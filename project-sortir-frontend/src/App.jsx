@@ -11,10 +11,10 @@ function App() {
 
     return (
       <>
-      <Router>
+        <Router>
           <div>
-            <Link  to="/">Accueil</Link>
-            <Link  to="/profile">Profile</Link>
+            <Link  to="/">Accueil</Link>{"  "}
+            <Link  to="/profile">Profile</Link>{"  "}
             <Link  to="/connecter">Se Connecter</Link>
           </div>
           <Routes>
