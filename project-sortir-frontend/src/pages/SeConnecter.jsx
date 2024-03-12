@@ -1,13 +1,13 @@
 import { useState } from "react";
-
+import serviceUser from '../services/serviceUser'
 const SeConnecter = () => {
 
   const[identifiant, setIdentifiant] = useState(' ');
   const[motdepasse, setMotdepasse] = useState(' ');
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(identifiant);
-    console.log(motdepasse);
+    const respone = serviceUser.connecterUser(identifiant, motdepasse).then(res => console.log(res))
+    console.log(respone);
   };
 
   return (

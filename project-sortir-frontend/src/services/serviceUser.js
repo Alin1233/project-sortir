@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:8000/api'
+const baseUrl = 'http://localhost:8000'
 const connecterUser = async (identifiant, motdepasse) => {
-    const url = baseUrl+'/'
+    const url = baseUrl+'/connecter'
     try {
-        const response = await axios.post(url, identifiant, motdepasse)
-        return response
+        const response = await axios.post(url, {identifiant, motdepasse})
+        return response.data
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
-export {connecterUser}
+export default {connecterUser}
