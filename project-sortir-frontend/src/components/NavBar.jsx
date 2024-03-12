@@ -4,7 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 import logo from '../assets/logo.jpg'
 const NavBar = (props) => {
     //Quand quelqu'un clique sur "log out", le cookie est supprimé et l'utilisateur actuel est déclaré null
-    const handeleLogout = () =>{
+    const handleLogout = () =>{
         window.localStorage.removeItem("loggedUser")
         props.setUser(null)
     }
@@ -21,7 +21,7 @@ const NavBar = (props) => {
                 <Link as={RouterLink} to="/profile" mr="4">Profile</Link>
                 <Link as={RouterLink} to="/creer" mr="4">Creer Sortie</Link>
                 {props.user ? (
-                    <Button onClick={handeleLogout} variant="link" colorScheme="black" mr="4">
+                    <Button onClick={handleLogout} variant="link" colorScheme="black" mr="4">
                         Welcome {props.user.nom}, Log Out
                     </Button>
                 ) : (
