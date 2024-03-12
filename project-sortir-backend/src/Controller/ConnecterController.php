@@ -15,25 +15,26 @@ use Psr\Log\LoggerInterface;
 class ConnecterController extends AbstractController
 {
     #[Route('/connecter', name: 'app_connecter')]
-    public function index(Request $request, ParticipantRepository $participantRepository, CampusRepository $campusRepository): JsonResponse
+    public function index(Request $request, ParticipantRepository $participantRepository, CampusRepository $campusRepository): Response
     {   
-        // Get query parameters
-        $queryParameters = $request->query->all();
-
-        // Get request body parameters
-        $bodyParameters = $request->request->all();
-
+        // Obtenir les paramètres de la requête
         $data = json_decode($request->getContent(), true);
 
-
-       $participants = $participantRepository->findAll();
-       $campus = $campusRepository->findAll();
-       $content = json_encode($participants);
-       dump($content);
-       dump($participants);
-       return $this->json([
-        'campus' =>  $campus,
-        'participants' => $participants,
-    ]);
+        // Récupérer le courrier et le mot de passe de la requête
+        $mail = $data['mail'];
+        $motdepasse = $data['motdepasse'];
+        // Trouver le participant à l'aide de son mail et de son mot de passe
+        $participant = $participantRepository->findOneBy(['mail' => $mail, 'motPasse' => $motdepasse]);
+        if ($participant) {
+            $response = $this->json([
+                'participant' => $participant,
+            ]);
+        } else {
+            $response = $this->json([
+                'error' => 'No participant found with the provided mail and password',
+            ]);
+        }
+    
+        return $response;
     }
 }
