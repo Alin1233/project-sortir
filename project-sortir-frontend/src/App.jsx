@@ -32,7 +32,7 @@ function App() {
             <Route path="/" element={<Accueil />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
-            <Route path="/creer" element={<CreerSortie />} />
+            <Route path="/creer" element={<CreerSortie user={user}/>} />
           </Routes>
         </Router>
       </>

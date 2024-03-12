@@ -26,15 +26,29 @@ class ConnecterController extends AbstractController
         // Trouver le participant à l'aide de son mail et de son mot de passe
         $participant = $participantRepository->findOneBy(['mail' => $mail, 'motPasse' => $motdepasse]);
         if ($participant) {
+            $campus = $participant->getCampus();
+            $participantData = [
+                'id' => $participant->getId(),
+                'nom' => $participant->getNom(),
+                'prenom' => $participant->getPrenom(),
+                'telephone' => $participant->getTelephone(),
+                'mail' => $participant->getMail(),
+                'isAdmin' => $participant->isIsAdmin(),
+                'isActiv' => $participant->isIsActiv(),
+                'campus' => [
+                    'id' => $campus->getId(),
+                    'nom' => $campus->getNom(),
+                ],
+            ];
             $response = $this->json([
-                'participant' => $participant,
+                'participant' => $participantData,
             ]);
         } else {
             $response = $this->json([
                 'error' => 'No participant found with the provided mail and password',
             ]);
         }
-    
+        
         return $response;
     }
 }

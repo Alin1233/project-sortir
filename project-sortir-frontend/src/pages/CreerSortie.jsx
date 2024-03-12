@@ -1,23 +1,36 @@
-import { useState } from "react"
-import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack } from "@chakra-ui/react"
-const CreerSortie = () => {
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unescaped-entities */
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea } from "@chakra-ui/react"
+const CreerSortie = (props) => {
 
-    const[nom, setNom] = useState(null)
-    const[dateDebut, setDateDebut] = useState(null)
-    const[dateLimit, setDateLimit] = useState(null)
-    const[nbPlaces, setNbPlaces] = useState(null)
-    const[duree, setDuree] = useState(null)
-    const[description, setDescription] = useState(null)
-    const [campus, setCampus] = useState(null)
-    const [ville, setVille] = useState(null)
-    const [lieu, setLieu] = useState(null)
-    const [rue, setRue] = useState(null)
-    const [codePostal, setCodePostal] = useState(null)
-    const [latitude, setLatitude] = useState(null)
-    const [longitude, setLongitude] = useState(null)
+    const[nom, setNom] = useState('')
+    const[dateDebut, setDateDebut] = useState('')
+    const[dateLimit, setDateLimit] = useState('')
+    const[nbPlaces, setNbPlaces] = useState('')
+    const[duree, setDuree] = useState('')
+    const[description, setDescription] = useState('')
+    const [campus, setCampus] = useState('')
+    const [ville, setVille] = useState('')
+    const [lieu, setLieu] = useState('')
+    const [rue, setRue] = useState('')
+    const [codePostal, setCodePostal] = useState('')
+    const [latitude, setLatitude] = useState('')
+    const [longitude, setLongitude] = useState('')
 
-    const handleSubmit = () =>{
-        console.log("ola");
+    //si l'utilisateur est nul, redirection à la connexion
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (props.user === null) {
+            navigate('/connecter');
+        }
+    }, [navigate, props.user]);
+    
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        console.log(props.user.campus.nom);
     }
     
 
@@ -27,15 +40,15 @@ const CreerSortie = () => {
                 <Grid templateColumns="repeat(2, 1fr)" gap={6}>
                     <VStack align="stretch">
                         <FormControl id="nom">
-                            <FormLabel>Nom:</FormLabel>
+                            <FormLabel>Nom de la sortie:</FormLabel>
                             <Input type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md" />
                         </FormControl>
                         <FormControl id="dateDebut">
-                            <FormLabel>Date Debut:</FormLabel>
+                            <FormLabel>Date et heure de la sortie:</FormLabel>
                             <Input type='date' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" />
                         </FormControl>
                         <FormControl id="dateLimit">
-                            <FormLabel>Date Limit:</FormLabel>
+                            <FormLabel>Date limite d'inscription:</FormLabel>
                             <Input type='date' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" />
                         </FormControl>
                             <FormControl id="nbPlaces">
@@ -46,13 +59,13 @@ const CreerSortie = () => {
                             <FormLabel>Durée:</FormLabel>
                             <Input type='text' name='duree' value={duree} onChange={(e) => setDuree(e.target.value)} size="md" />
                         </FormControl>
-                            <FormControl id="description">
-                            <FormLabel>Description:</FormLabel>
-                            <Input type='text' name='description' value={description} onChange={(e) => setDescription(e.target.value)} size="md" />
+                        <FormControl id="description">
+                            <FormLabel>Description et infos:</FormLabel>
+                            <Textarea name='description' value={description} onChange={(e) => setDescription(e.target.value)} size="md" />
                         </FormControl>
                         <FormControl id="campus">
                             <FormLabel>Campus:</FormLabel>
-                            <Input type='text' name='campus' value={campus} onChange={(e) => setCampus(e.target.value)} size="md" />
+                            <Input type='text' disabled name='campus' defaultValue={props.user && props.user.campus ? props.user.campus.nom : ''} onChange={(e) => setCampus(e.target.value)} size="md" />
                         </FormControl>
                     </VStack>
                     <VStack align="stretch">
