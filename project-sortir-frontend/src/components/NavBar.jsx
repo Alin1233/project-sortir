@@ -19,6 +19,7 @@ const NavBar = (props) => {
             <Box>
                 <Link as={RouterLink} to="/" mr="4">Accueil</Link>
                 <Link as={RouterLink} to="/profile" mr="4">Profile</Link>
+                <Link as={RouterLink} to="/creer" mr="4">Creer Sortie</Link>
                 {props.user ? (
                     <Button onClick={handeleLogout} variant="link" colorScheme="black" mr="4">
                         Welcome {props.user.nom}, Log Out
