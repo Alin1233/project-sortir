@@ -22,7 +22,7 @@ const SeConnecter = (props) => {
     <div>
       <form onSubmit={handleSubmit}>
         <label>Mail:</label>
-        <input type='text' name='identifiant' value={mail} onChange={(e) => setMail(e.target.value)}></input>
+        <input type='text' name='mail' value={mail} onChange={(e) => setMail(e.target.value)}></input>
         <label>Mot de passe:</label>
         <input type='text' name='motdepasse' value={motdepasse} onChange={(e) => setMotdepasse(e.target.value)}></input>
         <button type="submit">Connexion</button>
