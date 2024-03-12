@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea } from "@chakra-ui/react"
+import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea, Flex } from "@chakra-ui/react"
 import serviceSortie from "../services/serviceSortie"
 const CreerSortie = (props) => {
 
@@ -118,8 +118,10 @@ const CreerSortie = (props) => {
                         </FormControl>
                     </VStack>
                 </Grid>
-                <Button type="submit" name="register">Register</Button>
-                <Button type="submit" name="publish">Publier la sortie</Button>
+                <Flex justify="space-between">
+                    <Button type="submit" name="register">Register</Button>
+                    <Button type="submit" name="publish">Publier la sortie</Button>
+                 </Flex>
             </Box>
         </Center>
 )
