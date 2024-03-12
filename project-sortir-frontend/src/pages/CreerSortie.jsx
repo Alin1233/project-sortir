@@ -30,7 +30,28 @@ const CreerSortie = (props) => {
 
     const handleSubmit = (e) =>{
         e.preventDefault();
-        console.log(props.user.campus.nom);
+        let etat = null;
+        if (e.nativeEvent.submitter.name === 'register') {
+            etat = 'Creee'
+        } else if (e.nativeEvent.submitter.name === 'publish') {
+            etat = 'Ouverte'
+        }
+        const  sortie = {
+            nom: nom,
+            duree:duree,
+            nbInscriptionMax:nbPlaces,
+            infosSortie:description,
+            etat:etat,
+            nomLieu:lieu,
+            rue:rue,
+            codePostal: codePostal,
+            latitude: latitude,
+            longitude: longitude,
+            organisateur: props.user,
+            campus: campus,
+            dateHeureDebut: dateDebut,
+            dateLimiteInscription:dateLimit
+        }
     }
     return (
         <Center as="div" h="100vh" mt="-100px">
@@ -93,7 +114,8 @@ const CreerSortie = (props) => {
                         </FormControl>
                     </VStack>
                 </Grid>
-                <Button type="submit">Create</Button>
+                <Button type="submit" name="register">Register</Button>
+                <Button type="submit" name="publish">Publier la sortie</Button>
             </Box>
         </Center>
 )
