@@ -48,10 +48,6 @@ class Participant
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur')]
     private Collection $sortiesOrganisees;
 
-    #[ORM\OneToOne(inversedBy: 'participant', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     public function __construct()
     {
         $this->sortie = new ArrayCollection();
@@ -209,18 +205,6 @@ class Participant
                 $sortiesOrganisee->setOrganisateur(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): static
-    {
-        $this->user = $user;
 
         return $this;
     }
