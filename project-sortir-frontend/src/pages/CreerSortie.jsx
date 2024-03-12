@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea } from "@chakra-ui/react"
+import serviceSortie from "../services/serviceSortie"
 const CreerSortie = (props) => {
 
     const[nom, setNom] = useState('')
@@ -28,7 +29,7 @@ const CreerSortie = (props) => {
     }, [navigate, props.user]);
     
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async(e) =>{
         e.preventDefault();
         let etat = null;
         if (e.nativeEvent.submitter.name === 'register') {
@@ -50,8 +51,11 @@ const CreerSortie = (props) => {
             organisateur: props.user,
             campus: campus,
             dateHeureDebut: dateDebut,
-            dateLimiteInscription:dateLimit
+            dateLimiteInscription:dateLimit,
+            ville: ville
         }
+        const response = await serviceSortie.creerSortie(sortie);
+        console.log(response);
     }
     return (
         <Center as="div" h="100vh" mt="-100px">
