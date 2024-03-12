@@ -1,14 +1,20 @@
 
-import React from 'react'
-
 const TestCompo = () => {
+    const options = ['option1', 'option2', 'option3'];
 
-    const test = 100
-  return (
-    <div>TestCompo
-        <p>{test}</p>
-    </div>
-  )
-}
-
-export default TestCompo
+    return (
+        <div>
+            TestCompo
+            <form>
+                <select>
+                    {options.map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+            </form>
+        </div>
+    );
+};
+export default TestCompo;

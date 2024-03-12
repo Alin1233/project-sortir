@@ -1,11 +1,13 @@
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route
 } from 'react-router-dom'
 import Accueil from './pages/Accueil'
 import Profile from './pages/Profile'
 import SeConnecter from './pages/SeConnecter'
 import { useState, useEffect } from 'react'
+import NavBar from './components/NavBar'
+
 
 function App() {
 
@@ -21,20 +23,10 @@ function App() {
         setUser(user)
       }
     },[])
-    //Quand quelqu'un clique sur "log out", le cookie est supprimé et l'utilisateur actuel est déclaré null
-    const handeleLogout = () =>{
-      window.localStorage.removeItem("loggedUser")
-      setUser(null)
-    }
-
     return (
       <>
         <Router>
-          <div>
-            <Link  to="/">Accueil</Link>{"  "}
-            <Link  to="/profile">Profile</Link>{"  "}
-            {user ? (<button onClick={handeleLogout}>Log Out</button>) : (<Link to="/connecter">Se Connecter</Link>)}
-          </div>
+         <NavBar user={user} setUser={setUser}/>
           <Routes>
             <Route path="/" element={<Accueil />} />
             <Route path="/profile" element={<Profile />} />
