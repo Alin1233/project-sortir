@@ -1,13 +1,21 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import serviceUser from '../services/serviceUser'
-const SeConnecter = () => {
+const SeConnecter = (props) => {
 
-  const[mail, setMail] = useState(' ');
-  const[motdepasse, setMotdepasse] = useState(' ');
-  const handleSubmit = (e) => {
+  const[mail, setMail] = useState('');
+  const[motdepasse, setMotdepasse] = useState('');
+
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const respone = serviceUser.connecterUser(mail, motdepasse).then(res => console.log(res))
-    console.log(respone);
+    //vérifier que le mot de passe et l'adresse email sont corrects
+    const response = await serviceUser.connecterUser(mail, motdepasse)
+    if(response !== undefined){
+      //si oui, créer un cookie et définir l'utilisateur actuel comme utilisateur récupéré sur le serveur
+      window.localStorage.setItem('loggedUser', JSON.stringify(response))
+      props.setUser(response)
+    }
   };
 
   return (
