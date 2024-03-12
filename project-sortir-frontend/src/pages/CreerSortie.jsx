@@ -32,8 +32,6 @@ const CreerSortie = (props) => {
         e.preventDefault();
         console.log(props.user.campus.nom);
     }
-    
-
     return (
         <Center as="div" h="100vh" mt="-100px">
             <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
