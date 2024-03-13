@@ -44,10 +44,7 @@ const getAllSorties = async () => {
             sortie.organisateur = responseOrganisateurNom.data.nom
             return sortie;
         }));
-
     return updatedSorties;
-
-
     } catch (error) {
         console.error(error);
         if (error.response) {

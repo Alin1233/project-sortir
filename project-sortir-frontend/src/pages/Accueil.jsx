@@ -3,7 +3,8 @@ import { Link } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex } from "@chakra-ui/react";
+
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -17,7 +18,7 @@ const Accueil = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await serviceSortie.getAllSorties();
-      console.log(response);
+      console.log(response[0].participants.length);
       setSorties(response)
     };
   
@@ -25,21 +26,23 @@ const Accueil = (props) => {
   }, []);
 
   if(sorties===null){
-    return <div>Loading</div>
+    return <Flex justifyContent="center" alignItems="center" height="100vh">
+              <Spinner />
+          </Flex>
   }
 
   return (
     <div>
       <p>Accueil</p>
       <p>Date do jour: {formattedDate}</p>
-      <p>Participant: {props.user && props.user.nom}</p>
+      <p>Participant: {props.user.nom}</p>
       <Table variant="simple">
         <Thead>
           <Tr>
             <Th>Nom de la sortie</Th>
             <Th>Date de la sortie</Th>
             <Th>Cloture</Th>
-            <Th>inscrits/places</Th>
+            <Th>Inscrits / Places</Th>
             <Th>Etat</Th>
             <Th>Inscrit</Th>
             <Th>Organisateur</Th>
@@ -52,7 +55,7 @@ const Accueil = (props) => {
               <Td>{sortie.nom}</Td>
               <Td>{sortie.dateHeureDebut}</Td>
               <Td>{sortie.dateLimiteInscription}</Td>
-              <Td>{sortie.nbInscriptionMax}</Td>
+              <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
               <Td>{sortie.etat}</Td>
               <Td>Inscrit</Td>
               <Td>{sortie.organisateur}</Td>
