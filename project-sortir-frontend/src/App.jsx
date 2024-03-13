@@ -8,6 +8,7 @@ import SeConnecter from './pages/SeConnecter'
 import { useState, useEffect } from 'react'
 import NavBar from './components/NavBar'
 import CreerSortie from './pages/CreerSortie'
+import Sortie from './pages/Sortie'
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
             <Route path="/creer" element={<CreerSortie user={user}/>} />
+            <Route path="/sortie/:id" element={<Sortie/>} />
           </Routes>
         </Router>
       </>
