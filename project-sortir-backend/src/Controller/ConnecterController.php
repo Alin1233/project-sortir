@@ -25,6 +25,11 @@ class ConnecterController extends AbstractController
         $motdepasse = $data['motdepasse'];
         // Trouver le participant à l'aide de son mail et de son mot de passe
         $participant = $participantRepository->findOneBy(['mail' => $mail, 'motPasse' => $motdepasse]);
+
+
+        // check if participant has other prprieties beside email and password if yes send all the data as normal if not send just user obj with email and password
+
+
         if ($participant) {
             $campus = $participant->getCampus();
             $participantData = [

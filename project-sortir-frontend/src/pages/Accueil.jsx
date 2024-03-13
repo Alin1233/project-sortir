@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-const Accueil = (props) => {
-  const id = props.user.id;
+const Accueil = () => {
+  const id = 10;
   return (
     <div>
       <p>Accueil</p>
