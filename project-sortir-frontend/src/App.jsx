@@ -31,7 +31,7 @@ function App() {
           <NavBar user={user} setUser={setUser}/>
           <Routes>
             <Route path="/" element={<Accueil user={user}/>} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile user={user}/>} />
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
             <Route path="/creer" element={<CreerSortie user={user}/>} />
             <Route path="/sortie/:id" element={<Sortie/>} />
