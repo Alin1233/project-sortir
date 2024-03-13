@@ -12,7 +12,6 @@ const CreerSortie = (props) => {
     const[nbPlaces, setNbPlaces] = useState('')
     const[duree, setDuree] = useState('')
     const[description, setDescription] = useState('')
-    const [campus, setCampus] = useState('')
     const [ville, setVille] = useState('')
     const [lieu, setLieu] = useState('')
     const [rue, setRue] = useState('')
@@ -49,7 +48,7 @@ const CreerSortie = (props) => {
             latitude: latitude,
             longitude: longitude,
             organisateur: props.user,
-            campus: campus,
+            campus: props.user.campus.nom,
             dateHeureDebut: dateDebut,
             dateLimiteInscription:dateLimit,
             ville: ville
@@ -88,7 +87,7 @@ const CreerSortie = (props) => {
                         </FormControl>
                         <FormControl id="campus">
                             <FormLabel>Campus:</FormLabel>
-                            <Input type='text' disabled name='campus' defaultValue={props.user && props.user.campus ? props.user.campus.nom : ''} onChange={(e) => setCampus(e.target.value)} size="md" />
+                            <Input type='text' disabled name='campus' defaultValue={props.user && props.user.campus ? props.user.campus.nom : ''} size="md" />
                         </FormControl>
                     </VStack>
                     <VStack align="stretch">

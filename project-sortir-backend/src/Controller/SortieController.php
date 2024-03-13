@@ -42,9 +42,13 @@ class SortieController extends AbstractController
             $longitude = $data['longitude'];
             $organisateur = $data['organisateur']; // This will be an array representing the user object
             $campusNom = $data['campus'];
-            $dateHeureDebut = $data['dateHeureDebut'];
-            $dateLimiteInscription = $data['dateLimiteInscription'];
+            $dateHeureDebutString = $data['dateHeureDebut'];
+            $dateLimiteInscriptionString = $data['dateLimiteInscription'];
             $nomVille = $data['ville'];
+
+            //cast to correct format
+            $dateHeureDebut = \DateTime::createFromFormat('Y-m-d', $dateHeureDebutString);
+            $dateLimiteInscription = \DateTime::createFromFormat('Y-m-d', $dateLimiteInscriptionString);
 
             $sortie = new Sortie();
             $sortie -> setNom($nom);
