@@ -30,7 +30,7 @@ function App() {
         <Router>
           <NavBar user={user} setUser={setUser}/>
           <Routes>
-            <Route path="/" element={<Accueil />} />
+            <Route path="/" element={<Accueil user={user}/>} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
             <Route path="/creer" element={<CreerSortie user={user}/>} />

@@ -58,7 +58,7 @@ const CreerSortie = (props) => {
         console.log(response);
     }
     return (
-        <Center as="div" h="100vh" mt="-100px">
+        <Center  h="100vh" mt="-100px">
             <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
                 <Grid templateColumns="repeat(2, 1fr)" gap={6}>
                     <VStack align="stretch">
