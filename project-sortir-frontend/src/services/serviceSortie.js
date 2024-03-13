@@ -28,10 +28,26 @@ const creerSortie = async (data) => {
 }
 
 const getAllSorties = async () => {
-    const url = " ";
+    const url = baseUrl+"/getall";
     try {
-        const response = await axios.get(url)
-        return response.data
+
+        
+        const response = await axios.get(url);
+        const sorties = response.data.sorties;
+        
+        const updatedSorties = await Promise.all(sorties.map(async sortie => {
+            
+            const responseEtatLibbele = await axios.get(baseUrl + sortie.etat);
+            sortie.etat = responseEtatLibbele.data.libelle;
+
+            const responseOrganisateurNom = await axios.get(baseUrl+sortie.organisateur)
+            sortie.organisateur = responseOrganisateurNom.data.nom
+            return sortie;
+        }));
+
+    return updatedSorties;
+
+
     } catch (error) {
         console.error(error);
         if (error.response) {

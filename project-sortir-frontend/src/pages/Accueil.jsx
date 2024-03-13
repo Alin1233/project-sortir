@@ -1,12 +1,66 @@
 /* eslint-disable react/prop-types */
 import { Link } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-const Accueil = () => {
-  const id = 10;
+import serviceSortie from "../services/serviceSortie";
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+const Accueil = (props) => {
+  
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [sorties, setSorties] = useState(null)
+  const formattedDate = currentDate.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await serviceSortie.getAllSorties();
+      console.log(response);
+      setSorties(response)
+    };
+  
+    fetchData();
+  }, []);
+
+  if(sorties===null){
+    return <div>Loading</div>
+  }
+
   return (
     <div>
       <p>Accueil</p>
-      <Link as={RouterLink} to={`/sortie/${id}`}>This is an example of route with id parameter</Link>
+      <p>Date do jour: {formattedDate}</p>
+      <p>Participant: {props.user && props.user.nom}</p>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Nom de la sortie</Th>
+            <Th>Date de la sortie</Th>
+            <Th>Cloture</Th>
+            <Th>inscrits/places</Th>
+            <Th>Etat</Th>
+            <Th>Inscrit</Th>
+            <Th>Organisateur</Th>
+            <Th>Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {sorties.map(sortie => (
+            <Tr key={sortie.id}>
+              <Td>{sortie.nom}</Td>
+              <Td>{sortie.dateHeureDebut}</Td>
+              <Td>{sortie.dateLimiteInscription}</Td>
+              <Td>{sortie.nbInscriptionMax}</Td>
+              <Td>{sortie.etat}</Td>
+              <Td>Inscrit</Td>
+              <Td>{sortie.organisateur}</Td>
+              <Td>Actions</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
     </div>
   )
 }

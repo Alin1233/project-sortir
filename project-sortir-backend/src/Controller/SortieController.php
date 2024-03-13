@@ -109,4 +109,15 @@ class SortieController extends AbstractController
         }
        
     }
+    #[Route('/getall', name: 'get_all_sorties', methods: "GET")]
+    public function getAllSorties(SortieRepository $sortieRepository, EntityManagerInterface $entityManager, CampusRepository $campusRepository): Response
+    {
+        try{
+            $sorties = $sortieRepository -> findAll();
+            return $this->json(['sorties' =>  $sorties]);
+        } 
+        catch (\Exception $e) {
+            return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
+         }
+    }
 }
