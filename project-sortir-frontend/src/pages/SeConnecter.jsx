@@ -12,7 +12,6 @@ const SeConnecter = (props) => {
     e.preventDefault();
     //vérifier que le mot de passe et l'adresse email sont corrects
     const response = await serviceUser.connecterUser(mail, motdepasse)
-    console.log(response);
     if(response !== undefined){
       //si oui, créer un cookie et définir l'utilisateur actuel comme utilisateur récupéré sur le serveur
       window.localStorage.setItem('loggedUser', JSON.stringify(response))
