@@ -6,6 +6,7 @@ import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
 import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex } from "@chakra-ui/react";
 import SearchBar from "../components/SearchBar";
+import Filtre from "../components/Filtre";
 
 const Accueil = (props) => {
   
@@ -38,7 +39,7 @@ const Accueil = (props) => {
       <p>Accueil</p>
       <p>Date do jour: {formattedDate}</p>
       <p>Participant: {props.user.nom}</p>
-      <SearchBar sorties={sorties} setSorties={setSorties}/>
+      <Filtre sorties={sorties} setSorties={setSorties}/>
       <Table variant="simple">
         <Thead>
           <Tr>
