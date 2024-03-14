@@ -67,11 +67,11 @@ const CreerSortie = (props) => {
                         </FormControl>
                         <FormControl id="dateDebut">
                             <FormLabel>Date et heure de la sortie:</FormLabel>
-                            <Input type='date' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" />
+                            <Input type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" />
                         </FormControl>
                         <FormControl id="dateLimit">
                             <FormLabel>Date limite d'inscription:</FormLabel>
-                            <Input type='date' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" />
+                            <Input type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" />
                         </FormControl>
                             <FormControl id="nbPlaces">
                             <FormLabel>Nombre de Places:</FormLabel>

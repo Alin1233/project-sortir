@@ -47,8 +47,8 @@ class SortieController extends AbstractController
             $nomVille = $data['ville'];
 
             //cast to correct format
-            $dateHeureDebut = \DateTime::createFromFormat('Y-m-d', $dateHeureDebutString);
-            $dateLimiteInscription = \DateTime::createFromFormat('Y-m-d', $dateLimiteInscriptionString);
+            $dateHeureDebut = \DateTime::createFromFormat('Y-m-d\TH:i', $dateHeureDebutString);
+            $dateLimiteInscription = \DateTime::createFromFormat('Y-m-d\TH:i', $dateLimiteInscriptionString);
 
             $sortie = new Sortie();
             $sortie -> setNom($nom);
