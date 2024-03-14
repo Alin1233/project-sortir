@@ -8,7 +8,7 @@ import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex } from "@chakra-ui/react
 import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
 import axios from "axios";
-
+import dateFunctions from "../helpers/dateFunctions";
 
 const Accueil = (props) => {
   
@@ -25,7 +25,6 @@ const Accueil = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await serviceSortie.getAllSorties();
-      console.log(response);
       setSorties(response)
       setUpdateData(false);
     };
@@ -39,7 +38,6 @@ const Accueil = (props) => {
       idParticipant: idUser
     }
     const response = await serviceSortie.addParticipant(data)
-    console.log(response);
     setUpdateData(true);
   }
   //data is loading
@@ -72,8 +70,8 @@ const Accueil = (props) => {
           {sorties.map(sortie => (
             <Tr key={sortie.id}>
               <Td>{sortie.nom}</Td>
-              <Td>{sortie.dateHeureDebut}</Td>
-              <Td>{sortie.dateLimiteInscription}</Td>
+              <Td>{dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Td>
+              <Td>{dateFunctions.formatDate(sortie.dateLimiteInscription)}</Td>
               <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
               <Td>{sortie.etat}</Td>
               <Td>{sortie.participants.includes(props.user.id) ? 'Inscrit' : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>}</Td>
