@@ -21,7 +21,6 @@ const Accueil = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await serviceSortie.getAllSorties();
-      console.log(response);
       setSorties(response)
     };
   

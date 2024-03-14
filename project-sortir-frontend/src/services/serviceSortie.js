@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const baseUrl = 'http://localhost:8000'
+import serviceCampus from './serviceCampus'
 const creerSortie = async (data) => {
     const url = baseUrl+'/creer'
     try {
@@ -35,6 +36,9 @@ const getAllSorties = async () => {
         const sorties = response.data.sorties;
         //modifier chaque sortie dans le tableau
         const updatedSorties = await Promise.all(sorties.map(async sortie => {
+
+            const campusNom = await serviceCampus.getCampusNomParId(sortie.campus)
+            sortie.campus = campusNom
             //obtenir l'etat libbele et mofifier l'etat propriety dans la sortie
             const responseEtatLibbele = await axios.get(baseUrl + sortie.etat);
             sortie.etat = responseEtatLibbele.data.libelle;
