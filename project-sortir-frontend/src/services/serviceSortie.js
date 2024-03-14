@@ -2,7 +2,6 @@ import axios from 'axios'
 import serviceLieu from "./serviceLieu.js";
 import serviceVille from "./serviceVille.js";
 import serviceParticipantsSortie from "./serviceParticipantsSortie.js";
-import {createLogger} from "vite";
 
 const baseUrl = 'http://localhost:8000'
 const creerSortie = async (data) => {
@@ -52,9 +51,20 @@ const getSortie = async (id) => {
         const responseLieu = await axios.get(`${baseUrl}${sortie.lieu}`);
         sortie.lieu = responseLieu.data.nom;
 
+
+        let allParticipantsId = [];
+
+        for(let index = 0; index < sortie.participants.length; index++){
+            let participant = sortie.participants[index];
+            let dernierCaractere = participant[participant.length - 1];
+            allParticipantsId.push(dernierCaractere);
+        }
+
+
+
         const lieu = await serviceLieu.getLieuById(sortie.lieu)
         const ville = await serviceVille.getVilleById(lieu[0]?.id)
-        const participants = await serviceParticipantsSortie.getParticipantsBySortieId(sortie.id)
+        const participants = await serviceParticipantsSortie.getParticipantsById(allParticipantsId, sortie.id);
 
         return {
             responseSortie: sortie,

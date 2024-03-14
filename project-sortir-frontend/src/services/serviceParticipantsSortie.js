@@ -2,11 +2,14 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:8000'
 
-const getParticipantsBySortieId = async(id) => {
-    const url = baseUrl+'/api/participants/'+id
-
-    try{
-        const response = await axios.get(url)
+const getParticipantsById = async(idParticipants, idSortie) => {
+    const url = baseUrl + '/participants/sortie/'+idSortie;
+    const data = {
+        idSortie: idSortie,
+        idParticipants: idParticipants // Supposant que ceci est un tableau ou un objet
+    };
+    try {
+        const response = await axios.post(url, data);
         let participants = response.data;
         return participants;
     } catch(error){
@@ -30,4 +33,4 @@ const getParticipantsBySortieId = async(id) => {
     }
 }
 
-export default {getParticipantsBySortieId};
+export default {getParticipantsById};
