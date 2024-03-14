@@ -25,7 +25,7 @@ class AppFixtures extends Fixture
         $participant -> setNom('nomBob');
         $participant -> setPrenom('prenomBob');
         $participant -> setTelephone(123456);
-        $participant -> setMail('user@example.com');
+        $participant -> setMail('userBob@example.com');
         $participant -> setMotPasse('1234');
         $participant -> setIsAdmin(true);
         $participant -> setIsActiv(true);
@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
         $participant2 -> setNom('nomPatrick');
         $participant2 -> setPrenom('prenomPatrick');
         $participant2 -> setTelephone(123456);
-        $participant2 -> setMail('user@example.com');
+        $participant2 -> setMail('userPatrick@example.com');
         $participant2 -> setMotPasse('1234');
         $participant2 -> setIsAdmin(true);
         $participant2 -> setIsActiv(true);
@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         $participant3 -> setNom('nomCrabs');
         $participant3 -> setPrenom('prenomCrabs');
         $participant3 -> setTelephone(123456);
-        $participant3 -> setMail('user@example.com');
+        $participant3 -> setMail('userCrabs@example.com');
         $participant3 -> setMotPasse('1234');
         $participant3 -> setIsAdmin(true);
         $participant3 -> setIsActiv(true);

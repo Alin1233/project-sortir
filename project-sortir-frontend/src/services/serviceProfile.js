@@ -55,4 +55,6 @@ const modifierProfile = async (data) => {
         console.log(error.config);
     }
 }
+
+//const getUser = async ()
 export default {modifierProfile, getCampus}

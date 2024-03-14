@@ -19,15 +19,15 @@ use Psr\Log\LoggerInterface;
 class ProfileController extends AbstractController
 {
 
-    #[Route('', name: 'app_index')]
+    /*#[Route('', name: 'app_index')]
     public function index()
     {
 
 
         /*return $this->json([
             'user'=>$user
-        ]);*/
-    }
+        ]);
+    }*/
 
     #[Route('/modifier', name: 'app_modifier')]
     public function modifier(Request $request, ParticipantRepository $participantRepository,EntityManagerInterface $entityManager,CampusRepository $campusRepository)
@@ -36,6 +36,15 @@ class ProfileController extends AbstractController
 
 
             $data = json_decode($request->getContent(), true);
+
+            $premierParticipant=$participantRepository->findOneBy(['id'=>$data['id']]);
+            $memeParticipant=$participantRepository->findOneBy(['pseudo'=>$data['pseudo']]);
+
+            /*if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
+                throw new \Exception('Le pseudo que vous avez chosis est déja pris! Damm!', 1);
+            }elseif ($premierParticipant['pseudo']!==$memeParticipant['pseudo'] && $premierParticipant['mail']===$memeParticipant['mail']){
+                throw new \Exception('L\'adresse mail que vous avez chosis est déja pris! Chokbar!', 2);
+            }*/
 
             $pseudo = $data['pseudo'];
             $prenom = $data['prenom'];
@@ -67,9 +76,10 @@ class ProfileController extends AbstractController
                 return new Response();
 
 
+                //throw new \Exception('Vous ne pouvez pas choisir');
             }
         }catch (\Exception $e) {
-            return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
+            return new Response(json_encode(['error' => $e->getMessage(), 'code'=>$e->getCode()]), 400, ['Content-Type' => 'application/json']);
         }
     }
 }

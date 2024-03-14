@@ -1,39 +1,49 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unescaped-entities */
 import {Box, Button, FormControl, FormLabel, Input, Center, Grid, VStack, Flex, Select, Image} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import serviceProfile from "../services/serviceProfile.js";
-//import {request} from "axios";
 
 const Profile = (props) => {
 
-  //Etats, données
-
-  const [pseudo, setPseudo]=useState('')
-  const [nom, setNom]=useState('')
-  const [prenom, setPrenom]=useState('')
-  const [telephone, setTelephone]=useState('')
-  const [email, setEmail]=useState('')
-  const [password, setPassword]=useState('')
-  const[confirmPassword,setConfirmPassword]=useState('')
-  const [campus, setCampus]=useState('')
-  const lisTest=['a','b','c']
-
-//Comportements
+  useEffect( ()=> {
+    const requestCampus = async () =>{
+      const resp = await serviceProfile.getCampus();
+      setCampusList(resp)
+    }
+    requestCampus();
+  },[]) ;
 
   //Vérifie si User est connecté sinon le renvoie vers page de connection
   const navigate = useNavigate();
+
   useEffect(() => {
     if (props.user === null) {
       navigate('/connecter');
     }
   }, [navigate, props.user]);
 
+  //Etats, données
+
+  const [pseudo, setPseudo]=useState(props.user && props.user.pseudo ? props.user.pseudo : '')
+  const [nom, setNom]=useState(props.user && props.user.nom ? props.user.nom : '')
+  const [prenom, setPrenom]=useState(props.user && props.user.prenom ? props.user.prenom : '')
+  const [telephone, setTelephone]=useState(props.user && props.user.telephone ? props.user.telephone : '')
+  const [email, setEmail]=useState(props.user && props.user.mail ? props.user.mail : '')
+  const [password, setPassword]=useState('')
+  const[confirmPassword,setConfirmPassword]=useState('')
+  const [campus, setCampus]=useState(null)
+  const [campusList, setCampusList] = useState ( null)
+
+//Comportements
 
   //Vérifie mot de passe et renvoie les infos vers BDD
   const handleSubmit=async(e)=> {
     e.preventDefault();
     if (password === confirmPassword){
       const user = {
+        id: props.user.id,
         pseudo: pseudo,
         nom: nom,
         prenom: prenom,
@@ -43,49 +53,28 @@ const Profile = (props) => {
         confirmPassword: confirmPassword,
         campus: campus
       }
-      console.log(user)
       const response = await serviceProfile.modifierProfile(user);
-      console.log(response)
+      alert('Vous avez bien modifié votre profil avec succès')
     }else{
       alert('Attention votre mot de passe ne correspond pas à votre confirmation')
     }
   }
+  if (campusList===null){
+    return <div>Loading</div>
+  }
+  if(props.user===null){
+    return <div> Loading</div>;
+  }
 
-  const [list, setList]=useState(null);
-  useEffect( ()=> {
-    const requestCampus = async () =>{
-      const resp = await serviceProfile.getCampus();
-      setCampus(resp)
-    }
-    requestCampus();
-    console.log(campus)
-    },[]) ;
-    /*useEffect(() => {
-      const fetchData = async () => {
-        const response = await serviceCampus.getAllCampusNoms();
-        setCampuses(response)
-      };
-      fetchData();
-    }, []);*/
-
-    /*const objetCampus = result[1];
-      const nomObjetCampus = objetCampus['nom']
-      setCampus(nomObjetCampus)});*/
-    //setCampus(requestCampus['campus']);
-
-
-
-if (campus===null){
-  return <div>Loading</div> }
 
 //Affichage
 
   return (
-      <Center h="100vh" mt="-50px">
+      <Center h="100vh" mt="-50px" gap={9}>
         <Box boxSize='sm'>
-          <VStack align="stretch">
+          <VStack align="stretch" >
             {/* eslint-disable-next-line react/jsx-no-undef */}
-            <Image src="../img/IWantYou.png" alt='Hummm' />
+            <Image src="../img/IWantYou.png" alt='Hummm' borderRadius="full" />
           </VStack>
         </Box>
         <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
@@ -98,15 +87,15 @@ if (campus===null){
               </FormControl>
               <FormControl id="prenom">
                 <FormLabel>Prénom:</FormLabel>
-                <Input type='text' name='prenom' value={prenom} onChange={(e) => setPrenom(e.target.value)} size="md" />
+                <Input type='text' name='prenom' value={prenom} onChange={(e) => setPrenom(e.target.value)} size="md"/>
               </FormControl>
               <FormControl id="nom">
                 <FormLabel>Nom :</FormLabel>
-                <Input type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md" />
+                <Input type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md"/>
               </FormControl>
               <FormControl id="telephone">
                 <FormLabel>Telephone :</FormLabel>
-                <Input type='text' name='telephone' value={telephone} onChange={(e) => setTelephone(e.target.value)} size="md" />
+                <Input type='text' name='telephone' value={telephone} onChange={(e) => setTelephone(e.target.value)} size="md"/>
               </FormControl>
               <FormControl id="email">
                 <FormLabel>Email :</FormLabel>
@@ -122,18 +111,18 @@ if (campus===null){
               </FormControl>
               <FormControl id="campus">
                 <FormLabel>Campus :</FormLabel>
-                <Select onChange={(e)=>setCampus(e.target.value)} placeholder='Sélectionne une option'>
-                  {campus.map((campus) => (
-                      <option key={campus.id} value={campus.nom}>
-                        {campus.nom}
+                <Select value={props.user.campus.nom} onChange={(e)=>setCampus(e.target.value)} placeholder='Sélectionne une option'>
+                  {campusList.map((campusList) => (
+                      <option key={campusList.id} value={campusList.nom}>
+                        {campusList.nom}
                       </option>
                   ))}
                 </Select>
               </FormControl>
             </VStack>
           </Grid>
-          <Flex justify="space-between">
-            <Button type="submit" name="register">Enregistrer</Button>
+          <Flex justify="space-between" mt="20px">
+            <Button type="submit" colorScheme='teal' name="register">Enregistrer</Button>
             <Button type="reset" name="reset">Annuler</Button>
           </Flex>
         </Box>
