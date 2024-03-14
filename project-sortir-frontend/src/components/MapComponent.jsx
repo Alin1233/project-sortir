@@ -30,7 +30,7 @@ const MapComponent = (props) => {
   return (
     <div>
       <Map height={300} width={500}  center={[viewport.latitude, viewport.longitude]} defaultZoom={11}>
-        <Marker anchor={[viewport.latitude, viewport.longitude]} payload={1} onClick={({ event, anchor, payload }) => {}} />
+        <Marker anchor={[viewport.latitude, viewport.longitude]} payload={1} />
       </Map>
       <p>{address}</p>
     </div>
