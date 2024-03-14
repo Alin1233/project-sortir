@@ -77,4 +77,13 @@ const getAllSorties = async () => {
         console.log(error.config);
     }
 }
-export default {creerSortie, getAllSorties}
+const addParticipant = async (data) => {
+    const url = baseUrl+'/participate'
+    try {
+        const response = await axios.post(url, data)
+        return response
+    } catch (error) {
+        console.error(error);
+    }
+}
+export default {creerSortie, getAllSorties, addParticipant}

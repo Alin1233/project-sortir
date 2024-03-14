@@ -7,11 +7,14 @@ import serviceSortie from "../services/serviceSortie";
 import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex } from "@chakra-ui/react";
 import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
+import axios from "axios";
 
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
   const [sorties, setSorties] = useState(null)
+  const [updateData, setUpdateData] = useState(false);
+
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: '2-digit',
@@ -22,14 +25,20 @@ const Accueil = (props) => {
     const fetchData = async () => {
       const response = await serviceSortie.getAllSorties();
       setSorties(response)
+      setUpdateData(false);
     };
-  
     fetchData();
-  }, []);
-  const handleParticiperClick = (idSortie) =>{
+  }, [updateData]);
+
+  const handleParticiperClick = async(idSortie) =>{
     const idUser = props.user.id
-    console.log(idSortie)
-    console.log(props.user.id)
+    const data = {
+      idSortie: idSortie,
+      idParticipant: idUser
+    }
+    const response = await serviceSortie.addParticipant(data)
+    console.log(response);
+    setUpdateData(true);
   }
   //data is loading
   if(sorties===null){
