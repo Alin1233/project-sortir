@@ -22,7 +22,7 @@ const SearchBar = (props) => {
     return  (
         
           <Input
-            placeholder="Search..."
+            placeholder="Recherche par le nom de la sortie..."
             value={searchNom}
             onChange={handleSearch}
           />
