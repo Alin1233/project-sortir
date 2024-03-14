@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Link } from "@chakra-ui/react";
+import { Button, Link } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
@@ -26,6 +26,11 @@ const Accueil = (props) => {
   
     fetchData();
   }, []);
+  const handleParticiperClick = (idSortie) =>{
+    const idUser = props.user.id
+    console.log(idSortie)
+    console.log(props.user.id)
+  }
   //data is loading
   if(sorties===null){
     return <Flex justifyContent="center" alignItems="center" height="100vh">
@@ -60,7 +65,7 @@ const Accueil = (props) => {
               <Td>{sortie.dateLimiteInscription}</Td>
               <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
               <Td>{sortie.etat}</Td>
-              <Td>{sortie.participants.includes(props.user.id) ? 'Inscrit' : 'Not Inscrit'}</Td>
+              <Td>{sortie.participants.includes(props.user.id) ? 'Inscrit' : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>}</Td>
               <Td>{sortie.organisateur}</Td>
               <Td>Actions</Td>
             </Tr>
