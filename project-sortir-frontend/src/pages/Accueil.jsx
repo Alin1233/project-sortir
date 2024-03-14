@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Link } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
 import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex } from "@chakra-ui/react";
+import SearchBar from "../components/SearchBar";
 
 const Accueil = (props) => {
   
@@ -24,7 +26,7 @@ const Accueil = (props) => {
   
     fetchData();
   }, []);
-
+  //data is loading
   if(sorties===null){
     return <Flex justifyContent="center" alignItems="center" height="100vh">
               <Spinner />
@@ -36,6 +38,7 @@ const Accueil = (props) => {
       <p>Accueil</p>
       <p>Date do jour: {formattedDate}</p>
       <p>Participant: {props.user.nom}</p>
+      <SearchBar sorties={sorties} setSorties={setSorties}/>
       <Table variant="simple">
         <Thead>
           <Tr>
@@ -57,7 +60,7 @@ const Accueil = (props) => {
               <Td>{sortie.dateLimiteInscription}</Td>
               <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
               <Td>{sortie.etat}</Td>
-              <Td>Inscrit</Td>
+              <Td>{sortie.participants.includes(props.user.id) ? 'Inscrit' : 'Not Inscrit'}</Td>
               <Td>{sortie.organisateur}</Td>
               <Td>Actions</Td>
             </Tr>
