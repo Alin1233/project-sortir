@@ -114,7 +114,24 @@ class SortieController extends AbstractController
     {
         try{
             $sorties = $sortieRepository -> findAll();
-            return $this->json(['sorties' =>  $sorties]);
+            $sortiesData = [];
+            foreach ($sorties as $sortie) {
+                
+                $sortieData = [
+                    'id' => $sortie->getId(),
+                    'nom'=> $sortie->getNom(),
+                    'dateHeureDebut'=> $sortie->getDateHeureDebut(),
+                    'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
+                    'etat' => $sortie->getEtat()->getLibelle(),
+                    'organisateur' =>  $sortie->getOrganisateur()->getNom(),
+                    'participants'=> $sortie->getParticipants()
+                ];
+                $sortiesData[] = $sortieData;
+            
+                
+            }
+           
+            return $this->json(['sorties' =>  $sortiesData]);
         } 
         catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);

@@ -34,6 +34,7 @@ const getAllSorties = async () => {
         //obtenir un tableau de sorties
         const response = await axios.get(url);
         const sorties = response.data.sorties;
+        return sorties
         //modifier chaque sortie dans le tableau
         const updatedSorties = await Promise.all(sorties.map(async sortie => {
 
