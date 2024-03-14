@@ -13,6 +13,7 @@ const SearchBar = (props) => {
             placeholder="Recherche par le nom de la sortie"
             value={props.searchNom}
             onChange={handleSearch}
+            maxW="300px"
         />
     );
 }
