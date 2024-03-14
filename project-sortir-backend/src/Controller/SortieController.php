@@ -110,11 +110,29 @@ class SortieController extends AbstractController
        
     }
     #[Route('/getall', name: 'get_all_sorties', methods: "GET")]
-    public function getAllSorties(SortieRepository $sortieRepository, EntityManagerInterface $entityManager, CampusRepository $campusRepository): Response
+    public function getAllSorties(SortieRepository $sortieRepository): Response
     {
         try{
             $sorties = $sortieRepository -> findAll();
             return $this->json(['sorties' =>  $sorties]);
+        } 
+        catch (\Exception $e) {
+            return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
+         }
+    }
+    #[Route('/participate', name: 'get_all_sorties', methods: "POST")]
+    public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request): Response
+    {
+        try{
+
+            // Obtenir les paramètres de la requête
+            $data = json_decode($request->getContent(), true);
+
+            // Récupérer les champs de l'objet
+            $idSortie = $data['idSortie'];
+            // Récupérer les champs de l'objet
+            $idParticipant = $data['idParticipant'];
+
         } 
         catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
