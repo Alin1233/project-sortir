@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea, Flex } from "@chakra-ui/react"
 import serviceSortie from "../services/serviceSortie"
+import MapComponent from "../components/MapComponent"
 const CreerSortie = (props) => {
 
     const[nom, setNom] = useState('')
@@ -16,9 +17,8 @@ const CreerSortie = (props) => {
     const [lieu, setLieu] = useState('')
     const [rue, setRue] = useState('')
     const [codePostal, setCodePostal] = useState('')
-    const [latitude, setLatitude] = useState('')
-    const [longitude, setLongitude] = useState('')
-
+    const [latitude, setLatitude] = useState( 47.227479546104746)
+    const [longitude, setLongitude] = useState(-1.5507239538023578)
     //si l'utilisateur est nul, redirection à la connexion
     const navigate = useNavigate();
     useEffect(() => {
@@ -109,11 +109,11 @@ const CreerSortie = (props) => {
                         </FormControl>
                             <FormControl id="latitude">
                             <FormLabel>Latitude:</FormLabel>
-                            <Input type='text' name='latitude' value={latitude} onChange={(e) => setLatitude(e.target.value)} size="md" />
+                            <Input type='number' name='latitude' value={latitude} onChange={(e) => setLatitude(e.target.value)} size="md" />
                         </FormControl>
                             <FormControl id="longitude">
                             <FormLabel>Longitude:</FormLabel>
-                            <Input type='text' name='longitude' value={longitude} onChange={(e) => setLongitude(e.target.value)} size="md" />
+                            <Input type='number' name='longitude' value={longitude} onChange={(e) => setLongitude(e.target.value)} size="md" />
                         </FormControl>
                     </VStack>
                 </Grid>
@@ -122,6 +122,7 @@ const CreerSortie = (props) => {
                     <Button type="submit" name="publish">Publier la sortie</Button>
                  </Flex>
             </Box>
+            <MapComponent longitude={longitude} latitude={latitude}/>
         </Center>
 )
 
