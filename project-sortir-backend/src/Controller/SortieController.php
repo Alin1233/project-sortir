@@ -120,8 +120,8 @@ class SortieController extends AbstractController
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
          }
     }
-    #[Route('/participate', name: 'get_all_sorties', methods: "POST")]
-    public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request): Response
+    #[Route('/participate', name: 'participate', methods: "POST")]
+    public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $manager): Response
     {
         try{
 
@@ -132,6 +132,18 @@ class SortieController extends AbstractController
             $idSortie = $data['idSortie'];
             // Récupérer les champs de l'objet
             $idParticipant = $data['idParticipant'];
+
+            $participant = $participantRepository->find($idParticipant);
+            $sortie = $sortieRepository->find($idSortie);
+
+            if (!$participant || !$sortie) {
+                throw $this->createNotFoundException('No participant/sortie found for id '.$idParticipant.'/'. $idSortie);
+            }
+
+            $sortie->addParticipant($participant);
+
+            $manager->persist($sortie);
+            $manager->flush();
 
         } 
         catch (\Exception $e) {
