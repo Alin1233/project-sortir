@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react'
 import NavBar from './components/NavBar'
 import CreerSortie from './pages/CreerSortie'
 import Sortie from './pages/Sortie'
+import DetailsSortie from "./pages/DetailsSortie.jsx";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
             <Route path="/creer" element={<CreerSortie user={user}/>} />
             <Route path="/sortie/:id" element={<Sortie/>} />
+            <Route path="/details/:id" element={<DetailsSortie/>} />
           </Routes>
         </Router>
       </>
