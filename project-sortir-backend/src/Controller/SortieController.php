@@ -116,7 +116,13 @@ class SortieController extends AbstractController
             $sorties = $sortieRepository -> findAll();
             $sortiesData = [];
             foreach ($sorties as $sortie) {
+                $participants = $sortie->getParticipants();
+                $participantsData = [];
+                foreach($participants as $participant){
+                    $participantData = $participant->getId();
                 
+                    $participantsData[] = $participantData;
+                }
                 $sortieData = [
                     'id' => $sortie->getId(),
                     'nom'=> $sortie->getNom(),
@@ -124,11 +130,13 @@ class SortieController extends AbstractController
                     'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
                     'etat' => $sortie->getEtat()->getLibelle(),
                     'organisateur' =>  $sortie->getOrganisateur()->getNom(),
-                    'participants'=> $sortie->getParticipants()
+                    'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
+                    'participants'=> $participantsData,
+                    'campus'=> $sortie->getCampus()->getNom()
                 ];
+
                 $sortiesData[] = $sortieData;
-            
-                
+             
             }
            
             return $this->json(['sorties' =>  $sortiesData]);

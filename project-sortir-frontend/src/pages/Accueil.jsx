@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
 import axios from "axios";
 
+
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -24,6 +25,7 @@ const Accueil = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await serviceSortie.getAllSorties();
+      console.log(response);
       setSorties(response)
       setUpdateData(false);
     };
@@ -41,7 +43,7 @@ const Accueil = (props) => {
     setUpdateData(true);
   }
   //data is loading
-  if(sorties===null){
+  if(sorties===null || props.user === null){
     return <Flex justifyContent="center" alignItems="center" height="100vh">
               <Spinner />
           </Flex>
