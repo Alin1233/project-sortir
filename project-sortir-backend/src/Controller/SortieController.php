@@ -144,7 +144,7 @@ class SortieController extends AbstractController
 
             $manager->persist($sortie);
             $manager->flush();
-
+            return new Response('Added participant '. $idParticipant.' to sortie '. $idSortie);
         } 
         catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
