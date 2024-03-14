@@ -15,7 +15,7 @@ const Filtre = (props) => {
     useEffect(() => {
         let filteredSorties = [...originalSorties];
       
-        // Apply filters
+       
         if (searchNom) {
           filteredSorties = filteredSorties.filter(sortie => sortie.nom.includes(searchNom));
         }
@@ -23,7 +23,7 @@ const Filtre = (props) => {
           filteredSorties = filteredSorties.filter(sortie => sortie.campus === searchCampus);
         }
       
-        // Update sorties based on filter state
+        
         props.setSorties(searchNom || searchCampus ? filteredSorties : originalSorties);
       }, [searchNom, searchCampus]);
 
