@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Elasticsearch\Tests\Fixtures\User;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +24,13 @@ class ProfileController extends AbstractController
     {
 
 
-        return $this->json([
+        /*return $this->json([
             'user'=>$user
-        ]);
+        ]);*/
     }
 
     #[Route('/modifier', name: 'app_modifier')]
-    public function modifier(Request $request, ParticipantRepository $participantRepository,EntityManager $entityManager)
+    public function modifier(Request $request, ParticipantRepository $participantRepository,EntityManagerInterface $entityManager,CampusRepository $campusRepository)
     {
         try {
 
@@ -40,19 +41,25 @@ class ProfileController extends AbstractController
             $prenom = $data['prenom'];
             $nom = $data['nom'];
             $telephone = $data['telephone'];
-            $mail = $data['mail'];
+            $email = $data['email'];
             $campus = $data['campus'];
             if ($data['password'] === $data['confirmPassword']) {
                 $password = $data['password'];
 
-                $participant = $participantRepository->findOneBy(['mail' => $mail]);
-                //$user=setPseudo($pseudo);
+                $participant = $participantRepository->findOneBy(['mail' => $email]);
+
+                $campusIdDuParticipant=$participant->getCampus();
+
+                $participant -> setPseudo($pseudo);
                 $participant->setPrenom($prenom);
                 $participant->setNom($nom);
                 $participant->setTelephone($telephone);
-                $participant->setMail($mail);
-                $participant->setCampus($campus);
+                $participant->setMail($email);
                 $participant->setMotPasse($password);
+
+                $campusBDD = $campusRepository->findOneBy(['nom'=>$campus]);
+                $participant->setCampus($campusBDD);
+
 
                 $entityManager->flush();
                 $this->addFlash('success', 'Profile bien modifié!');
