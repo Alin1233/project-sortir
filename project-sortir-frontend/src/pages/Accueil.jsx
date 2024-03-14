@@ -18,7 +18,7 @@ const Accueil = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await serviceSortie.getAllSorties();
-      console.log(response[0].participants.length);
+      console.log(response);
       setSorties(response)
     };
   
