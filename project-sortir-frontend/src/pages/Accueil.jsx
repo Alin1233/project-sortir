@@ -10,7 +10,7 @@ import Filtre from "../components/Filtre";
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
-import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon  } from '@chakra-ui/icons';
+import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
 
 const Accueil = (props) => {
   
@@ -108,7 +108,7 @@ const Accueil = (props) => {
             <Tbody>
                 {sorties.map(sortie => (
                     <Tr key={sortie.id}>
-                        <Td>{sortie.nom}</Td>
+                        <Td><Link as={RouterLink} to={`/details/${sortie.id}`} mr="4">{sortie.nom} <ViewIcon/></Link></Td>
                         <Td>{dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Td>
                         <Td>{dateFunctions.formatDate(sortie.dateLimiteInscription)}</Td>
                         <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
