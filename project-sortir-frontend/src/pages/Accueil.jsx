@@ -47,7 +47,7 @@ const Accueil = (props) => {
   };
 
   //data is loading
-  if(sorties===null || props.user === null){
+  if(sorties===null ){
     return <Flex justifyContent="center" alignItems="center" height="100vh">
               <Spinner />
           </Flex>
@@ -57,7 +57,7 @@ const Accueil = (props) => {
     <div>
         <p>Accueil</p>
         <p>Date do jour: {formattedDate}</p>
-        <p>Participant: {props.user.nom}</p>
+        <p>Participant: {props.user  ? props.user.nom : " "}</p>
         <Popover isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen} placement='top-start'>
             <PopoverTrigger>
                 <Button>Filtrer les sorties</Button>
@@ -87,7 +87,14 @@ const Accueil = (props) => {
                         <Td>{dateFunctions.formatDate(sortie.dateLimiteInscription)}</Td>
                         <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
                         <Td>{sortie.etat}</Td>
-                        <Td>{sortie.participants.includes(props.user.id) ? 'Inscrit' : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>}</Td>
+                        <Td>
+  {props.user 
+    ? sortie.participants.includes(props.user.id) 
+      ? 'Inscrit' 
+      : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
+    : 'Conecter'
+  }
+</Td>
                         <Td>{sortie.organisateur}</Td>
                         <Td>Actions</Td>
                     </Tr>
