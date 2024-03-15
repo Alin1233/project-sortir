@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import serviceUser from '../services/serviceUser'
-import { Box, Button, FormControl, FormLabel, Input, Center } from "@chakra-ui/react";
+import {Box, Button, FormControl, FormLabel, Input, Center, Checkbox, Grid} from "@chakra-ui/react";
 const SeConnecter = (props) => {
 
   const[mail, setMail] = useState('');
@@ -16,6 +16,9 @@ const SeConnecter = (props) => {
       //si oui, créer un cookie et définir l'utilisateur actuel comme utilisateur récupéré sur le serveur
       window.localStorage.setItem('loggedUser', JSON.stringify(response))
       props.setUser(response)
+      window.location.assign('/')
+    }else{
+      alert('Erreur lors de votre saisis de vos identifiants veuillez réessayer svp')
     }
   };
 
@@ -30,7 +33,10 @@ const SeConnecter = (props) => {
           <FormLabel>Mot de passe:</FormLabel>
           <Input type='text' name='motdepasse' value={motdepasse} onChange={(e) => setMotdepasse(e.target.value)} size="md" />
         </FormControl>
-        <Button type="submit">Connexion</Button>
+        <Grid mt={3} templateColumns="repeat(2, 1fr)" gap={10}>
+          <Button type="submit">Connexion</Button>
+          <Checkbox>Rester Connecté</Checkbox>
+        </Grid>
       </Box>
     </Center>
   );

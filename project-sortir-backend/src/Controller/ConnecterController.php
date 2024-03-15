@@ -34,6 +34,7 @@ class ConnecterController extends AbstractController
             $campus = $participant->getCampus();
             $participantData = [
                 'id' => $participant->getId(),
+                'pseudo'=> $participant->getPseudo(),
                 'nom' => $participant->getNom(),
                 'prenom' => $participant->getPrenom(),
                 'telephone' => $participant->getTelephone(),
