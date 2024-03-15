@@ -49,8 +49,8 @@ class SortieController extends AbstractController
             $nomVille = $data['ville'];
 
             //cast to correct format
-            $dateHeureDebut = \DateTime::createFromFormat('Y-m-d', $dateHeureDebutString);
-            $dateLimiteInscription = \DateTime::createFromFormat('Y-m-d', $dateLimiteInscriptionString);
+            $dateHeureDebut = \DateTime::createFromFormat('Y-m-d\TH:i', $dateHeureDebutString);
+            $dateLimiteInscription = \DateTime::createFromFormat('Y-m-d\TH:i', $dateLimiteInscriptionString);
 
             $sortie = new Sortie();
             $sortie -> setNom($nom);
@@ -112,6 +112,73 @@ class SortieController extends AbstractController
        
     }
 
+    #[Route('/getall', name: 'get_all_sorties', methods: "GET")]
+    public function getAllSorties(SortieRepository $sortieRepository): Response
+    {
+        try{
+            $sorties = $sortieRepository -> findAll();
+            $sortiesData = [];
+            foreach ($sorties as $sortie) {
+                $participants = $sortie->getParticipants();
+                $participantsData = [];
+                foreach($participants as $participant){
+                    $participantData = $participant->getId();
+                
+                    $participantsData[] = $participantData;
+                }
+                $sortieData = [
+                    'id' => $sortie->getId(),
+                    'nom'=> $sortie->getNom(),
+                    'dateHeureDebut'=> $sortie->getDateHeureDebut(),
+                    'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
+                    'etat' => $sortie->getEtat()->getLibelle(),
+                    'organisateur' =>  $sortie->getOrganisateur()->getNom(),
+                    'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
+                    'participants'=> $participantsData,
+                    'campus'=> $sortie->getCampus()->getNom()
+                ];
+
+                $sortiesData[] = $sortieData;
+             
+            }
+           
+            return $this->json(['sorties' =>  $sortiesData]);
+        } 
+        catch (\Exception $e) {
+            return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
+         }
+    }
+    #[Route('/participate', name: 'participate', methods: "POST")]
+    public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $manager): Response
+    {
+        try{
+
+            // Obtenir les paramètres de la requête
+            $data = json_decode($request->getContent(), true);
+
+            // Récupérer les champs de l'objet
+            $idSortie = $data['idSortie'];
+            // Récupérer les champs de l'objet
+            $idParticipant = $data['idParticipant'];
+
+            $participant = $participantRepository->find($idParticipant);
+            $sortie = $sortieRepository->find($idSortie);
+
+            if (!$participant || !$sortie) {
+                throw $this->createNotFoundException('No participant/sortie found for id '.$idParticipant.'/'. $idSortie);
+            }
+
+            $sortie->addParticipant($participant);
+
+            $manager->persist($sortie);
+            $manager->flush();
+            return new Response('Added participant '. $idParticipant.' to sortie '. $idSortie);
+        } 
+        catch (\Exception $e) {
+            return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
+         }
+    }
+
 
     #[Route('/details/{id}', name: 'details_sortie')]
     public function getSortie(int $id, SerializerInterface $serializer, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
@@ -131,5 +198,6 @@ class SortieController extends AbstractController
             // Utilisez HTTP 500 pour les erreurs serveur
             return new Response(json_encode(['error' => 'Une erreur serveur est survenue.']), 500, ['Content-Type' => 'application/json']);
         }
+
     }
 }

@@ -4,6 +4,7 @@ import serviceVille from "./serviceVille.js";
 import serviceParticipantsSortie from "./serviceParticipantsSortie.js";
 
 const baseUrl = 'http://localhost:8000'
+
 const creerSortie = async (data) => {
     const url = baseUrl+'/creer'
     try {
@@ -27,6 +28,19 @@ const creerSortie = async (data) => {
             console.log('Error', error.message);
         }
         console.log(error.config);
+    }
+}
+
+
+const getAllSorties = async () => {
+    const url = baseUrl+"/getall";
+    try {
+        //obtenir un tableau de sorties
+        const response = await axios.get(url);
+        const sorties = response.data.sorties;
+        return sorties
+    } catch (error) {
+       console.error(error);
     }
 }
 
@@ -93,4 +107,15 @@ const getSortie = async (id) => {
         console.log(error.config);
     }
 }
-export default {creerSortie, getSortie}
+
+const addParticipant = async (data) => {
+    const url = baseUrl+'/participate'
+    try {
+        const response = await axios.post(url, data)
+        return response
+    } catch (error) {
+        console.error(error);
+    }
+}
+export default {creerSortie, getAllSorties, addParticipant, getSortie}
+
