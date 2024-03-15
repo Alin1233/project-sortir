@@ -2,6 +2,7 @@ import {Box, Button, Center, Heading, Image, Text, VStack} from "@chakra-ui/reac
 import {useEffect, useState} from "react";
 import serviceAutreProfil from "../services/serviceAutreProfil.js";
 import {useParams} from "react-router-dom";
+import Loading from "../components/Loading.jsx";
 
 const AutreProfilUtilisateur =()=>{
 
@@ -32,8 +33,19 @@ const AutreProfilUtilisateur =()=>{
         window.location.assign('/')
     }
 
-    if (userId===undefined){
-        return <div>Utilisateur en cours de création</div>
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+    useDocumentTitle('Golaf! | Profil de '+pseudo);
+
+    if (userId===undefined) {
+        return(
+            <div>
+                <Loading/>
+            </div>
+        );
     }
 
     return (

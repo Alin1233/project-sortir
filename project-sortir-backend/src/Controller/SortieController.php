@@ -14,6 +14,7 @@ use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
+use http\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -196,8 +197,9 @@ class SortieController extends AbstractController
             return new Response($data, 200, ['Content-Type' => 'application/json']);
         } catch (\Exception $e) {
             // Utilisez HTTP 500 pour les erreurs serveur
-            return new Response(json_encode(['error' => 'Une erreur serveur est survenue.']), 500, ['Content-Type' => 'application/json']);
+            return new Response(json_encode(['error' => $e->getMessage()]), 500, ['Content-Type' => 'application/json']);
         }
-
+        //Virer try catch, dans react voir status de l'erreur, pop up sur react , ouvrez console -> network requete en rouge , details de l'erreur
+        //plus propre handler dans symfony toute les réponse donne du json
     }
 }

@@ -5,20 +5,33 @@ import fr from 'date-fns/locale/fr';
 import serviceSortie from "../services/serviceSortie.js";
 import {
     Badge,
-    Box,
-    Center, Flex,
-    Grid,
-    Heading, List, ListIcon, ListItem, Spinner,
-    Text
+    Box, Button,
+    Center,
+    Flex,
+    Grid, GridItem,
+    Heading,
+    List,
+    ListIcon,
+    ListItem, Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Spinner,
+    Text, useDisclosure
 } from "@chakra-ui/react";
 import Loading from "../components/Loading.jsx";
+import MapComponent from "../components/MapComponent.jsx";
 
 const DetailsSortie = () => {
-    const id = 1; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
+    const id = 11; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
     const [sortie, setSortie] = useState(null);
     const [lieu, setLieu] = useState(null);
     const [ville, setVille] = useState(null);
     const [participants, setParticipants] = useState(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     useEffect(() => {
         const fetchSortie = async () => {
@@ -40,6 +53,13 @@ const DetailsSortie = () => {
 // Effet pour réagir aux changements de `lieu`
     useEffect(() => {
     }, [lieu]);
+
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+    useDocumentTitle('Golaf! | Détails')
 
     if (!sortie && !lieu && !ville) {
         return (
@@ -99,17 +119,43 @@ const DetailsSortie = () => {
                 </Box>
             </Center>
 
-            <Box p={5} shadow="md" borderWidth="1px" mt={6}>
-                <Heading as="h2" size="xl" mb={4}>Participants de la Sortie</Heading>
-                <List spacing={3}>
-                    {participants.map((participant, index) => (
-                        <ListItem key={index} fontSize="xl">
-                            <ListIcon as='' color="teal.600" />
-                            <Badge colorScheme="teal" ml="10" fontSize="large">{participant.nom}</Badge>
-                        </ListItem>
-                    ))}
-                </List>
-            </Box>
+
+
+            <Grid templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]} gap={6} p={5}>
+                <GridItem colSpan={2}>
+                    <Heading as="h2" size="xl" mb={4}>Participants de la Sortie</Heading>
+                    <List spacing={3}>
+                        {participants.map((participant, index) => (
+                            <ListItem key={index} fontSize="xl">
+                                <ListIcon as='' color="teal.600" />
+                                <Badge colorScheme="teal" ml="10" fontSize="large">{participant.nom}</Badge>
+                            </ListItem>
+                        ))}
+                    </List>
+                </GridItem>
+
+                <GridItem colStart={3}>
+                    <Button onClick={onOpen} colorScheme="teal">Afficher sur la carte</Button>
+
+                    <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
+                        <ModalOverlay/>
+                        <ModalContent>
+                            <ModalHeader>Carte</ModalHeader>
+                            <ModalCloseButton/>
+                            <ModalBody>
+                                <MapComponent longitude={lieu[0]?.latitude} latitude={lieu[0]?.longitude}/>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                    Fermer
+                                </Button>
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+                </GridItem>
+            </Grid>
+
+
         </div>
     )
 };
