@@ -4,13 +4,13 @@ import { Button, Link, Heading, VStack, Box, Popover, PopoverTrigger, PopoverCon
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
-import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon } from "@chakra-ui/react";
 import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
-import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon  } from '@chakra-ui/icons';
+import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon  } from '@chakra-ui/icons';
 
 const Accueil = (props) => {
   
@@ -57,9 +57,16 @@ const Accueil = (props) => {
 
   return (
     <div>
-        <p>Accueil</p>
-        <p>Date do jour: {formattedDate}</p>
-        <p>Participant: {props.user  ? props.user.nom : " "}</p>
+        <Box>
+          <Flex justifyContent="space-between" alignItems="center" p={5}>
+            <Heading as="h1" size="lg"  textAlign="center">
+              Accueil
+            </Heading>
+            <Text >
+              Date du jour: {formattedDate} <Icon as={CalendarIcon}/>
+            </Text>
+          </Flex>
+        </Box>
         <Popover isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
             <PopoverTrigger>
                 <Button>Filtrer les sorties <ChevronDownIcon /></Button>
