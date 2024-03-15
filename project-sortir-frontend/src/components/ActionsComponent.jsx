@@ -16,7 +16,7 @@ const ActionsComponent = () => {
   </MenuButton>
   <MenuList>
     <MenuItem>Modifier</MenuItem>
-    <MenuItem>Ouvrir</MenuItem>
+    <MenuItem>Publier</MenuItem>
     <MenuItem>Supprimer</MenuItem>
   </MenuList>
 </Menu>

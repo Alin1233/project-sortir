@@ -10,7 +10,8 @@ import Filtre from "../components/Filtre";
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, CheckIcon  } from '@chakra-ui/icons';
+
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -91,7 +92,7 @@ const Accueil = (props) => {
                         <Td>
                           {props.user 
                             ? sortie.participants.includes(props.user.id) 
-                              ? 'Inscrit' 
+                              ? <CheckIcon boxSize="20px" color="green.500" />
                               : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
                             : <Link as={RouterLink} to="/connecter">Se Connecter</Link>
                           }
