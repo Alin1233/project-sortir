@@ -33,6 +33,13 @@ const Accueil = (props) => {
     fetchData();
   }, [updateData]);
 
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+    useDocumentTitle('Golaf! | Accueil')
+
   const handleParticiperClick = async(idSortie) =>{
     const idUser = props.user.id
     const data = {

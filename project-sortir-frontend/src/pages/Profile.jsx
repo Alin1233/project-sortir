@@ -38,6 +38,13 @@ const Profile = (props) => {
     }
   }, [navigate, props.user]);
 
+  function useDocumentTitle(title) {
+    useEffect(() => {
+      document.title = title;
+    }, [title]);
+  }
+  useDocumentTitle('Golaf! | Mon profil')
+
   //Etats, données
 
   const [pseudo, setPseudo]=useState(props.user && props.user.pseudo ? props.user.pseudo : '')
@@ -78,14 +85,10 @@ const Profile = (props) => {
     }
   }
   if (campusList===null){
-    return <div>
-      <Loading/>
-    </div>
+    return <div><Loading/></div>
   }
-  if (props.user === null) {
-    return <div>
-    <Loading/>
-    </div>
+  if(props.user===null){
+    return <div><Loading/></div>;
   }
 
 //Affichage
