@@ -88,13 +88,13 @@ const Accueil = (props) => {
                         <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
                         <Td>{sortie.etat}</Td>
                         <Td>
-  {props.user 
-    ? sortie.participants.includes(props.user.id) 
-      ? 'Inscrit' 
-      : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
-    : 'Conecter'
-  }
-</Td>
+                          {props.user 
+                            ? sortie.participants.includes(props.user.id) 
+                              ? 'Inscrit' 
+                              : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
+                            : <Link as={RouterLink} to="/connecter">Se Connecter</Link>
+                          }
+                        </Td>
                         <Td>{sortie.organisateur}</Td>
                         <Td>Actions</Td>
                     </Tr>
