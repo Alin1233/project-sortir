@@ -54,7 +54,7 @@ const Profile = (props) => {
   const [email, setEmail]=useState(props.user && props.user.mail ? props.user.mail : '')
   const [password, setPassword]=useState('')
   const[confirmPassword,setConfirmPassword]=useState('')
-  const [campus, setCampus]=useState(props.user && props.user.campus ? props.user.campus : null)
+  const [campus, setCampus]=useState(props.user && props.user.campus ? props.user.campus : '')
   const [campusList, setCampusList] = useState ( null)
 
 //Comportements
@@ -75,6 +75,7 @@ const Profile = (props) => {
         campus: campus
       }
       const response = await serviceProfile.modifierProfile(user);
+      window.localStorage.setItem('loggedUser', JSON.stringify(response))
       console.log(response)
       if (response.status===500){
         alert('Erreur venant du serveur, profil non modifié')
@@ -138,7 +139,7 @@ const Profile = (props) => {
                     </FormControl>
                     <FormControl id="campus">
                       <FormLabel>Campus :</FormLabel>
-                      <Select value={props.user.campus} onChange={(e)=>{setCampus(e.target.value)
+                      <Select value={campus} onChange={(e)=>{setCampus(e.target.value)
                       console.log(campus)}}>
                         {campusList.map((campusList) => (
                             <option key={campusList.id} value={campusList.nom}>

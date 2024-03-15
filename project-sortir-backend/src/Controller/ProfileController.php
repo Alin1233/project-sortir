@@ -38,8 +38,8 @@ class ProfileController extends AbstractController
 
             $data = json_decode($request->getContent(), true);
 
-            $premierParticipant=$participantRepository->findOneBy(['id'=>$data['id']]);
-            $memeParticipant=$participantRepository->findOneBy(['pseudo'=>$data['pseudo']]);
+            /*$premierParticipant=$participantRepository->findOneBy(['id'=>$data['id']]);
+            $memeParticipant=$participantRepository->findOneBy(['pseudo'=>$data['pseudo']]);*/
 
             /*if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
                 throw new \Exception('Le pseudo que vous avez chosis est déja pris! Damm!', 1);
@@ -58,8 +58,6 @@ class ProfileController extends AbstractController
 
                 $participant = $participantRepository->findOneBy(['mail' => $email]);
 
-                $campusIdDuParticipant=$participant->getCampus();
-
                 $participant -> setPseudo($pseudo);
                 $participant->setPrenom($prenom);
                 $participant->setNom($nom);
@@ -70,14 +68,8 @@ class ProfileController extends AbstractController
                 $campusBDD = $campusRepository->findOneBy(['nom'=>$campus]);
                 $participant->setCampus($campusBDD);
 
-
                 $entityManager->flush();
-                $this->addFlash('success', 'Profile bien modifié!');
-
-
-
-
-                //throw new \Exception('Vous ne pouvez pas choisir');
+                return new Response();
             }
         }catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage(), 'code'=>$e->getCode()]), 400, ['Content-Type' => 'application/json']);

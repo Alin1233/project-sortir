@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Link, Flex, Image, Heading, Avatar, Tooltip } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import logo from '../assets/logo.jpg'
+import logo from '../assets/FAVICON.png'
 const NavBar = (props) => {
     //Quand quelqu'un clique sur "log out", le cookie est supprimé et l'utilisateur actuel est déclaré null
     const handleLogout = () =>{
@@ -13,7 +13,7 @@ const NavBar = (props) => {
             <Box>
             <Flex align="center">
                 <Link as={RouterLink} to="/" mr="4">
-                <Image src='img/FAVICON.png' alt="Logo" boxSize="100px" borderRadius="full"/>
+                <Image src={logo} alt="Logo" boxSize="100px" borderRadius="full"/>
                 </Link>
                 <Heading size="lg" ml="4">Golaf!</Heading>
             </Flex>
