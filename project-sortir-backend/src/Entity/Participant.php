@@ -7,9 +7,11 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[ApiResource]
+#[UniqueEntity(fields: ['pseudo','mail'], ignoreNull: 'pseudo')]
 class Participant
 {
     #[ORM\Id]
@@ -48,6 +50,9 @@ class Participant
 
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur')]
     private Collection $sortiesOrganisees;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pseudo = null;
 
     public function __construct()
     {
@@ -206,6 +211,18 @@ class Participant
                 $sortiesOrganisee->setOrganisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }

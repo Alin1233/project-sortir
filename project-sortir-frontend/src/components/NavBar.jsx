@@ -20,6 +20,7 @@ const NavBar = (props) => {
                 <Link as={RouterLink} to="/" mr="4">Accueil</Link>
                 <Link as={RouterLink} to="/profile" mr="4">Profile</Link>
                 <Link as={RouterLink} to="/creer" mr="4">Creer Sortie</Link>
+                <Link as={RouterLink} to={`/details/${props.user && props.user.id ? props.user.id : ''}`} mr="4">Détails sortie</Link>
                 {props.user ? (
                     <Button onClick={handleLogout} variant="link" colorScheme="black" mr="4">
                         <Tooltip label='Se déconnecter!'>
