@@ -9,7 +9,8 @@ import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
-
+import ActionsComponent from "../components/ActionsComponent";
+import { ChevronDownIcon } from '@chakra-ui/icons';
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -58,9 +59,9 @@ const Accueil = (props) => {
         <p>Accueil</p>
         <p>Date do jour: {formattedDate}</p>
         <p>Participant: {props.user  ? props.user.nom : " "}</p>
-        <Popover isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen} placement='top-start'>
+        <Popover isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
             <PopoverTrigger>
-                <Button>Filtrer les sorties</Button>
+                <Button>Filtrer les sorties <ChevronDownIcon /></Button>
             </PopoverTrigger>
             <PopoverContent>
             <Filtre sorties={sorties} setSorties={setSorties}/>
@@ -96,7 +97,7 @@ const Accueil = (props) => {
                           }
                         </Td>
                         <Td>{sortie.organisateur}</Td>
-                        <Td>Actions</Td>
+                        <Td><ActionsComponent/></Td>
                     </Tr>
                 ))}
             </Tbody>
