@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
@@ -17,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class SortieController extends AbstractController
 {
@@ -108,5 +110,26 @@ class SortieController extends AbstractController
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
         }
        
+    }
+
+
+    #[Route('/details/{id}', name: 'details_sortie')]
+    public function getSortie(int $id, SerializerInterface $serializer, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
+    {
+        try {
+            $sortie = $sortieRepository->find($id);
+
+
+            if (!$sortie) {
+                return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+            }
+
+            $data = $serializer->serialize($sortie, 'json');
+
+            return new Response($data, 200, ['Content-Type' => 'application/json']);
+        } catch (\Exception $e) {
+            // Utilisez HTTP 500 pour les erreurs serveur
+            return new Response(json_encode(['error' => 'Une erreur serveur est survenue.']), 500, ['Content-Type' => 'application/json']);
+        }
     }
 }

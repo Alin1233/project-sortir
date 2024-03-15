@@ -10,6 +10,8 @@ import NavBar from './components/NavBar'
 import CreerSortie from './pages/CreerSortie'
 import Sortie from './pages/Sortie'
 import AutreProfilUtilisateur from "./pages/AutreProfilUtilisateur.jsx";
+import DetailsSortie from "./pages/DetailsSortie.jsx";
+
 
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
             <Route path="/creer" element={<CreerSortie user={user}/>} />
             <Route path="/sortie/:id" element={<Sortie/>} />
             <Route path="/profile/:userId" element={<AutreProfilUtilisateur id={userId}/>}/>
+            <Route path="/details/:id" element={<DetailsSortie/>} />
           </Routes>
         </Router>
       </>
