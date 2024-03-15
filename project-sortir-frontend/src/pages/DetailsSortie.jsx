@@ -26,7 +26,7 @@ import Loading from "../components/Loading.jsx";
 import MapComponent from "../components/MapComponent.jsx";
 
 const DetailsSortie = () => {
-    const id = 11; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
+    const id = useParams().id; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
     const [sortie, setSortie] = useState(null);
     const [lieu, setLieu] = useState(null);
     const [ville, setVille] = useState(null);
