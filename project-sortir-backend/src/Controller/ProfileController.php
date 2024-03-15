@@ -40,11 +40,11 @@ class ProfileController extends AbstractController
             $premierParticipant=$participantRepository->findOneBy(['id'=>$data['id']]);
             $memeParticipant=$participantRepository->findOneBy(['pseudo'=>$data['pseudo']]);
 
-            /*if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
+            if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
                 throw new \Exception('Le pseudo que vous avez chosis est déja pris! Damm!', 1);
             }elseif ($premierParticipant['pseudo']!==$memeParticipant['pseudo'] && $premierParticipant['mail']===$memeParticipant['mail']){
                 throw new \Exception('L\'adresse mail que vous avez chosis est déja pris! Chokbar!', 2);
-            }*/
+            }
 
             $pseudo = $data['pseudo'];
             $prenom = $data['prenom'];
@@ -81,5 +81,13 @@ class ProfileController extends AbstractController
         }catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage(), 'code'=>$e->getCode()]), 400, ['Content-Type' => 'application/json']);
         }
+    }
+
+    #[Route('/{id}', name: 'app_autreUtilisateur')]
+    public function getAutreProfil(ParticipantRepository $participantRepository, Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $participant = $participantRepository->findOneBy(['id'=>$data]);
+        return new Response();
     }
 }

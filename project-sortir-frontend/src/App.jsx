@@ -1,6 +1,6 @@
 import {
-  BrowserRouter as Router,
-  Routes, Route
+    BrowserRouter as Router,
+    Routes, Route, useParams
 } from 'react-router-dom'
 import Accueil from './pages/Accueil'
 import Profile from './pages/Profile'
@@ -9,12 +9,14 @@ import { useState, useEffect } from 'react'
 import NavBar from './components/NavBar'
 import CreerSortie from './pages/CreerSortie'
 import Sortie from './pages/Sortie'
+import AutreProfilUtilisateur from "./pages/AutreProfilUtilisateur.jsx";
 
 
 function App() {
 
     //l'utilisateur connecté actuel
     const[user, setUser] = useState (null)
+    let { userId } = useParams();
 
     useEffect(()=>{
       //vérifier s'il existe un cookie contenant l'utilisateur actuel
@@ -35,6 +37,7 @@ function App() {
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
             <Route path="/creer" element={<CreerSortie user={user}/>} />
             <Route path="/sortie/:id" element={<Sortie/>} />
+            <Route path="/profile/:userId" element={<AutreProfilUtilisateur id={userId}/>}/>
           </Routes>
         </Router>
       </>

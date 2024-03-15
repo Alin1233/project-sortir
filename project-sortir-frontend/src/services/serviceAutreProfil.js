@@ -1,17 +1,14 @@
-import axios from 'axios'
+import axios from "axios";
 
-const baseUrl = 'http://localhost:8000'
+const getAutreProfil = async (id) => {
 
-const getCampus = async () => {
-    const url =  baseUrl + '/api/campuses?page=1'
-    try {
-        const response= await axios.get(url)
+    //const baseUrl = 'http://localhost:8000'
 
-        return response.data['hydra:member'].map(campus=>({
-            id:campus.id,
-            nom: campus.nom
-        }))
-    }catch (error) {
+    const url = `http://localhost:8000/api/participants/${id}`;
+    try{
+        const response = await axios.get(url);
+        return response.data
+    } catch(error){
         console.error(error);
         if (error.response) {
             // The request was made and the server responded with a status code
@@ -31,11 +28,13 @@ const getCampus = async () => {
         console.log(error.config);
     }
 }
-const modifierProfile = async (data) => {
-    const url = baseUrl+'/profile/modifier'
-    try {
-        return await axios.post(url, data)
-    } catch (error) {
+
+const getCampusAutreProfil = async (id)=>{
+    const url = `http://localhost:8000/api/campuses/${id}`;
+    try{
+        const response = await axios.get(url);
+        return response.data
+    } catch(error){
         console.error(error);
         if (error.response) {
             // The request was made and the server responded with a status code
@@ -43,7 +42,6 @@ const modifierProfile = async (data) => {
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            return error.response
         } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -56,6 +54,4 @@ const modifierProfile = async (data) => {
         console.log(error.config);
     }
 }
-
-//const getUser = async ()
-export default {modifierProfile, getCampus}
+export default {getAutreProfil, getCampusAutreProfil}
