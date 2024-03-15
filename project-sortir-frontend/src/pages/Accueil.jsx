@@ -10,7 +10,7 @@ import Filtre from "../components/Filtre";
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
-import { ChevronDownIcon, CheckIcon  } from '@chakra-ui/icons';
+import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon  } from '@chakra-ui/icons';
 
 const Accueil = (props) => {
   
@@ -72,8 +72,8 @@ const Accueil = (props) => {
             <Thead>
                 <Tr>
                     <Th>Nom de la sortie</Th>
-                    <Th>Date de la sortie</Th>
-                    <Th>Cloture</Th>
+                    <Th>Date de la sortie <TimeIcon/></Th>
+                    <Th>Cloture <LockIcon/></Th>
                     <Th>Inscrits / Places</Th>
                     <Th>Etat</Th>
                     <Th>Inscrit</Th>
