@@ -14,6 +14,7 @@ use App\Entity\Participant;
 use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/profile', name: 'app_profile')]
 class ProfileController extends AbstractController
@@ -40,11 +41,11 @@ class ProfileController extends AbstractController
             $premierParticipant=$participantRepository->findOneBy(['id'=>$data['id']]);
             $memeParticipant=$participantRepository->findOneBy(['pseudo'=>$data['pseudo']]);
 
-            if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
+            /*if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
                 throw new \Exception('Le pseudo que vous avez chosis est déja pris! Damm!', 1);
             }elseif ($premierParticipant['pseudo']!==$memeParticipant['pseudo'] && $premierParticipant['mail']===$memeParticipant['mail']){
                 throw new \Exception('L\'adresse mail que vous avez chosis est déja pris! Chokbar!', 2);
-            }
+            }*/
 
             $pseudo = $data['pseudo'];
             $prenom = $data['prenom'];
@@ -73,7 +74,7 @@ class ProfileController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Profile bien modifié!');
 
-                return new Response();
+
 
 
                 //throw new \Exception('Vous ne pouvez pas choisir');

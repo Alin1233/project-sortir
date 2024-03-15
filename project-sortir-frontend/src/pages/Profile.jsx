@@ -17,6 +17,7 @@ import {
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import serviceProfile from "../services/serviceProfile.js";
+import Loading from "../components/Loading.jsx";
 
 const Profile = (props) => {
 
@@ -46,7 +47,7 @@ const Profile = (props) => {
   const [email, setEmail]=useState(props.user && props.user.mail ? props.user.mail : '')
   const [password, setPassword]=useState('')
   const[confirmPassword,setConfirmPassword]=useState('')
-  const [campus, setCampus]=useState(null)
+  const [campus, setCampus]=useState(props.user && props.user.campus ? props.user.campus : null)
   const [campusList, setCampusList] = useState ( null)
 
 //Comportements
@@ -77,18 +78,21 @@ const Profile = (props) => {
     }
   }
   if (campusList===null){
-    return <div>Loading</div>
+    return <div>
+      <Loading/>
+    </div>
   }
-  if(props.user===null){
-    return <div> Loading</div>;
+  if (props.user === null) {
+    return <div>
+    <Loading/>
+    </div>
   }
-
 
 //Affichage
 
   return (
-          <Box>
-            <Center mt="100px">
+      <Box>
+      <Center mt="100px">
               <Heading textDecoration="underline">Mon Profil</Heading>
             </Center>
             <Center h="100vh" mt="-200px" gap={9}>
@@ -131,7 +135,8 @@ const Profile = (props) => {
                     </FormControl>
                     <FormControl id="campus">
                       <FormLabel>Campus :</FormLabel>
-                      <Select value={props.user.campus.nom} onChange={(e)=>setCampus(e.target.value)}>
+                      <Select value={props.user.campus} onChange={(e)=>{setCampus(e.target.value)
+                      console.log(campus)}}>
                         {campusList.map((campusList) => (
                             <option key={campusList.id} value={campusList.nom}>
                               {campusList.nom}
