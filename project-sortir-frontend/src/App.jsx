@@ -29,6 +29,12 @@ function App() {
         setUser(user)
       }
     },[])
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+    useDocumentTitle('Golaf! | Accueil')
     return (
       <>
         <Router>

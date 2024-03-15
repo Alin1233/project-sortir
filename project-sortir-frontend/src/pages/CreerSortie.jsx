@@ -26,7 +26,13 @@ const CreerSortie = (props) => {
             navigate('/connecter');
         }
     }, [navigate, props.user]);
-    
+
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+    useDocumentTitle('Golaf! | Créer une sortie')
 
     const handleSubmit = async(e) =>{
         e.preventDefault();

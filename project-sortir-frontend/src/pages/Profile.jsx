@@ -17,6 +17,7 @@ import {
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import serviceProfile from "../services/serviceProfile.js";
+import Loading from "../components/Loading.jsx";
 
 const Profile = (props) => {
 
@@ -36,6 +37,13 @@ const Profile = (props) => {
       navigate('/connecter');
     }
   }, [navigate, props.user]);
+
+  function useDocumentTitle(title) {
+    useEffect(() => {
+      document.title = title;
+    }, [title]);
+  }
+  useDocumentTitle('Golaf! | Mon profil')
 
   //Etats, données
 
@@ -77,10 +85,10 @@ const Profile = (props) => {
     }
   }
   if (campusList===null){
-    return <div>Loading</div>
+    return <div><Loading/></div>
   }
   if(props.user===null){
-    return <div> Loading</div>;
+    return <div> <Loading/></div>;
   }
 
 
