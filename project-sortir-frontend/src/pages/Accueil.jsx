@@ -79,8 +79,18 @@ const Accueil = (props) => {
             <Thead>
                 <Tr>
                     <Th>Nom de la sortie</Th>
-                    <Th>Date de la sortie <TimeIcon/></Th>
-                    <Th>Cloture <LockIcon/></Th>
+                    <Th> 
+                      <Flex alignItems="center">
+                        <Text marginRight="2">Date de la sortie</Text>
+                        <TimeIcon />
+                      </Flex>
+                    </Th>
+                    <Th>
+                      <Flex alignItems="center">
+                        <Text marginRight="2">Cloture</Text>
+                        <LockIcon />
+                      </Flex>
+                    </Th>
                     <Th>Inscrits / Places</Th>
                     <Th>Etat</Th>
                     <Th>Inscrit</Th>
