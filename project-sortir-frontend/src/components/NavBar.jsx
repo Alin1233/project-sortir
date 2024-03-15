@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Button, Link, Flex, Image, Heading } from "@chakra-ui/react";
+import { Box, Button, Link, Flex, Image, Heading, Avatar, Tooltip } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import logo from '../assets/logo.jpg'
 const NavBar = (props) => {
@@ -22,7 +22,9 @@ const NavBar = (props) => {
                 <Link as={RouterLink} to="/creer" mr="4">Creer Sortie</Link>
                 {props.user ? (
                     <Button onClick={handleLogout} variant="link" colorScheme="black" mr="4">
-                        Welcome {props.user.nom}, Log Out
+                        <Tooltip label='Se déconnecter!'>
+                            <Avatar name={props.user.nom} src='https://bit.ly/broken-link' />
+                        </Tooltip>
                     </Button>
                 ) : (
                     <Link as={RouterLink} to="/connecter">Se Connecter</Link>
