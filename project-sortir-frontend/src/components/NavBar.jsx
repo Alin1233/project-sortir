@@ -24,7 +24,7 @@ const NavBar = (props) => {
                 {props.user ? (
                     <Button onClick={handleLogout} variant="link" colorScheme="black" mr="4">
                         <Tooltip label='Se déconnecter!'>
-                            <Avatar name={props.user.nom} src='https://bit.ly/broken-link' />
+                            <Avatar name={props.user.nom}  />
                         </Tooltip>
                     </Button>
                 ) : (
