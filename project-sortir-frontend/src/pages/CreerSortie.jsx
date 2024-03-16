@@ -22,7 +22,7 @@ const CreerSortie = (props) => {
     const [latitude, setLatitude] = useState( 47.227479546104746)
     const [longitude, setLongitude] = useState(-1.5507239538023578)
 
-    const[lieuxVille, setLieuxVille] = useState(null)
+    const[lieuxVille, setLieuxVille] = useState('')
     const [villes, setVilles] = useState(null)
     //si l'utilisateur est nul, redirection à la connexion
     const navigate = useNavigate();
@@ -48,6 +48,8 @@ const CreerSortie = (props) => {
             setCodePostal(responseVilles[0].codePostal)
             setLatitude(responseVilles[0].lieux[0].latitude)
             setLatitude(responseVilles[0].lieux[0].longitude)
+            setVille(responseVilles[0].nom)
+            setLieu(responseVilles[0].lieux[0].nom)
         }
         fetchVilles()
     },[])
@@ -88,7 +90,8 @@ const CreerSortie = (props) => {
                 setCodePostal(selectedVille.codePostal);
                 setRue(selectedVille.lieux[0].rue)
                 setLatitude(selectedVille.lieux[0].latitude)
-                setLongitude(selectedVille.lieux[0].longitude)  
+                setLongitude(selectedVille.lieux[0].longitude)
+                setLieu(selectedVille.lieux[0].nom)  
             }
         }
     }, [ville, villes]);
@@ -133,7 +136,7 @@ const CreerSortie = (props) => {
                     <VStack align="stretch">
                         <FormControl id="ville">
                             <FormLabel>Ville:</FormLabel>
-                            <Select name='ville' onChange={(e) => setVille(e.target.value)}>
+                            <Select name='ville' onChange={(e) => setVille(e.target.value)} defaultValue={ville}>
                                 {villes.map((ville) => (
                                     <option key={ville.id} value={ville.nom}>
                                     {ville.nom}
@@ -143,7 +146,7 @@ const CreerSortie = (props) => {
                         </FormControl>
                             <FormControl id="lieu">
                             <FormLabel>Lieu:</FormLabel>
-                            <Select name='lieu' onChange={(e) => setLieu(e.target.value)}>
+                            <Select name='lieu' onChange={(e) => setLieu(e.target.value)} defaultValue={lieu}>
                                 {lieuxVille.map((lieu) => (
                                     <option key={lieu.id} value={lieu.nom}>
                                     {lieu.nom}
@@ -153,19 +156,19 @@ const CreerSortie = (props) => {
                         </FormControl>
                             <FormControl id="rue">
                             <FormLabel>Rue:</FormLabel>
-                            <Input disabled type='text' name='rue' value={rue} onChange={(e) => setRue(e.target.value)} size="md" />
+                            <Input disabled type='text' name='rue' value={rue} size="md" />
                         </FormControl>
                             <FormControl id="codePostal">
                             <FormLabel>Code Postal:</FormLabel>
-                            <Input disabled type='text' name='codePostal' value={codePostal} onChange={(e) => setCodePostal(e.target.value)} size="md" />
+                            <Input disabled type='text' name='codePostal' value={codePostal}  size="md" />
                         </FormControl>
                             <FormControl id="latitude">
                             <FormLabel>Latitude:</FormLabel>
-                            <Input disabled type='number' name='latitude' value={latitude} onChange={(e) => setLatitude(e.target.value)} size="md" />
+                            <Input disabled type='number' name='latitude' value={latitude} size="md" />
                         </FormControl>
                             <FormControl id="longitude">
                             <FormLabel>Longitude:</FormLabel>
-                            <Input disabled type='number' name='longitude' value={longitude} onChange={(e) => setLongitude(e.target.value)} size="md" />
+                            <Input disabled type='number' name='longitude' value={longitude} size="md" />
                         </FormControl>
                     </VStack>
                 </Grid>
