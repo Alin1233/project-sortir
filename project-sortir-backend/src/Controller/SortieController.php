@@ -114,8 +114,8 @@ class SortieController extends AbstractController
        
     }
 
-    #[Route('/getall', name: 'get_all_sorties', methods: "GET")]
-    public function getAllSorties(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository): Response
+    #[Route('/getallbyfilter', name: 'get_all_sorties', methods: "GET")]
+    public function getAllSortiesByFilter(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository): Response
     {
         try{
             $filters = json_decode($_GET['filter']);

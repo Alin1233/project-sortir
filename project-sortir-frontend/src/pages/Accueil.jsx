@@ -28,7 +28,7 @@ const Accueil = (props) => {
     const fetchData = async () => {
       const filter = ['inscrit']
       if (props.user) {
-      const response = await serviceSortie.getAllSorties(filter, props.user.id)
+      const response = await serviceSortie.getAllSortiesByFilter(filter, props.user.id)
       setSorties(response)
       setUpdateData(false);}
     };

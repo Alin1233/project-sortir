@@ -32,8 +32,8 @@ const creerSortie = async (data) => {
 }
 
 
-const getAllSorties = async (filter, userId) => {
-    const url = baseUrl+"/getall";
+const getAllSortiesByFilter = async (filter, userId) => {
+    const url = baseUrl+"/getallbyfilter";
     try {
         //obtenir un tableau de sorties
         const response = await axios.get(url, { params: { filter: JSON.stringify(filter),userId } });
@@ -133,5 +133,5 @@ const addParticipant = async (data) => {
         console.error(error);
     }
 }
-export default {creerSortie, getAllSorties, addParticipant, getSortie}
+export default {creerSortie, getAllSortiesByFilter, addParticipant, getSortie}
 
