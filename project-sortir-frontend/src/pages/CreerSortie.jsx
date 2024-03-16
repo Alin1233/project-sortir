@@ -86,15 +86,23 @@ const CreerSortie = (props) => {
         if (villes) {
             const selectedVille = villes.find(v => v.nom === ville);
             if (selectedVille && selectedVille.lieux[0]) {
-                setLieuxVille(selectedVille.lieux);
                 setCodePostal(selectedVille.codePostal);
-                setRue(selectedVille.lieux[0].rue)
-                setLatitude(selectedVille.lieux[0].latitude)
-                setLongitude(selectedVille.lieux[0].longitude)
-                setLieu(selectedVille.lieux[0].nom)  
+                setLieuxVille(selectedVille.lieux);
+                setLieu(selectedVille.lieux[0].nom); 
             }
         }
     }, [ville, villes]);
+    
+    useEffect(() => {
+        if (lieuxVille) {
+            const selectedLieu = lieuxVille.find(l => l.nom === lieu)
+            if(selectedLieu){
+                setRue(selectedLieu.rue)
+                setLatitude(selectedLieu.latitude)
+                setLongitude(selectedLieu.longitude)
+            }
+        }
+    }, [lieu, lieuxVille]);
 
     if(villes === null){
         return <Loading/>
