@@ -30,4 +30,14 @@ const getVilleById = async (id) => {
         console.log(error.config);
     }
 }
-export default {getVilleById}
+const getAllVilles = async () => {
+    try {
+        const url = $baseUrl+"/villes"
+        const response = await axios.get(url)
+        console.log(response.data);
+        return response.data.villes
+    } catch (error) {
+        console.error(error);
+    }
+}
+export default {getVilleById, getAllVilles}
