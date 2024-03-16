@@ -84,7 +84,7 @@ const Accueil = (props) => {
             <Filtre sorties={sorties} setSorties={setSorties}/>
             </PopoverContent>
         </Popover>
-        <SimpleGrid columns={columns} spacing={10} >
+        <SimpleGrid columns={columns} spacing={10} ml={{base: "0", md: isOpen ? "350" : "0"}} mt={{base: isOpen ? "450" : "0", md: "0"}}>
     {sorties.map(sortie => (
         <Box key={sortie.id} borderWidth="1px" borderRadius="lg" overflow="hidden" p="6"  bgColor="blue.50">
             <VStack align="center" spacing="4">
