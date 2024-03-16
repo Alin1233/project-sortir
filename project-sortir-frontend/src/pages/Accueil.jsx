@@ -4,7 +4,7 @@ import { Button, Link, Heading, VStack, Box, Popover, PopoverTrigger, PopoverCon
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
-import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon, SimpleGrid, HStack, Avatar } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon, SimpleGrid, HStack, Avatar, useBreakpointValue  } from "@chakra-ui/react";
 import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
 import axios from "axios";
@@ -54,6 +54,8 @@ const Accueil = (props) => {
   const handleOpen = () => {
   setIsOpen(!isOpen);
   };
+  //design pour smartphone
+  const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
   //data is loading
   if(sorties===null ){
@@ -82,7 +84,7 @@ const Accueil = (props) => {
             <Filtre sorties={sorties} setSorties={setSorties}/>
             </PopoverContent>
         </Popover>
-        <SimpleGrid columns={3} spacing={10}>
+        <SimpleGrid columns={columns} spacing={10} >
     {sorties.map(sortie => (
         <Box key={sortie.id} borderWidth="1px" borderRadius="lg" overflow="hidden" p="6"  bgColor="blue.50">
             <VStack align="center" spacing="4">
