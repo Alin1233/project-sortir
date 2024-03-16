@@ -45,4 +45,21 @@ class SortieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findSortiesWhereUserNotInscrit($userId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT s
+            FROM App\Entity\Sortie s
+            WHERE s.id NOT IN (
+                SELECT s2.id
+                FROM App\Entity\Sortie s2
+                JOIN s2.participants p
+                WHERE p.id = :userId
+            )'
+        )->setParameter('userId', $userId);
+
+        return $query->getResult();
+    }
 }

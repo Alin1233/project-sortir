@@ -26,12 +26,14 @@ const Accueil = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await serviceSortie.getAllSorties();
+      const filter = ['inscrit']
+      if (props.user) {
+      const response = await serviceSortie.getAllSorties(filter, props.user.id)
       setSorties(response)
-      setUpdateData(false);
+      setUpdateData(false);}
     };
     fetchData();
-  }, [updateData]);
+  }, [props.user, updateData]);
 
     function useDocumentTitle(title) {
         useEffect(() => {
@@ -58,7 +60,7 @@ const Accueil = (props) => {
   const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
   //data is loading
-  if(sorties===null ){
+  if(sorties===null || props.user ===null ){
     return <Flex justifyContent="center" alignItems="center" height="100vh">
               <Spinner />
           </Flex>

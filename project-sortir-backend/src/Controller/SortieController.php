@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Repository\CampusRepository;
@@ -114,12 +115,50 @@ class SortieController extends AbstractController
     }
 
     #[Route('/getall', name: 'get_all_sorties', methods: "GET")]
-    public function getAllSorties(SortieRepository $sortieRepository): Response
+    public function getAllSorties(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository): Response
     {
         try{
-            $sorties = $sortieRepository -> findAll();
+            $filters = json_decode($_GET['filter']);
+            $userId = json_decode($_GET['userId']);
+            $participant = $participantRepository->find($userId);
+            $filteredSorties = [];
+
+        
+            foreach($filters as $filter){
+                foreach($filters as $filter){
+                    if($filter === 'inscrit'){
+                        $inscritSorties = $participant->getSortie();
+                        if($inscritSorties){
+                            $filteredSorties = array_merge($filteredSorties, $inscritSorties->toArray());
+                        }
+                    }
+                    if($filter === 'organisateur'){
+                        $organisateurSorties = $participant->getSortiesOrganisees();
+                        if($organisateurSorties){
+                            $filteredSorties = array_merge($filteredSorties, $organisateurSorties->toArray());
+                        }
+                    }
+                    if($filter === 'nonInscrit'){
+                        $nonInscritSorties = $sortieRepository->findSortiesWhereUserNotInscrit($userId);
+                        if($nonInscritSorties){
+                            $filteredSorties = array_merge($filteredSorties, $nonInscritSorties->toArray());
+                        }
+                    }
+                    if($filter === 'passee'){
+                        $sortiesPasse = $sortieRepository->findBy(['etat'=> 'Passée']);
+                        if($sortiesPasse){
+                            $filteredSorties = array_merge($filteredSorties, $sortiesPasse->toArray());
+                        }
+                    }
+                }
+                
+            }
+            $filteredSorties = array_unique($filteredSorties, SORT_REGULAR);
+
+            #$sorties = $sortieRepository -> findAll();
+            #$sorties = $participant->getSortie();
             $sortiesData = [];
-            foreach ($sorties as $sortie) {
+            foreach ($filteredSorties as $sortie) {
                 $participants = $sortie->getParticipants();
                 $participantsData = [];
                 foreach($participants as $participant){
@@ -148,6 +187,7 @@ class SortieController extends AbstractController
         catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
          }
+
     }
     #[Route('/participate', name: 'participate', methods: "POST")]
     public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $manager): Response
