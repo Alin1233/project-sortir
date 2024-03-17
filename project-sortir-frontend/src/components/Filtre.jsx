@@ -5,7 +5,7 @@
 import SearchBar from './SearchBar'
 import SearchParCampus from './SearchParCampus'
 import SearchParDate from './SearchParDate'
-import { Heading, VStack, Box, Checkbox, CheckboxGroup } from '@chakra-ui/react'
+import { Heading, VStack, Box, Checkbox, CheckboxGroup,Button } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import dateFunctions from '../helpers/dateFunctions'
 import serviceSortie from '../services/serviceSortie'
@@ -15,7 +15,7 @@ const Filtre = (props) => {
     const [searchDate1, setSearchDate1] = useState("")
     const [searchDate2, setSearchDate2] = useState("")
     const [originalSorties, setOriginalSorties] = useState([...props.sorties]);
-    
+    const [checkboxValues, setCheckboxValues] = useState(['inscrit']);
 
     useEffect(() => {
         let filteredSorties = [...originalSorties];
@@ -36,9 +36,17 @@ const Filtre = (props) => {
       }, [searchNom, searchCampus, searchDate1, searchDate2]);
 
       const handleCheckbox = async(value) => {
+          setCheckboxValues(value);
           const response = await serviceSortie.getAllSortiesByFilter(value, props.user.id);
           props.setSorties(response);
       };
+      const handleResetClick = () => {
+        setSearchCampus("")
+        setSearchNom("")
+        setSearchDate1("")
+        setSearchDate2("")
+        setCheckboxValues(['inscrit'])
+      }
       
 
       return (
@@ -52,7 +60,7 @@ const Filtre = (props) => {
         >
             <Heading size="lg">Filtrer les sorties</Heading>
             <VStack align="start">
-            <CheckboxGroup  colorScheme="green" defaultValue={['inscrit']} onChange={handleCheckbox}>
+            <CheckboxGroup  colorScheme="green"  value={checkboxValues} onChange={handleCheckbox}>
               <Checkbox value="organisateur">Sorties dont je suis l'organisateur</Checkbox>
               <Checkbox value="inscrit">Sorties où je suis inscrit</Checkbox>
               <Checkbox value="nonInscrit">Sorties auxquelles je ne suis pas inscrit</Checkbox>
@@ -67,6 +75,9 @@ const Filtre = (props) => {
             </Box>
             <Box w="100%">
                 <SearchParCampus value={searchCampus} onChange={(e) => setSearchCampus(e.target.value)} />
+            </Box>
+            <Box w="100%" display="flex" justifyContent="center">
+              <Button onClick={handleResetClick}>Réinitialiser les filtres</Button>
             </Box>
         </VStack>
     );
