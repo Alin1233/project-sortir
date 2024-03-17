@@ -28,6 +28,7 @@ const creerSortie = async (data) => {
             console.log('Error', error.message);
         }
         console.log(error.config);
+        return error.response.status
     }
 }
 

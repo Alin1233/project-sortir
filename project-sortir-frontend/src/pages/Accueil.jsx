@@ -12,12 +12,16 @@ import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
 import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
-
+import Notification from "../components/Notification";
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
   const [sorties, setSorties] = useState(null)
   const [updateData, setUpdateData] = useState(false);
+
+  //notification
+  const [notification, setNotification] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -50,6 +54,15 @@ const Accueil = (props) => {
       idParticipant: idUser
     }
     const response = await serviceSortie.addParticipant(data)
+    if (response.status === 200) {
+      setNotification({ status: 'success', description: 'La participation a été ajoutée avec succès !' });
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 5000);
+    }else{
+      setNotification({ status: 'error', description: 'Une erreur est survenue, essayez à nouveau' });
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 5000);
+    }
     setUpdateData(true);
   }
   //effet popover et design
@@ -69,6 +82,7 @@ const Accueil = (props) => {
 
   return (
     <div>
+        {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
         <Box>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">

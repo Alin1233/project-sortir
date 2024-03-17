@@ -7,6 +7,7 @@ import serviceSortie from "../services/serviceSortie"
 import serviceVille from "../services/serviceVille"
 import MapComponent from "../components/MapComponent"
 import Loading from "../components/Loading"
+import Notification from "../components/Notification";
 const CreerSortie = (props) => {
 
     const[nom, setNom] = useState('')
@@ -24,6 +25,11 @@ const CreerSortie = (props) => {
 
     const[lieuxVille, setLieuxVille] = useState('')
     const [villes, setVilles] = useState(null)
+
+    //notification
+    const [notification, setNotification] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
     //si l'utilisateur est nul, redirection à la connexion
     const navigate = useNavigate();
     useEffect(() => {
@@ -80,7 +86,15 @@ const CreerSortie = (props) => {
             ville: ville
         }
         const response = await serviceSortie.creerSortie(sortie);
-        console.log(response);
+        if (response.status === 200) {
+            setNotification({ status: 'success', description: 'Sortie créée avec succès' });
+            setIsVisible(true);
+            setTimeout(() => setIsVisible(false), 5000);
+          }else{
+            setNotification({ status: 'error', description: 'Une erreur est survenue, essayez à nouveau' });
+            setIsVisible(true);
+            setTimeout(() => setIsVisible(false), 5000);
+          }
     }
     useEffect(() => {
         if (villes) {
@@ -108,6 +122,12 @@ const CreerSortie = (props) => {
         return <Loading/>
     }
     return (
+        <Box >
+            {notification && (
+            <Box >
+                <Notification status={notification.status} description={notification.description} isVisible={isVisible} />
+            </Box>
+            )}
         <Center  h="100vh" mt="-100px">
             <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
                 <Grid templateColumns="repeat(2, 1fr)" gap={6}>
@@ -187,6 +207,7 @@ const CreerSortie = (props) => {
             </Box>
             <MapComponent longitude={longitude} latitude={latitude}/>
         </Center>
+    </Box>
 )
 
 }
