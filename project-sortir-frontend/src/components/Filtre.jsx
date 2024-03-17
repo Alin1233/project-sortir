@@ -8,13 +8,14 @@ import SearchParDate from './SearchParDate'
 import { Heading, VStack, Box, Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import dateFunctions from '../helpers/dateFunctions'
+import serviceSortie from '../services/serviceSortie'
 const Filtre = (props) => {
     const [searchCampus, setSearchCampus] = useState("");
     const [searchNom, setSearchNom] = useState("");
     const [searchDate1, setSearchDate1] = useState("")
     const [searchDate2, setSearchDate2] = useState("")
     const [originalSorties, setOriginalSorties] = useState([...props.sorties]);
-    const [checkBox, setcheckBox] = useState(['organisateur','inscrit','nonInscrit','passee'])
+    
 
     useEffect(() => {
         let filteredSorties = [...originalSorties];
@@ -34,9 +35,11 @@ const Filtre = (props) => {
         props.setSorties(searchNom || searchCampus || searchDate1 || searchDate2 ? filteredSorties : originalSorties);
       }, [searchNom, searchCampus, searchDate1, searchDate2]);
 
-      const handleCheckbox = (value)=> {
-        console.log(value)
-      }
+      const handleCheckbox = async(value) => {
+          const response = await serviceSortie.getAllSortiesByFilter(value, props.user.id);
+          props.setSorties(response);
+      };
+      
 
       return (
         <VStack
@@ -49,12 +52,12 @@ const Filtre = (props) => {
         >
             <Heading size="lg">Filtrer les sorties</Heading>
             <VStack align="start">
-              <CheckboxGroup colorScheme="green" defaultValue={checkBox[1]}  onChange={(value) => handleCheckbox(value)}>
-                <Checkbox value={checkBox[0]}>Sorties dont je suis l'organisateur</Checkbox>
-                <Checkbox value={checkBox[1]}>Sorties où je suis inscrit</Checkbox>
-                <Checkbox value={checkBox[2]}>Sorties auxquelles je ne suis pas inscrit</Checkbox>
-                <Checkbox value={checkBox[3]}>Sorties passées</Checkbox>
-              </CheckboxGroup>
+            <CheckboxGroup  colorScheme="green" defaultValue={['inscrit']} onChange={handleCheckbox}>
+              <Checkbox value="organisateur">Sorties dont je suis l'organisateur</Checkbox>
+              <Checkbox value="inscrit">Sorties où je suis inscrit</Checkbox>
+              <Checkbox value="nonInscrit">Sorties auxquelles je ne suis pas inscrit</Checkbox>
+              <Checkbox value="passee">Sorties passées</Checkbox>
+            </CheckboxGroup>
             </VStack>
             <Box w="100%">
                 <SearchBar searchNom={searchNom} setSearchNom={setSearchNom} />

@@ -123,8 +123,10 @@ class SortieController extends AbstractController
             $participant = $participantRepository->find($userId);
             $filteredSorties = [];
 
-        
-            foreach($filters as $filter){
+            if(empty($filters)){
+                $inscritSorties = $participant->getSortie();
+                $filteredSorties = array_merge($filteredSorties, $inscritSorties->toArray());
+            }else {
                 foreach($filters as $filter){
                     if($filter === 'inscrit'){
                         $inscritSorties = $participant->getSortie();
@@ -141,7 +143,7 @@ class SortieController extends AbstractController
                     if($filter === 'nonInscrit'){
                         $nonInscritSorties = $sortieRepository->findSortiesWhereUserNotInscrit($userId);
                         if($nonInscritSorties){
-                            $filteredSorties = array_merge($filteredSorties, $nonInscritSorties->toArray());
+                            $filteredSorties = array_merge($filteredSorties, $nonInscritSorties);
                         }
                     }
                     if($filter === 'passee'){
@@ -151,7 +153,6 @@ class SortieController extends AbstractController
                         }
                     }
                 }
-                
             }
             $filteredSorties = array_unique($filteredSorties, SORT_REGULAR);
 
