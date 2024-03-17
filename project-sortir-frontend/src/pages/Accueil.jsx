@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Button, Link, Heading, VStack, Box, Popover, PopoverTrigger, PopoverContent } from "@chakra-ui/react";
@@ -110,11 +111,11 @@ const Accueil = (props) => {
                 </Flex>
                 <HStack>
                     <Text>Inscrit:</Text>
-                    {props.user 
-                        ? sortie.participants.includes(props.user.id) 
-                            ? <CheckIcon boxSize="20px" color="green.500" />
-                            : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
-                        : <Link as={RouterLink} to="/connecter">Se Connecter</Link>
+                    {sortie.participants.includes(props.user.id) 
+                    ? <CheckIcon boxSize="20px" color="green.500" />
+                      : (sortie.etat === 'Creee' || sortie.etat === 'Ouverte')
+                    ? <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
+                      : <Text>Non et il n'est pas possible de vous inscrire</Text>
                     }
                 </HStack>
             </VStack>
