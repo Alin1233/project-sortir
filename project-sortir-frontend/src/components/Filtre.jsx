@@ -21,7 +21,7 @@ const Filtre = (props) => {
         let filteredSorties = [...originalSorties];
        
         if (searchNom) {
-          filteredSorties = filteredSorties.filter(sortie => sortie.nom.includes(searchNom));
+          filteredSorties = filteredSorties.filter(sortie => sortie.nom.toLowerCase().includes(searchNom.toLowerCase()));
         }
         if (searchCampus) {
           filteredSorties = filteredSorties.filter(sortie => sortie.campus === searchCampus);
