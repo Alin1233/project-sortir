@@ -46,6 +46,7 @@ const Filtre = (props) => {
         setSearchDate1("")
         setSearchDate2("")
         setCheckboxValues(['inscrit'])
+        props.setUpdateData(true)
       }
       
 

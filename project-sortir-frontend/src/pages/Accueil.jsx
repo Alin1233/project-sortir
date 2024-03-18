@@ -99,7 +99,7 @@ const Accueil = (props) => {
                 <Button>Filtrer les sorties <ChevronDownIcon /></Button>
             </PopoverTrigger>
             <PopoverContent>
-            <Filtre sorties={sorties} setSorties={setSorties} user={props.user}/>
+            <Filtre sorties={sorties} setSorties={setSorties} user={props.user} setUpdateData={setUpdateData}/>
             </PopoverContent>
         </Popover>
         <SimpleGrid columns={columns} spacing={10} ml={{base: "0", md: isOpen ? "350" : "0"}} mt={{base: isOpen ? "450" : "0", md: "0"}}>
