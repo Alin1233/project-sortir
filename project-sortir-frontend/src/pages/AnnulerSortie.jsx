@@ -25,16 +25,15 @@ const AnnulerSortie = () => {
     useEffect(()=> {
         const responseId = async ()=>{
             //récupération de toutes les infos via adresse api de l'utilisateur via l'id que l'on récupere dans l'url
-            const response = await serviceSortie.getSortie(sortieId);
-            console.log(response)
-            setNom(response.responseSortie.nom)
-            setDateNonFormate(response.responseSortie.dateHeureDebut)
+            const response = await serviceSortie.getDetailsSortie(sortieId);
+            setNom(response.sortieNom)
+            setDateNonFormate(response.sortieDate)
 
-            setCampus(response.responseSortie.campus)
-            setVille(response.responseVille.nom)
-            setCodePostal(response.responseVille.codePostal)
-            setRue(response.responseLieu[0].rue)
-            setNomLieu(response.responseLieu[0].nom)
+            setCampus(response.campusNom)
+            setVille(response.villeNom)
+            setCodePostal(response.villeCodePostal)
+            setRue(response.lieuRue)
+            setNomLieu(response.lieuNom)
             const date = new Date(dateNonFormate);
             const jour = date.getDate();
             const heure = date.getHours();
@@ -42,8 +41,6 @@ const AnnulerSortie = () => {
             const mois = date.getMonth() + 1;
             const annee = date.getFullYear();
             setDateDebut( `${jour}/${mois}/${annee} à ${heure}h${minute}`);
-
-
         }
         responseId();
         []});
@@ -54,7 +51,12 @@ const AnnulerSortie = () => {
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        const response = await serviceSortie.annulerSortie(sortieId)
+        const envoieDonnee = {
+            sortieId: sortieId,
+            motif: motif
+        }
+        console.log(envoieDonnee)
+        const response = await serviceSortie.annulerSortie(envoieDonnee)
         console.log(response)
     }
 

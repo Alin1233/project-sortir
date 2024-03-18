@@ -7,7 +7,6 @@ import Loading from "../components/Loading.jsx";
 const AutreProfilUtilisateur =()=>{
 
     let { userId } = useParams();
-    console.log(userId)
     const[prenom,setPrenom]=useState('');
     const[nom,setNom]=useState('');
     const[telephone,setTelephone]=useState('');

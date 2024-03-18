@@ -203,9 +203,11 @@ class SortieController extends AbstractController
         //plus propre handler dans symfony toute les réponse donne du json
     }
 
-    #[Route('annuler/{id}',name: 'app_annulation')]
-    public function annulerSortie(int $id, SortieRepository $sortieRepository,EtatRepository $etatRepository,EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\JsonResponse|Response
+    #[Route('/annuler/{id}',name: 'app_annulation')]
+    public function annulerSortie(int $id, SortieRepository $sortieRepository,EtatRepository $etatRepository,EntityManagerInterface $entityManager, Request $request): \Symfony\Component\HttpFoundation\JsonResponse|Response
     {
+        $data = json_decode($request->getContent(), true);
+        $motif = $data['motif'];
 
         $sortie = $sortieRepository->findOneBy(['id'=>$id]);
 
@@ -220,7 +222,62 @@ class SortieController extends AbstractController
         }
 
         $sortie->setEtat($etat);
+        $sortie->setInfosSortie('Annulée pour cause de : '.$motif);
         $entityManager->flush();
         return new Response();
+    }
+
+    #[Route('/getDetails/{id}', name: 'app_get_details')]
+    public function getSortieDetails(int $id,SortieRepository $sortieRepository, LieuRepository $lieuRepository, VilleRepository $villeRepository, CampusRepository $campusRepository): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+
+        $sortie = $sortieRepository->findOneBy(['id'=>$id]);
+
+        if (!$sortie){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sortieNom = $sortie->getNom();
+        $sortieDate=$sortie->getDateHeureDebut();
+        $sortieCampusId=$sortie->getCampus();
+        $sortieLieu=$sortie->getLieu();
+
+        $campus = $campusRepository->findOneBy(['id'=>$sortieCampusId]);
+
+        if (!$campus){
+            return $this->json(['message' => 'Campus non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+        $campusNom = $campus->getNom();
+
+        $lieu=$lieuRepository->findOneBy(['id'=>$sortieLieu]);
+
+        if (!$lieu){
+            return $this->json(['message' => 'Lieu non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $lieuNom=$lieu->getNom();
+        $lieuRue=$lieu->getRue();
+        $villeId=$lieu->getVille();
+
+        $ville = $villeRepository->findOneBy(['id'=>$villeId]);
+
+        if (!$ville){
+            return $this->json(['message' => 'Ville non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $villeNom=$ville->getNom();
+        $villeCodePostal=$ville->getCodePostal();
+
+        $responseDetails= [
+            'sortieNom'=>$sortieNom,
+            'sortieDate'=>$sortieDate,
+            'lieuNom'=>$lieuNom,
+            'lieuRue'=>$lieuRue,
+            'villeNom'=>$villeNom,
+            'villeCodePostal'=>$villeCodePostal,
+            'campusNom'=>$campusNom
+            ];
+
+        return $this->json(['details'=>$responseDetails]);
     }
 }
