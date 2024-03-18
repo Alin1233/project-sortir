@@ -147,9 +147,9 @@ class SortieController extends AbstractController
                         }
                     }
                     if($filter === 'passee'){
-                        $sortiesPasse = $sortieRepository->findBy(['etat'=> 'Passée']);
+                        $sortiesPasse = $sortieRepository->findRecentSortiesWithEtatPassee();
                         if($sortiesPasse){
-                            $filteredSorties = array_merge($filteredSorties, $sortiesPasse->toArray());
+                            $filteredSorties = array_merge($filteredSorties, $sortiesPasse);
                         }
                     }
                 }

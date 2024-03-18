@@ -128,7 +128,7 @@ const Accueil = (props) => {
                     <Text>Inscrit:</Text>
                     {sortie.participants.includes(props.user.id) 
                     ? <CheckIcon boxSize="20px" color="green.500" />
-                      : (sortie.etat === 'Creee' || sortie.etat === 'Ouverte')
+                      : (sortie.etat === 'Ouverte')
                     ? <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
                       : <Text>Non et il n'est pas possible de vous inscrire</Text>
                     }

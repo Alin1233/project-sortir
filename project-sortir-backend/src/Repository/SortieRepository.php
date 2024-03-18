@@ -62,4 +62,20 @@ class SortieRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+    public function findRecentSortiesWithEtatPassee()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQueryBuilder()
+            ->select('s')
+            ->from('App\Entity\Sortie', 's')
+            ->join('s.etat', 'e')
+            ->where('e.libelle = :etat')
+            ->andWhere('s.dateHeureDebut > :oneMonthAgo')
+            ->setParameter('etat', 'Passée')
+            ->setParameter('oneMonthAgo', new \DateTime('-1 month'))
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }
