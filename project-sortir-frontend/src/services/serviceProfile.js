@@ -3,14 +3,11 @@ import axios from 'axios'
 const baseUrl = 'http://localhost:8000'
 
 const getCampus = async () => {
-    const url =  baseUrl + '/api/campuses?page=1'
+    const url =  baseUrl + '/profile'
     try {
         const response= await axios.get(url)
-
-        return response.data['hydra:member'].map(campus=>({
-            id:campus.id,
-            nom: campus.nom
-        }))
+        console.log(response.data)
+        return response.data.campus
     }catch (error) {
         console.error(error);
         if (error.response) {
@@ -61,8 +58,7 @@ const modifierProfile = async (data) => {
 const uploadImage = async (data) => {
     const url = baseUrl+'/profile/upload'
     try {
-        const response = await axios.post(url, data)
-        return response
+        return await axios.post(url, data)
     } catch (error) {
         console.error(error);
         if (error.response) {

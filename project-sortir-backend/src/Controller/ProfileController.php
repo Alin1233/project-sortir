@@ -21,34 +21,30 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/profile', name: 'app_profile')]
 class ProfileController extends AbstractController
 {
-
-    /*#[Route('', name: 'app_index')]
-    public function index()
+    #[Route('', name: 'app_index')]
+    public function index(Request $request,CampusRepository $campusRepository)
     {
-
-
-        /*return $this->json([
-            'user'=>$user
+        $campusAll=$campusRepository->findAll();
+        $campusList=[];
+        foreach ($campusAll as $campus){
+            $campusId=$campus->getId();
+            $campusName=$campus->getNom();
+            $campusObjet=['id'=>$campusId, 'nom' =>$campusName];
+            $campusList[]=$campusObjet;
+        }
+        return $this->json([
+            'campus'=>$campusList
         ]);
-    }*/
+    }
 
     #[Route('/modifier', name: 'app_modifier')]
     public function modifier(Request $request, ParticipantRepository $participantRepository,EntityManagerInterface $entityManager,CampusRepository $campusRepository, FileUploader $fileUploader)
     {
         try {
             $data = json_decode($request->getContent(), true);
-            $image=$request->files->get('image');
+            //$image=$request->files->get('image');
 
 
-
-            /*$premierParticipant=$participantRepository->findOneBy(['id'=>$data['id']]);
-            $memeParticipant=$participantRepository->findOneBy(['pseudo'=>$data['pseudo']]);*/
-
-            /*if ($premierParticipant['pseudo']===$memeParticipant['pseudo'] && $premierParticipant['mail']!==$memeParticipant['mail']){
-                throw new \Exception('Le pseudo que vous avez chosis est déja pris! Damm!', 1);
-            }elseif ($premierParticipant['pseudo']!==$memeParticipant['pseudo'] && $premierParticipant['mail']===$memeParticipant['mail']){
-                throw new \Exception('L\'adresse mail que vous avez chosis est déja pris! Chokbar!', 2);
-            }*/
 
             $pseudo = $data['pseudo'];
             $prenom = $data['prenom'];
@@ -74,10 +70,10 @@ class ProfileController extends AbstractController
 
                 $campusBDD = $campusRepository->findOneBy(['nom'=>$campus]);
                 $participant->setCampus($campusBDD);
-                if ($image) {
+                /*if ($image) {
                     $imageFilename = $fileUploader->upload($image);
                     $participant->setImage($imageFilename);
-                }
+                }*/
 
                 $campus2 = $participant->getCampus();
                 $participantSansMDP = [
@@ -98,7 +94,7 @@ class ProfileController extends AbstractController
 
                 $entityManager->flush();
 
-                return $response=$this->json(['participant' => $participantSansMDP]);
+                return $this->json(['participant' => $participantSansMDP]);
             }
         }catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage(), 'code'=>$e->getCode()]), 400, ['Content-Type' => 'application/json']);
