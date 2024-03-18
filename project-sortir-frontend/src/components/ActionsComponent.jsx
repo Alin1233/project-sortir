@@ -3,11 +3,12 @@
 
 import {Menu,MenuButton,MenuList,MenuItem,Button,} from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons';
-
+import serviceSortie from '../services/serviceSortie';
 
 const ActionsComponent = (props) => {
-    const handleSeDesister = async ()=> {
-        console.log("ola");
+    const handleSeDesister = async (sortieId, userId)=> {
+        const response = await serviceSortie.seDesister(sortieId,userId)
+        props.setUpdateData(true)
     }
     return (
         <Menu>

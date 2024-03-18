@@ -54,7 +54,8 @@ const Accueil = (props) => {
       idParticipant: idUser
     }
     const response = await serviceSortie.addParticipant(data)
-    if (response.status === 200) {
+    console.log(response);
+    if (response === 200) {
       setNotification({ status: 'success', description: 'La participation a été ajoutée avec succès !' });
       setIsVisible(true);
       setTimeout(() => setIsVisible(false), 5000);
@@ -110,7 +111,7 @@ const Accueil = (props) => {
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
                     </Text>
                     <Icon as={ViewIcon} />
-                    <ActionsComponent sortie={sortie} user={props.user}/>
+                    <ActionsComponent sortie={sortie} user={props.user} setUpdateData={setUpdateData}/>
                 </HStack>
                 <Text><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
                 <Text><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>

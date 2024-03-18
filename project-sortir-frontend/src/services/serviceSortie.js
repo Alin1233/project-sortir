@@ -129,15 +129,21 @@ const addParticipant = async (data) => {
     const url = baseUrl+'/participate'
     try {
         const response = await axios.post(url, data)
-        return response
+        return response.status
     } catch (error) {
         console.error(error);
     }
 }
 const seDesister = async (sortieId,userId) =>{
-    const url =""
-    const response = await axios.delete(url+`/${sortieId}/${userId}`)
-    return response
+    const url =baseUrl+"/sedesister"
+    try {
+        const response = await axios.delete(url+`/${sortieId}/${userId}`)
+        return response
+    } catch (error) {
+        console.error(error);
+        return error.status
+    }
+   
     
 }
 export default {creerSortie, getAllSortiesByFilter, addParticipant, getSortie, seDesister}
