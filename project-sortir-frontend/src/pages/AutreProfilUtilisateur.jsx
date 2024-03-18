@@ -7,6 +7,7 @@ import Loading from "../components/Loading.jsx";
 const AutreProfilUtilisateur =()=>{
 
     let { userId } = useParams();
+    console.log(userId)
     const[prenom,setPrenom]=useState('');
     const[nom,setNom]=useState('');
     const[telephone,setTelephone]=useState('');
@@ -22,9 +23,8 @@ const AutreProfilUtilisateur =()=>{
             setTelephone(response.telephone);
             setNom(response.nom);
             setPrenom(response.prenom);
-            setEmail(response.mail);
-            const responseCampus = await serviceAutreProfil.getCampusAutreProfil(userId);
-            setCampus(responseCampus.nom);
+            setEmail(response.email);
+            setCampus(response.campusNom);
         }
         responseId();
         []});

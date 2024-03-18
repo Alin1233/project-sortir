@@ -6,7 +6,6 @@ const getCampus = async () => {
     const url =  baseUrl + '/profile'
     try {
         const response= await axios.get(url)
-        console.log(response.data)
         return response.data.campus
     }catch (error) {
         console.error(error);

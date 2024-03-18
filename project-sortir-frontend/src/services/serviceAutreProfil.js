@@ -4,10 +4,11 @@ const getAutreProfil = async (id) => {
 
     //const baseUrl = 'http://localhost:8000'
 
-    const url = `http://localhost:8000/api/participants/${id}`;
+    const url = `http://localhost:8000/profile/${id}`;
     try{
         const response = await axios.get(url);
-        return response.data
+        console.log(response)
+        return response.data.participant
     } catch(error){
         console.error(error);
         if (error.response) {
