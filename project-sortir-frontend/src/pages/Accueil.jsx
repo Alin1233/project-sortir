@@ -13,6 +13,7 @@ import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
 import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
 import Notification from "../components/Notification";
+import InscrireCSV from "../components/InscrireCSV";
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
