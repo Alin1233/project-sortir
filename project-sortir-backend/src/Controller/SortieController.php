@@ -246,4 +246,21 @@ class SortieController extends AbstractController
         //Virer try catch, dans react voir status de l'erreur, pop up sur react , ouvrez console -> network requete en rouge , details de l'erreur
         //plus propre handler dans symfony toute les réponse donne du json
     }
+    #[Route('/sedesister/{sortieId}/{participantId}', name: 'se_desister')]
+    public function seDesister(EntityManagerInterface $entityManager, SortieRepository $sortieRepository, ParticipantRepository $participantRepository, $sortieId, $participantId): Response
+    {
+        try {
+            $sortie = $sortieRepository->find($sortieId);
+            $participant = $participantRepository->find($participantId);
+
+            $sortie->removeParticipant($participant);
+            $entityManager->flush();
+            
+            return new Response("Participation annulée");
+        } catch (\Exception $e) {
+            // Utilisez HTTP 500 pour les erreurs serveur
+            return new Response(json_encode(['error' => $e->getMessage()]), 500, ['Content-Type' => 'application/json']);
+        }
+        
+    }
 }

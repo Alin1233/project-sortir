@@ -1,8 +1,14 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 
 import {Menu,MenuButton,MenuList,MenuItem,Button,} from '@chakra-ui/react'
-  import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+
 
 const ActionsComponent = (props) => {
+    const handleSeDesister = async ()=> {
+        console.log("ola");
+    }
     return (
         <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -12,7 +18,11 @@ const ActionsComponent = (props) => {
                 <MenuItem>Modifier</MenuItem>
                 <MenuItem>Publier</MenuItem>
                 <MenuItem>Supprimer</MenuItem>
-                <MenuItem>Se désister</MenuItem>
+                {props.sortie.participants.includes(props.user.id)
+                ?
+                    <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
+                :   null
+                }
             </MenuList>
         </Menu>
     )

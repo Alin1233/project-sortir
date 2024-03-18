@@ -134,5 +134,11 @@ const addParticipant = async (data) => {
         console.error(error);
     }
 }
-export default {creerSortie, getAllSortiesByFilter, addParticipant, getSortie}
+const seDesister = async (sortieId,userId) =>{
+    const url =""
+    const response = await axios.delete(url+`/${sortieId}/${userId}`)
+    return response
+    
+}
+export default {creerSortie, getAllSortiesByFilter, addParticipant, getSortie, seDesister}
 
