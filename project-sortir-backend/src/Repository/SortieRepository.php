@@ -78,4 +78,59 @@ class SortieRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function findSortiesByFilters($filters, $userId)
+    {
+        $entityManager = $this->getEntityManager();
+    
+        // Si aucun filtre n'est fourni, toutes les entités de la sortie sont renvoyées.
+        if (empty($filters)) {
+            return $entityManager->getRepository('App\Entity\Sortie')->findAll();
+        }
+    
+        $queryBuilder = $entityManager->createQueryBuilder()
+                                      ->select('s')
+                                      ->from('App\Entity\Sortie', 's');
+    
+        $orX = $queryBuilder->expr()->orX();
+    
+        if (in_array('inscrit', $filters)) {
+            $orX->add($queryBuilder->expr()->exists(
+                $entityManager->createQueryBuilder()
+                              ->select('p')
+                              ->from('App\Entity\Participant', 'p')
+                              ->join('p.sortie', 's1')
+                              ->where('s1.id = s.id')
+                              ->andWhere('p.id = :userId')
+            ));
+        }
+    
+        if (in_array('organisateur', $filters)) {
+            $orX->add('s.organisateur = :userId');
+        }
+        if (in_array('nonInscrit', $filters)) {
+            $orX->add($queryBuilder->expr()->not(
+                $queryBuilder->expr()->exists(
+                    $entityManager->createQueryBuilder()
+                                  ->select('p2')
+                                  ->from('App\Entity\Participant', 'p2')
+                                  ->join('p2.sortie', 's2')
+                                  ->where('s2.id = s.id')
+                                  ->andWhere('p2.id = :userId')
+                )
+            ));
+        }
+        if (in_array('passee', $filters)) {
+            $queryBuilder->join('s.etat', 'e');
+            $orX->add('e.libelle = :etat');
+            $queryBuilder->setParameter('etat', 'Passée');
+        }
+        if (in_array('inscrit', $filters) || in_array('organisateur', $filters) || in_array('nonInscrit', $filters)) {
+            $queryBuilder->setParameter('userId', $userId);
+        }
+    
+        $queryBuilder->andWhere($orX);
+    
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

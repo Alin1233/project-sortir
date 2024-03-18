@@ -115,84 +115,47 @@ class SortieController extends AbstractController
     }
 
     #[Route('/getallbyfilter', name: 'get_all_sorties', methods: "GET")]
-    public function getAllSortiesByFilter(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository): Response
-    {
-        try{
-            $filters = json_decode($_GET['filter']);
-            $userId = json_decode($_GET['userId']);
-            $participant = $participantRepository->find($userId);
-            $filteredSorties = [];
+public function getAllSortiesByFilter(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository): Response
+{
+    try {
+        $filters = json_decode($_GET['filter']);
+        $userId = json_decode($_GET['userId']);
 
-            if(empty($filters)){
-                $inscritSorties = $participant->getSortie();
-                $filteredSorties = array_merge($filteredSorties, $inscritSorties->toArray());
-            }else {
-                foreach($filters as $filter){
-                    if($filter === 'inscrit'){
-                        $inscritSorties = $participant->getSortie();
-                        if($inscritSorties){
-                            $filteredSorties = array_merge($filteredSorties, $inscritSorties->toArray());
-                        }
-                    }
-                    if($filter === 'organisateur'){
-                        $organisateurSorties = $participant->getSortiesOrganisees();
-                        if($organisateurSorties){
-                            $filteredSorties = array_merge($filteredSorties, $organisateurSorties->toArray());
-                        }
-                    }
-                    if($filter === 'nonInscrit'){
-                        $nonInscritSorties = $sortieRepository->findSortiesWhereUserNotInscrit($userId);
-                        if($nonInscritSorties){
-                            $filteredSorties = array_merge($filteredSorties, $nonInscritSorties);
-                        }
-                    }
-                    if($filter === 'passee'){
-                        $sortiesPasse = $sortieRepository->findRecentSortiesWithEtatPassee();
-                        if($sortiesPasse){
-                            $filteredSorties = array_merge($filteredSorties, $sortiesPasse);
-                        }
-                    }
-                }
+        $sortiesByRepoFilter = $sortieRepository->findSortiesByFilters($filters, $userId);
+
+        $sortiesData = [];
+        foreach ($sortiesByRepoFilter as $sortie) {
+            $participants = $sortie->getParticipants();
+            $participantsData = [];
+            foreach($participants as $participant){
+                $participantData = $participant->getId();
+            
+                $participantsData[] = $participantData;
             }
-            $filteredSorties = array_unique($filteredSorties, SORT_REGULAR);
+            $sortieData = [
+                'id' => $sortie->getId(),
+                'nom'=> $sortie->getNom(),
+                'dateHeureDebut'=> $sortie->getDateHeureDebut(),
+                'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
+                'etat' => $sortie->getEtat()->getLibelle(),
+                'organisateur' =>[  
+                    'nom' => $sortie->getOrganisateur()->getNom(),
+                    'id' =>$sortie->getOrganisateur()->getId(),
+                ],
+                'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
+                'participants'=> $participantsData,
+                'campus'=> $sortie->getCampus()->getNom()
+            ];
 
-            #$sorties = $sortieRepository -> findAll();
-            #$sorties = $participant->getSortie();
-            $sortiesData = [];
-            foreach ($filteredSorties as $sortie) {
-                $participants = $sortie->getParticipants();
-                $participantsData = [];
-                foreach($participants as $participant){
-                    $participantData = $participant->getId();
-                
-                    $participantsData[] = $participantData;
-                }
-                $sortieData = [
-                    'id' => $sortie->getId(),
-                    'nom'=> $sortie->getNom(),
-                    'dateHeureDebut'=> $sortie->getDateHeureDebut(),
-                    'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
-                    'etat' => $sortie->getEtat()->getLibelle(),
-                    'organisateur' =>[  
-                        'nom' => $sortie->getOrganisateur()->getNom(),
-                        'id' =>$sortie->getOrganisateur()->getId(),
-                    ],
-                    'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
-                    'participants'=> $participantsData,
-                    'campus'=> $sortie->getCampus()->getNom()
-                ];
-
-                $sortiesData[] = $sortieData;
-             
-            }
-           
-            return $this->json(['sorties' =>  $sortiesData]);
-        } 
-        catch (\Exception $e) {
-            return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
-         }
-
+            $sortiesData[] = $sortieData;
+        }
+        
+        return $this->json(['sorties' =>  $sortiesData]);
+    } 
+    catch (\Exception $e) {
+        return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
     }
+}
     #[Route('/participate', name: 'participate', methods: "POST")]
     public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $manager): Response
     {
