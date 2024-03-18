@@ -120,8 +120,8 @@ const Accueil = (props) => {
                 </VStack>
                 <Text>Etat: {sortie.etat}</Text>
                 <Flex align="center">
-                  <Text mr={2}>Organisateur: {sortie.organisateur}</Text>
-                   <Avatar name={props.user.nom}/>
+                  <Text mr={2}>Organisateur: <Link as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>{sortie.organisateur.nom}</Link></Text>
+                  <Avatar name={props.user.nom}/>
                 </Flex>
                 <HStack>
                     <Text>Inscrit:</Text>

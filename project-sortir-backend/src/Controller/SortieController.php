@@ -173,7 +173,10 @@ class SortieController extends AbstractController
                     'dateHeureDebut'=> $sortie->getDateHeureDebut(),
                     'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
                     'etat' => $sortie->getEtat()->getLibelle(),
-                    'organisateur' =>  $sortie->getOrganisateur()->getNom(),
+                    'organisateur' =>[  
+                        'nom' => $sortie->getOrganisateur()->getNom(),
+                        'id' =>$sortie->getOrganisateur()->getId(),
+                    ],
                     'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
                     'participants'=> $participantsData,
                     'campus'=> $sortie->getCampus()->getNom()
