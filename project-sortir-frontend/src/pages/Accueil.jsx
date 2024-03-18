@@ -110,7 +110,7 @@ const Accueil = (props) => {
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
                     </Text>
                     <Icon as={ViewIcon} />
-                    <ActionsComponent/>
+                    <ActionsComponent sortie={sortie} user={props.user}/>
                 </HStack>
                 <Text><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
                 <Text><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>
