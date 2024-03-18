@@ -108,7 +108,7 @@ const Accueil = (props) => {
             <Tbody>
                 {sorties.map(sortie => (
                     <Tr key={sortie.id}>
-                        <Td>{sortie.nom}</Td>
+                        <Td><Link as={RouterLink} to={`/annuler/${sortie.id}`} id={sortie.id} mr="4">{sortie.nom}</Link></Td>
                         <Td>{dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Td>
                         <Td>{dateFunctions.formatDate(sortie.dateLimiteInscription)}</Td>
                         <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
@@ -122,7 +122,7 @@ const Accueil = (props) => {
                           }
                         </Td>
                         <Td>{sortie.organisateur}</Td>
-                        <Td><ActionsComponent/></Td>
+                        <Td><ActionsComponent sortie={sortie}/></Td>
                     </Tr>
                 ))}
             </Tbody>

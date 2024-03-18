@@ -77,6 +77,7 @@ const getSortie = async (id) => {
 
 
         const lieu = await serviceLieu.getLieuById(sortie.lieu)
+        console.log(lieu)
         const ville = await serviceVille.getVilleById(lieu[0]?.id)
         const participants = await serviceParticipantsSortie.getParticipantsById(allParticipantsId, sortie.id);
 
@@ -117,5 +118,14 @@ const addParticipant = async (data) => {
         console.error(error);
     }
 }
-export default {creerSortie, getAllSorties, addParticipant, getSortie}
+
+const annulerSortie = async(id) =>{
+    const url = baseUrl+'/annuler/'+id ;
+    try {
+        return await axios.post(url, id)
+    } catch (error) {
+        console.error(error);
+    }
+}
+export default {creerSortie, getAllSorties, addParticipant, getSortie, annulerSortie}
 

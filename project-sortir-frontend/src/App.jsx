@@ -11,6 +11,7 @@ import CreerSortie from './pages/CreerSortie'
 import Sortie from './pages/Sortie'
 import AutreProfilUtilisateur from "./pages/AutreProfilUtilisateur.jsx";
 import DetailsSortie from "./pages/DetailsSortie.jsx";
+import AnnulerSortie from "./pages/AnnulerSortie.jsx";
 
 
 
@@ -34,19 +35,20 @@ function App() {
             document.title = title;
         }, [title]);
     }
-    useDocumentTitle('Golaf! | Accueil')
+    useDocumentTitle('Golaf! | Annuler une sortie')
     return (
       <>
         <Router>
           <NavBar user={user} setUser={setUser}/>
           <Routes>
             <Route path="/" element={<Accueil user={user}/>} />
-            <Route path="/profile" element={<Profile user={user}/>} />
+            <Route path="/profile" element={<Profile user={user} setUser={setUser}/>} />
             <Route path="/connecter" element={<SeConnecter user={user} setUser={setUser}/>} />
             <Route path="/creer" element={<CreerSortie user={user}/>} />
             <Route path="/sortie/:id" element={<Sortie/>} />
             <Route path="/profile/:userId" element={<AutreProfilUtilisateur id={userId}/>}/>
             <Route path="/details/:id" element={<DetailsSortie/>} />
+            <Route path="/annuler/:sortieId" element={<AnnulerSortie/>}/>
           </Routes>
         </Router>
       </>

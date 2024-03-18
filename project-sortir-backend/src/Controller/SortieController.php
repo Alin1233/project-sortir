@@ -202,4 +202,25 @@ class SortieController extends AbstractController
         //Virer try catch, dans react voir status de l'erreur, pop up sur react , ouvrez console -> network requete en rouge , details de l'erreur
         //plus propre handler dans symfony toute les réponse donne du json
     }
+
+    #[Route('annuler/{id}',name: 'app_annulation')]
+    public function annulerSortie(int $id, SortieRepository $sortieRepository,EtatRepository $etatRepository,EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\JsonResponse|Response
+    {
+
+        $sortie = $sortieRepository->findOneBy(['id'=>$id]);
+
+        if (!$sortie){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $etat = $etatRepository->findOneBy(['id'=>6]);
+
+        if (!$etat){
+            return $this->json(['message' => 'Etat non trouvé.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sortie->setEtat($etat);
+        $entityManager->flush();
+        return new Response();
+    }
 }

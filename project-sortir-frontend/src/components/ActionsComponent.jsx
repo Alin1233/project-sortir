@@ -4,11 +4,12 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
-    Button,
-  } from '@chakra-ui/react'
+    Button, Link,
+} from '@chakra-ui/react'
   import { ChevronDownIcon } from '@chakra-ui/icons';
+import {Link as RouterLink} from "react-router-dom";
 
-const ActionsComponent = () => {
+const ActionsComponent = (props) => {
     return (
         <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -17,7 +18,7 @@ const ActionsComponent = () => {
             <MenuList>
                 <MenuItem>Modifier</MenuItem>
                 <MenuItem>Publier</MenuItem>
-                <MenuItem>Supprimer</MenuItem>
+                <MenuItem><Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Supprimer</Link></MenuItem>
             </MenuList>
         </Menu>
     )

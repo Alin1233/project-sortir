@@ -8,17 +8,18 @@ const SeConnecter = (props) => {
   const[motdepasse, setMotdepasse] = useState('');
   const[resterConnecter, setResterConnecter]=useState(false)
 
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     //vérifier que le mot de passe et l'adresse email sont corrects
     const response = await serviceUser.connecterUser(mail, motdepasse)
-    if (resterConnecter){
-      window.localStorage.setItem("stayCo; expires=15770000", JSON.stringify(response))
+    if (resterConnecter && response !==undefined){
+      document.cookie = 'stayCo='+response.id+'; path=/; max-age= 60'
+      //window.localStorage.setItem("stayCo", JSON.stringify(response))
     }
     if(response !== undefined){
       //si oui, créer un cookie et définir l'utilisateur actuel comme utilisateur récupéré sur le serveur
       window.localStorage.setItem('loggedUser', JSON.stringify(response))
-      console.log(response)
       props.setUser(response)
       window.location.assign('/')
     }else{
@@ -27,14 +28,27 @@ const SeConnecter = (props) => {
   };
 
   useEffect(()=>{
-    const stayCo=window.localStorage.getItem('stayCo')
-    console.log(stayCo)
-    if (stayCo){
-            const stayCoDecode = JSON.parse(stayCo)
-            console.log(stayCoDecode)
-            }
-          },
-  [])
+    const cookies =document.cookie
+    const cookieArray = cookies.split('; ');
+    for (let i = 0; i < cookieArray.length; i++) {
+      const cookie = cookieArray[i];
+      const parts = cookie.split('=');
+      const name = parts[0];
+      const value = parts[1];
+
+      if (name==="stayCo"){
+        const connection=async()=>{
+          const response = await serviceUser.cookieConnection(value)
+          if (response!==undefined){
+            window.localStorage.setItem('loggedUser', JSON.stringify(response))
+            props.setUser(response)
+            window.location.assign('/')
+          }
+        }
+        connection();
+      }
+    }
+            []})
 
   return (
     <Center as="div" h="100vh" mt="-200px">

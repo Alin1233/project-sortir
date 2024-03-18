@@ -27,7 +27,7 @@ class ConnecterController extends AbstractController
         $participant = $participantRepository->findOneBy(['mail' => $mail, 'motPasse' => $motdepasse]);
 
 
-        // check if participant has other prprieties beside email and password if yes send all the data as normal if not send just user obj with email and password
+        // check if participant has other proprieties beside email and password if yes send all the data as normal if not send just user obj with email and password
 
 
         if ($participant) {
@@ -56,5 +56,41 @@ class ConnecterController extends AbstractController
         }
         
         return $response;
+    }
+    #[Route('/connecter/cookie', name: 'app_connectionCookie')]
+    public function connectionCookie(Request $request, ParticipantRepository $participantRepository, CampusRepository $campusRepository): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['id'];
+
+        $participant = $participantRepository->findOneBy(['id' => $id]);
+
+        if ($participant) {
+            $campus = $participant->getCampus();
+            $participantData = [
+                'id' => $participant->getId(),
+                'pseudo'=> $participant->getPseudo(),
+                'nom' => $participant->getNom(),
+                'prenom' => $participant->getPrenom(),
+                'telephone' => $participant->getTelephone(),
+                'mail' => $participant->getMail(),
+                'isAdmin' => $participant->isIsAdmin(),
+                'isActiv' => $participant->isIsActiv(),
+                'campus' => [
+                    'id' => $campus->getId(),
+                    'nom' => $campus->getNom(),
+                ],
+            ];
+            $response = $this->json([
+                'participant' => $participantData,
+            ]);
+        } else {
+            $response = $this->json([
+                'error' => 'No participant found id',
+            ]);
+        }
+
+        return $response;
+
     }
 }
