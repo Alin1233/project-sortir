@@ -48,44 +48,9 @@ const getSortie = async (id) => {
     const url = `http://localhost:8000/details/${id}`;
     try{
         const response = await axios.get(url);
-        let sortie = response.data; // Assumant que la réponse directe est l'objet sortie
+        const sortie = response.data.sorties; 
 
-
-        // Mise à jour de la sortie selon l'URL utilisé
-
-        const responseCampusNom = await axios.get(`${baseUrl}${sortie.campus}`);
-        sortie.campus = responseCampusNom.data.nom;
-
-        const responseEtatLibelle = await axios.get(`${baseUrl}${sortie.etat}`);
-        sortie.etat = responseEtatLibelle.data.libelle;
-
-        const responseOrganisateurNom = await axios.get(`${baseUrl}${sortie.organisateur}`);
-        sortie.organisateur = responseOrganisateurNom.data.nom;
-
-        const responseLieu = await axios.get(`${baseUrl}${sortie.lieu}`);
-        sortie.lieu = responseLieu.data.nom;
-
-
-        let allParticipantsId = [];
-
-        for(let index = 0; index < sortie.participants.length; index++){
-            let participant = sortie.participants[index];
-            let dernierCaractere = participant[participant.length - 1];
-            allParticipantsId.push(dernierCaractere);
-        }
-
-
-
-        const lieu = await serviceLieu.getLieuById(sortie.lieu)
-        const ville = await serviceVille.getVilleById(lieu[0]?.id)
-        const participants = await serviceParticipantsSortie.getParticipantsById(allParticipantsId, sortie.id);
-
-        return {
-            responseSortie: sortie,
-            responseLieu: lieu,
-            responseVille : ville,
-            responseParticipants : participants
-        };
+        return sortie;
 
     } catch(error){
         console.error(error);

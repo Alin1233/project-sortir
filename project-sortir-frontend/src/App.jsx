@@ -11,6 +11,7 @@ import CreerSortie from './pages/CreerSortie'
 import Sortie from './pages/Sortie'
 import AutreProfilUtilisateur from "./pages/AutreProfilUtilisateur.jsx";
 import DetailsSortie from "./pages/DetailsSortie.jsx";
+import PanelAdministration from "./pages/PanelAdministration.jsx";
 
 
 
@@ -47,6 +48,8 @@ function App() {
             <Route path="/sortie/:id" element={<Sortie/>} />
             <Route path="/profile/:userId" element={<AutreProfilUtilisateur id={userId}/>}/>
             <Route path="/details/:id" element={<DetailsSortie/>} />
+            <Route path="/administration" element={<PanelAdministration user={user}/>} />
+
           </Routes>
         </Router>
       </>
