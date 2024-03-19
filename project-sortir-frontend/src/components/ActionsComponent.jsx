@@ -52,7 +52,7 @@ const ActionsComponent = (props) => {
                     <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
                 :   null
                 }
-                {props.sortie.participants.includes(props.user.id)
+                {props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" )
                 ?
                     <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
                 :   null
