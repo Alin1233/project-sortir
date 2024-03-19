@@ -171,7 +171,6 @@ const DetailsSortie = () => {
                             {sortie.participants.map((participant, index) => (
                                 <Center key={index}>
                                 <ListItem
-                                    
                                     p={2}
                                     ml={5}
                                     mr={5}
