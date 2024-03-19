@@ -7,7 +7,8 @@ const getVilleById = async (id) => {
     try{
         let urlEncode = encodeURI(url);
         const response = await axios.get(urlEncode)
-        let ville = response.data;
+        const ville = response.data;
+        console.log(ville)
         return ville;
 
     } catch(error){
@@ -29,5 +30,15 @@ const getVilleById = async (id) => {
         }
         console.log(error.config);
     }
+
 }
-export default {getVilleById}
+const getAllVilles = async () => {
+    try {
+        const url = $baseUrl+"/villes"
+        const response = await axios.get(url)
+        return response.data.villes
+    } catch (error) {
+        console.error(error);
+    }
+}
+export default {getVilleById, getAllVilles}

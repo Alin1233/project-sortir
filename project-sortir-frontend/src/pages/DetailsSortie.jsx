@@ -26,6 +26,7 @@ import Loading from "../components/Loading.jsx";
 import MapComponent2 from "../components/MapComponent2.jsx";
 
 const DetailsSortie = () => {
+
     const id = useParams().id; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
     const [sortie, setSortie] = useState(null);
     const [nomSortie, setNomSortie] = useState(null);

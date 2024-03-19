@@ -223,4 +223,133 @@ class SortieController extends AbstractController
         //Virer try catch, dans react voir status de l'erreur, pop up sur react , ouvrez console -> network requete en rouge , details de l'erreur
         //plus propre handler dans symfony toute les réponse donne du json
     }
+
+    #[Route('/annuler/{id}',name: 'app_annulation')]
+    public function annulerSortie(int $id, SortieRepository $sortieRepository,EtatRepository $etatRepository,EntityManagerInterface $entityManager, Request $request): \Symfony\Component\HttpFoundation\JsonResponse|Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $motif = $data['motif'];
+
+        $sortie = $sortieRepository->findOneBy(['id'=>$id]);
+
+        if (!$sortie){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $etat = $etatRepository->findOneBy(['id'=>6]);
+
+        if (!$etat){
+            return $this->json(['message' => 'Etat non trouvé.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sortie->setEtat($etat);
+        $sortie->setInfosSortie('Annulée pour cause de : '.$motif);
+        $entityManager->flush();
+        return new Response();
+    }
+
+    #[Route('/getDetails/{id}', name: 'app_get_details')]
+    public function getSortieDetails(int $id,SortieRepository $sortieRepository, LieuRepository $lieuRepository, VilleRepository $villeRepository, CampusRepository $campusRepository): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+
+        $sortie = $sortieRepository->findOneBy(['id'=>$id]);
+
+        if (!$sortie){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sortieNom = $sortie->getNom();
+        $sortieDate=$sortie->getDateHeureDebut();
+        $sortieCampusId=$sortie->getCampus();
+        $sortieLieu=$sortie->getLieu();
+
+        $campus = $campusRepository->findOneBy(['id'=>$sortieCampusId]);
+
+        if (!$campus){
+            return $this->json(['message' => 'Campus non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+        $campusNom = $campus->getNom();
+
+        $lieu=$lieuRepository->findOneBy(['id'=>$sortieLieu]);
+
+        if (!$lieu){
+            return $this->json(['message' => 'Lieu non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $lieuNom=$lieu->getNom();
+        $lieuRue=$lieu->getRue();
+        $villeId=$lieu->getVille();
+
+        $ville = $villeRepository->findOneBy(['id'=>$villeId]);
+
+        if (!$ville){
+            return $this->json(['message' => 'Ville non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $villeNom=$ville->getNom();
+        $villeCodePostal=$ville->getCodePostal();
+
+        $responseDetails= [
+            'sortieNom'=>$sortieNom,
+            'sortieDate'=>$sortieDate,
+            'lieuNom'=>$lieuNom,
+            'lieuRue'=>$lieuRue,
+            'villeNom'=>$villeNom,
+            'villeCodePostal'=>$villeCodePostal,
+            'campusNom'=>$campusNom
+            ];
+
+        return $this->json(['details'=>$responseDetails]);
+    }
+
+    #[Route('/supprimer/${id}', name: 'app_supprimer_sortie')]
+    public function supprimerSortie(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        $sortieASupprimer = $sortieRepository->findOneBy(['id'=>$id]);
+
+        if (!$sortieASupprimer){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($sortieASupprimer);
+
+        $entityManager->flush();
+
+        return $this->json(['message'=> 'Vous avez bien supprimer votre sortie']);
+
+
+    }
+
+    #[Route('/modifier/{id}', name: 'app_supprimer_sortie')]
+    public function modifierSortie(Request $request, int $id, SortieRepository $sortieRepository,EntityManagerInterface $entityManager, LieuRepository $lieuRepository){
+
+        $sortie = json_decode($request->getContent(), true);
+
+        $sortieAModifier = $sortieRepository->findOneBy(['id'=>$sortie['id']]);
+
+        if (!$sortieAModifier){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sortieAModifier->setNom($sortie['nom']);
+        $sortieAModifier->setDateHeureDebut($sortie['dateHeureDebut']);
+        $sortieAModifier->setDateLimiteInscription($sortie['dateLimiteInscription']);
+        $sortieAModifier->setNbInscriptionMax($sortie['nbInscriptionMax']);
+        $sortieAModifier->setDuree($sortie['duree']);
+        $sortieAModifier->setInfosSortie($sortie['infosSortie']);
+        $sortieAModifier->setEtat($sortie['etat']);
+
+        $lieu = $lieuRepository->findOneBy(['nom'=>$sortie['nomLieu']]);
+        if (!$lieu){
+            return $this->json(['message' => 'Lieu non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+        $lieuAModifier = $lieu -> getId();
+        $sortieAModifier->setLieu($lieuAModifier);
+
+        $entityManager->flush();
+
+        return $this->json(['message'=> 'Vous avez bien modifier votre sortie']);
+
+
+    }
 }

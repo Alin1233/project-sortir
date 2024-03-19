@@ -64,7 +64,7 @@ const Accueil = (props) => {
 
   return (
     <div>
-        <Box>
+        <Box ml={2}>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">
               Accueil
@@ -74,9 +74,9 @@ const Accueil = (props) => {
             </Text>
           </Flex>
         </Box>
-        <Popover isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
+        <Popover ml={2} isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
             <PopoverTrigger>
-                <Button>Filtrer les sorties <ChevronDownIcon /></Button>
+                <Button ml={2}>Filtrer les sorties <ChevronDownIcon /></Button>
             </PopoverTrigger>
             <PopoverContent>
             <Filtre sorties={sorties} setSorties={setSorties}/>
