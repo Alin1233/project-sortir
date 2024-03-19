@@ -18,6 +18,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import serviceProfile from "../services/serviceProfile.js";
 import Loading from "../components/Loading.jsx";
+import UploadImg from "../components/UploadImg.jsx";
 
 const Profile = (props) => {
 

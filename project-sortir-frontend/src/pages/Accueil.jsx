@@ -36,6 +36,7 @@ const Accueil = (props) => {
       const filter = ['inscrit']
       if (props.user) {
       const response = await serviceSortie.getAllSortiesByFilter(filter, props.user.id)
+      console.log(props.user);
       setSorties(response)
       setUpdateData(false);}
     };
@@ -85,7 +86,6 @@ const Accueil = (props) => {
   return (
     <div>
         {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
-        <UploadImg user={props.user}/>
         <Box>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">
@@ -124,7 +124,7 @@ const Accueil = (props) => {
                 <Text>Etat: {sortie.etat}</Text>
                 <Flex align="center">
                   <Text mr={2}>Organisateur: <Link as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>{sortie.organisateur.nom}</Link></Text>
-                  <Avatar name={props.user.nom}/>
+                  <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
                 </Flex>
                 <HStack>
                     <Text>Inscrit:</Text>

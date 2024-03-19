@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import {Box, Button, Link, Flex, Image, Heading, Avatar, Tooltip, Text} from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
@@ -33,7 +34,7 @@ const NavBar = (props) => {
                     {props.user ? (
                         <Button onClick={handleLogout} variant="link" colorScheme="black" mr="4">
                             <Tooltip label='Se déconnecter!'>
-                                <Avatar name={props.user.nom}/>
+                                <Avatar src={`http://localhost:8000/getimage/${props.user.image}`} name={props.user.nom}/>
                             </Tooltip>
                         </Button>
                     ) : (

@@ -17,6 +17,7 @@ use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 #[Route('/profile', name: 'app_profile')]
 class ProfileController extends AbstractController
@@ -134,7 +135,7 @@ class ProfileController extends AbstractController
 
         if ($uploadedFile) {
             
-        $fileName = $participant->getId().$participant->getNom().'.png';
+        $fileName = $participant->getId().$participant->getNom()."profile";
 
         $destination = $this->getParameter('uploads_directory');
 
@@ -150,4 +151,5 @@ class ProfileController extends AbstractController
 
         return new Response('Aucune image envoyée.', 400);
     }
+   
 }

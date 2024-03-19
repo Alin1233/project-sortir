@@ -141,6 +141,7 @@ class SortieController extends AbstractController
                     'organisateur' =>[  
                         'nom' => $sortie->getOrganisateur()->getNom(),
                         'id' =>$sortie->getOrganisateur()->getId(),
+                        'image'=>$sortie->getOrganisateur()->getImage(),
                     ],
                     'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
                     'participants'=> $participantsData,
