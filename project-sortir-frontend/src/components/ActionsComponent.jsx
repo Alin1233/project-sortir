@@ -6,6 +6,9 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import serviceSortie from '../services/serviceSortie';
 import Notification from './Notification';
 import { useState } from 'react';
+import { Link } from '@chakra-ui/react';
+
+import { Link as RouterLink } from "react-router-dom";
 
 const ActionsComponent = (props) => {
 
@@ -42,8 +45,9 @@ const ActionsComponent = (props) => {
                 Actions
             </MenuButton>
             <MenuList>
-                <MenuItem>Modifier</MenuItem>
-                <MenuItem>Supprimer</MenuItem>
+            <MenuItem> <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4"/></MenuItem>
+            <MenuItem>
+                <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4"/></MenuItem>
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
                 ?
                     <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
