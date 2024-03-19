@@ -280,4 +280,55 @@ class SortieController extends AbstractController
 
         return $this->json(['details'=>$responseDetails]);
     }
+
+    #[Route('/supprimer/${id}', name: 'app_supprimer_sortie')]
+    public function supprimerSortie(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        $sortieASupprimer = $sortieRepository->findOneBy(['id'=>$id]);
+
+        if (!$sortieASupprimer){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($sortieASupprimer);
+
+        $entityManager->flush();
+
+        return $this->json(['message'=> 'Vous avez bien supprimer votre sortie']);
+
+
+    }
+
+    #[Route('/modifier/{id}', name: 'app_supprimer_sortie')]
+    public function modifierSortie(Request $request, int $id, SortieRepository $sortieRepository,EntityManagerInterface $entityManager, LieuRepository $lieuRepository){
+
+        $sortie = json_decode($request->getContent(), true);
+
+        $sortieAModifier = $sortieRepository->findOneBy(['id'=>$sortie['id']]);
+
+        if (!$sortieAModifier){
+            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sortieAModifier->setNom($sortie['nom']);
+        $sortieAModifier->setDateHeureDebut($sortie['dateHeureDebut']);
+        $sortieAModifier->setDateLimiteInscription($sortie['dateLimiteInscription']);
+        $sortieAModifier->setNbInscriptionMax($sortie['nbInscriptionMax']);
+        $sortieAModifier->setDuree($sortie['duree']);
+        $sortieAModifier->setInfosSortie($sortie['infosSortie']);
+        $sortieAModifier->setEtat($sortie['etat']);
+
+        $lieu = $lieuRepository->findOneBy(['nom'=>$sortie['nomLieu']]);
+        if (!$lieu){
+            return $this->json(['message' => 'Lieu non trouvée.'], Response::HTTP_NOT_FOUND);
+        }
+        $lieuAModifier = $lieu -> getId();
+        $sortieAModifier->setLieu($lieuAModifier);
+
+        $entityManager->flush();
+
+        return $this->json(['message'=> 'Vous avez bien modifier votre sortie']);
+
+
+    }
 }

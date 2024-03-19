@@ -1,14 +1,29 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea, Flex, Select } from "@chakra-ui/react"
+import {useNavigate, useParams} from "react-router-dom"
+import {
+    Center,
+    Box,
+    FormControl,
+    FormLabel,
+    Input,
+    Button,
+    Grid,
+    VStack,
+    Textarea,
+    Flex,
+    Select,
+    Heading
+} from "@chakra-ui/react"
 import serviceSortie from "../services/serviceSortie"
 import serviceVille from "../services/serviceVille"
 import MapComponent from "../components/MapComponent"
 import Loading from "../components/Loading"
 import Notification from "../components/Notification";
 const ModificationSortie = (props) => {
+
+    const sortieId  = useParams().sortieId;
 
     const[nom, setNom] = useState('')
     const[dateDebut, setDateDebut] = useState('')
@@ -43,9 +58,14 @@ const ModificationSortie = (props) => {
             document.title = title;
         }, [title]);
     }
-    useDocumentTitle('Golaf! | Créer une sortie')
+    useDocumentTitle('Golaf! | Modifier une sortie')
 
     useEffect(()=>{
+
+        const fetchSortie = async (sortieId)=>{
+            const responseSortie = await serviceSortie.getSortie(sortieId)
+
+        }
         const fetchVilles = async() => {
             const responseVilles = await serviceVille.getAllVilles()
             setLieuxVille(responseVilles[0].lieux)
@@ -68,9 +88,11 @@ const ModificationSortie = (props) => {
         } else if (e.nativeEvent.submitter.name === 'publish') {
             etat = 'Ouverte'
         } else if (e.nativeEvent.submitter.name === 'erase'){
-
+            const response = await serviceSortie.supprimerSortie(sortieId);
+            console.log(response)
         }
         const  sortie = {
+            id: sortieId,
             nom: nom,
             duree:duree,
             nbInscriptionMax:nbPlaces,
@@ -87,7 +109,7 @@ const ModificationSortie = (props) => {
             dateLimiteInscription:dateLimit,
             ville: ville
         }
-        const response = await serviceSortie.creerSortie(sortie);
+        const response = await serviceSortie.modifierSortie(sortie);
         if (response.status === 200) {
             setNotification({ status: 'success', description: 'Sortie créée avec succès' });
             setIsVisible(true);
@@ -130,6 +152,9 @@ const ModificationSortie = (props) => {
                     <Notification status={notification.status} description={notification.description} isVisible={isVisible} />
                 </Box>
             )}
+            <Center mt="100px" p={5}>
+                <Heading textDecoration="underline">Modifier une sortie</Heading>
+            </Center>
             <Center  h="100vh" mt="-100px">
                 <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
                     <Grid templateColumns="repeat(2, 1fr)" gap={6}>
