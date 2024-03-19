@@ -4,13 +4,13 @@ import { Button, Link, Heading, VStack, Box, Popover, PopoverTrigger, PopoverCon
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
-import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon, SimpleGrid, HStack, Avatar } from "@chakra-ui/react";
 import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
-import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon  } from '@chakra-ui/icons';
+import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
 
 const Accueil = (props) => {
   
@@ -82,51 +82,41 @@ const Accueil = (props) => {
             <Filtre sorties={sorties} setSorties={setSorties}/>
             </PopoverContent>
         </Popover>
-        <Table variant="simple" mt={isOpen ? "400" : "0"}>
-            <Thead>
-                <Tr>
-                    <Th>Nom de la sortie</Th>
-                    <Th> 
-                      <Flex alignItems="center">
-                        <Text marginRight="2">Date de la sortie</Text>
-                        <TimeIcon />
-                      </Flex>
-                    </Th>
-                    <Th>
-                      <Flex alignItems="center">
-                        <Text marginRight="2">Cloture</Text>
-                        <LockIcon />
-                      </Flex>
-                    </Th>
-                    <Th>Inscrits / Places</Th>
-                    <Th>Etat</Th>
-                    <Th>Inscrit</Th>
-                    <Th>Organisateur</Th>
-                    <Th>Actions</Th>
-                </Tr>
-            </Thead>
-            <Tbody>
-                {sorties.map(sortie => (
-                    <Tr key={sortie.id}>
-                        <Td>{sortie.nom}</Td>
-                        <Td>{dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Td>
-                        <Td>{dateFunctions.formatDate(sortie.dateLimiteInscription)}</Td>
-                        <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>
-                        <Td>{sortie.etat}</Td>
-                        <Td>
-                          {props.user 
-                            ? sortie.participants.includes(props.user.id) 
-                              ? <CheckIcon boxSize="20px" color="green.500" />
-                              : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
-                            : <Link as={RouterLink} to="/connecter">Se Connecter</Link>
-                          }
-                        </Td>
-                        <Td>{sortie.organisateur}</Td>
-                        <Td><ActionsComponent/></Td>
-                    </Tr>
-                ))}
-            </Tbody>
-        </Table>
+        <SimpleGrid columns={3} spacing={10}>
+    {sorties.map(sortie => (
+        <Box key={sortie.id} borderWidth="1px" borderRadius="lg" overflow="hidden" p="6"  bgColor="blue.50">
+            <VStack align="center" spacing="4">
+                <HStack spacing="4">
+                    <Text fontSize="xl" fontWeight="bold">
+                        <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
+                    </Text>
+                    <Icon as={ViewIcon} />
+                    <ActionsComponent/>
+                </HStack>
+                <Text><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
+                <Text><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>
+                <VStack align="center" spacing="1">
+                  <Text>Inscrits / Places:</Text>
+                  <Text>{sortie.participants.length} / {sortie.nbInscriptionMax}</Text>
+                </VStack>
+                <Text>Etat: {sortie.etat}</Text>
+                <Flex align="center">
+                  <Text mr={2}>Organisateur: {sortie.organisateur}</Text>
+                   <Avatar name={props.user.nom}/>
+                </Flex>
+                <HStack>
+                    <Text>Inscrit:</Text>
+                    {props.user 
+                        ? sortie.participants.includes(props.user.id) 
+                            ? <CheckIcon boxSize="20px" color="green.500" />
+                            : <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
+                        : <Link as={RouterLink} to="/connecter">Se Connecter</Link>
+                    }
+                </HStack>
+            </VStack>
+        </Box>
+    ))}
+        </SimpleGrid>
     </div>
 );
 }
