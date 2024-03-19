@@ -28,12 +28,12 @@ const MapComponent = (props) => {
   }, [viewport]);
 
   return (
-    <div>
-      <Map height={1500} width={1500}  center={[viewport.latitude, viewport.longitude]} defaultZoom={13}>
-        <Marker anchor={[viewport.latitude, viewport.longitude]} payload={1} />
-      </Map>
-      <p>{address}</p>
-    </div>
+      <div>
+        <Map height={300} width={500} center={[viewport.latitude, viewport.longitude]} defaultZoom={13}>
+          <Marker anchor={[viewport.latitude, viewport.longitude]} payload={1}/>
+        </Map>
+        <p>{address}</p>
+      </div>
   );
 }
 

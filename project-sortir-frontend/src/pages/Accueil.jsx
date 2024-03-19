@@ -108,7 +108,7 @@ const Accueil = (props) => {
             <Tbody>
                 {sorties.map(sortie => (
                     <Tr key={sortie.id}>
-                        <Td><Link as={RouterLink} to={`/annuler/${sortie.id}`} id={sortie.id} mr="4">{sortie.nom}</Link></Td>
+                        <Td>{sortie.nom}</Td>
                         <Td>{dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Td>
                         <Td>{dateFunctions.formatDate(sortie.dateLimiteInscription)}</Td>
                         <Td> {sortie.participants.length} /{sortie.nbInscriptionMax}</Td>

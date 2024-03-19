@@ -95,7 +95,9 @@ const Profile = (props) => {
 
   const handleChange = (e)=>{
     setImage(e)
-    console.log(image);
+  }
+  const handleClick = () =>{
+    window.location.assign('/')
   }
 
 
@@ -173,7 +175,7 @@ const Profile = (props) => {
             </Grid>
             <Flex justify="space-between" mt="20px">
               <Button type="submit" colorScheme='teal' name="register">Enregistrer</Button>
-              <Button type="reset" name="reset">Annuler</Button>
+              <Button type="reset" name="reset" onClick={handleClick}>Annuler</Button>
             </Flex>
           </Box>
         </Center>

@@ -12,6 +12,7 @@ import Sortie from './pages/Sortie'
 import AutreProfilUtilisateur from "./pages/AutreProfilUtilisateur.jsx";
 import DetailsSortie from "./pages/DetailsSortie.jsx";
 import AnnulerSortie from "./pages/AnnulerSortie.jsx";
+import ModificationSortie from "./pages/ModificationSortie.jsx";
 
 
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/profile/:userId" element={<AutreProfilUtilisateur id={userId}/>}/>
             <Route path="/details/:id" element={<DetailsSortie/>} />
             <Route path="/annuler/:sortieId" element={<AnnulerSortie/>}/>
+            <Route path="/modifier/:sortieId" element={<ModificationSortie/>}/>
           </Routes>
         </Router>
       </>
