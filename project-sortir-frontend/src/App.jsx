@@ -13,6 +13,8 @@ import AutreProfilUtilisateur from "./pages/AutreProfilUtilisateur.jsx";
 import DetailsSortie from "./pages/DetailsSortie.jsx";
 import AnnulerSortie from "./pages/AnnulerSortie.jsx";
 import ModificationSortie from "./pages/ModificationSortie.jsx";
+import PanelAdministration from "./pages/PanelAdministration.jsx";
+
 
 
 
@@ -51,6 +53,7 @@ function App() {
             <Route path="/details/:id" element={<DetailsSortie/>} />
             <Route path="/annuler/:sortieId" element={<AnnulerSortie/>}/>
             <Route path="/modifier/:sortieId" element={<ModificationSortie/>}/>
+            <Route path="/administration" element={<PanelAdministration user={user}/>} />
           </Routes>
         </Router>
       </>
