@@ -16,7 +16,7 @@ const InscrireCSV = () => {
                     const participant = {
                       mail:d.mail,
                       password:d.password,
-                      campus:d.campus
+                      campusNom:d.campus
                     }
                     const response = await serviceIsAdmin.createParticipant(participant)
                     console.log(response);

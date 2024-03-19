@@ -32,7 +32,7 @@ class AdminController extends AbstractController
             // Récupérer les champs de l'objet de la sortie
             $mailData = $data['mail'];
             $passwordData = $data['password'];
-            $campusData = $data['campus'];
+            $campusData = $data['campusNom'];
 
             $campus = $campusRepository->findOneBy(['nom'=>$campusData]);
 
