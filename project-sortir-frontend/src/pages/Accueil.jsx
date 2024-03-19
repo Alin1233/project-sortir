@@ -6,15 +6,13 @@ import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
 import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon, SimpleGrid, HStack, Avatar, useBreakpointValue  } from "@chakra-ui/react";
-import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
-
-import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
 import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
 import Notification from "../components/Notification";
 import InscrireCSV from "../components/InscrireCSV";
+import UploadImg from "../components/UploadImg";
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -87,7 +85,7 @@ const Accueil = (props) => {
   return (
     <div>
         {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
-        <InscrireCSV/>
+        <UploadImg user={props.user}/>
         <Box>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">

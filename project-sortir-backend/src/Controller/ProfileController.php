@@ -101,7 +101,7 @@ class ProfileController extends AbstractController
         }
     }
 
-    #[Route('/{id}', name: 'app_autreUtilisateur')]
+    #[Route('/id/{id}', name: 'app_autreUtilisateur')]
     public function getAutreProfil(int $id ,ParticipantRepository $participantRepository,CampusRepository$campusRepository, Request $request): Response
     {
 
@@ -123,17 +123,31 @@ class ProfileController extends AbstractController
     }
 
 
-   /* #[Route('/upload', name: 'app_upload')]
-    public function uploadImage(Request $request,FileUploader $fileUploader): Response
+    #[Route('/upload', name: 'app_upload')]
+    public function uploadImage(Request $request,FileUploader $fileUploader, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager): Response
     {
-        $data= $request->files->get('image');
-        /**@var UploadedFile $image *
-        $image=$data;
+        $uploadedFile = $request->files->get('file');
 
-        if ($image){
-            $imageFilename = $fileUploader->upload($image);
-            return new Response('Image téléchargée avec succès.', 200);
+        $participantId = $request->request->get('id'); 
+        
+        $participant = $participantRepository->find($participantId);
+
+        if ($uploadedFile) {
+            
+        $fileName = $participant->getId().$participant->getNom().'.png';
+
+        $destination = $this->getParameter('uploads_directory');
+
+        $uploadedFile->move($destination, $fileName);
+
+        $participant->setImage($fileName);
+        
+        $entityManager->flush();
+        
+        
+        return new Response('Image téléchargée avec succès.', 200);
         }
+
         return new Response('Aucune image envoyée.', 400);
-    }*/
+    }
 }
