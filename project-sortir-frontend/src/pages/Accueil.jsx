@@ -85,6 +85,7 @@ const Accueil = (props) => {
   return (
     <div>
         {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
+        !
         <Box>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">
@@ -112,7 +113,7 @@ const Accueil = (props) => {
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
                     </Text>
                     <Icon as={ViewIcon} />
-                    <ActionsComponent sortie={sortie} user={props.user} setUpdateData={setUpdateData}/>
+                    <ActionsComponent sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
                 </HStack>
                 <Text><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
                 <Text><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>
