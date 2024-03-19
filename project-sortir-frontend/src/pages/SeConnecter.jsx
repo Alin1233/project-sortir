@@ -2,12 +2,16 @@
 import {useEffect, useState} from "react";
 import serviceUser from '../services/serviceUser'
 import {Box, Button, FormControl, FormLabel, Input, Center, Checkbox, Grid} from "@chakra-ui/react";
+import Notification from "../components/Notification";
 const SeConnecter = (props) => {
 
   const[mail, setMail] = useState('');
   const[motdepasse, setMotdepasse] = useState('');
   const[resterConnecter, setResterConnecter]=useState(false)
 
+  //notification
+  const [notification, setNotification] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -21,9 +25,14 @@ const SeConnecter = (props) => {
       //si oui, créer un cookie et définir l'utilisateur actuel comme utilisateur récupéré sur le serveur
       window.localStorage.setItem('loggedUser', JSON.stringify(response))
       props.setUser(response)
+      setNotification({ status: 'success', description: 'Connexion réussie!' });
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 5000);
       window.location.assign('/')
     }else{
-      alert('Erreur lors de votre saisis de vos identifiants veuillez réessayer svp')
+      setNotification({ status: 'error', description: 'Mauvais mot de passe ou email, essayez encore !' });
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 5000);
     }
   };
 
@@ -52,6 +61,7 @@ const SeConnecter = (props) => {
 
   return (
     <Center as="div" h="100vh" mt="-200px">
+      {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
       <Box as="form" onSubmit={handleSubmit} w="50%">
         <FormControl id="mail">
           <FormLabel>Mail:</FormLabel>

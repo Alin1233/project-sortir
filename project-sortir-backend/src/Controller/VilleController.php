@@ -28,7 +28,6 @@ class VilleController extends AbstractController
             return new Response(json_encode(['error' => 'Une erreur serveur est survenue.']), 500, ['Content-Type' => 'application/json']);
         }
     }
-
     #[Route('/villes', name: 'get_all_villes')]
     public function getAllVilles(VilleRepository $villeRepository): Response
     {

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Repository\CampusRepository;
@@ -113,13 +114,17 @@ class SortieController extends AbstractController
        
     }
 
-    #[Route('/getall', name: 'get_all_sorties', methods: "GET")]
-    public function getAllSorties(SortieRepository $sortieRepository): Response
+    #[Route('/getallbyfilter', name: 'get_all_sorties', methods: "GET")]
+    public function getAllSortiesByFilter(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository): Response
     {
-        try{
-            $sorties = $sortieRepository -> findAll();
+        try {
+            $filters = json_decode($_GET['filter']);
+            $userId = json_decode($_GET['userId']);
+
+            $sortiesByRepoFilter = $sortieRepository->findSortiesByFilters($filters, $userId);
+
             $sortiesData = [];
-            foreach ($sorties as $sortie) {
+            foreach ($sortiesByRepoFilter as $sortie) {
                 $participants = $sortie->getParticipants();
                 $participantsData = [];
                 foreach($participants as $participant){
@@ -133,21 +138,23 @@ class SortieController extends AbstractController
                     'dateHeureDebut'=> $sortie->getDateHeureDebut(),
                     'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
                     'etat' => $sortie->getEtat()->getLibelle(),
-                    'organisateur' =>  $sortie->getOrganisateur()->getNom(),
+                    'organisateur' =>[  
+                        'nom' => $sortie->getOrganisateur()->getNom(),
+                        'id' =>$sortie->getOrganisateur()->getId(),
+                    ],
                     'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
                     'participants'=> $participantsData,
-                    'campus'=> $sortie->getCampus()->getNom(),
+                    'campus'=> $sortie->getCampus()->getNom()
                 ];
 
                 $sortiesData[] = $sortieData;
-             
             }
-           
+            
             return $this->json(['sorties' =>  $sortiesData]);
         } 
         catch (\Exception $e) {
             return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
-         }
+        }
     }
     #[Route('/participate', name: 'participate', methods: "POST")]
     public function addParticipantToSortie(SortieRepository $sortieRepository, Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $manager): Response
@@ -223,9 +230,26 @@ class SortieController extends AbstractController
         //Virer try catch, dans react voir status de l'erreur, pop up sur react , ouvrez console -> network requete en rouge , details de l'erreur
         //plus propre handler dans symfony toute les réponse donne du json
     }
+    #[Route('/sedesister/{sortieId}/{participantId}', name: 'se_desister')]
+    public function seDesister(EntityManagerInterface $entityManager, SortieRepository $sortieRepository, ParticipantRepository $participantRepository, $sortieId, $participantId): Response
+    {
+        try {
+            $sortie = $sortieRepository->find($sortieId);
+            $participant = $participantRepository->find($participantId);
+
+            $sortie->removeParticipant($participant);
+            $entityManager->flush();
+            
+            return new Response("Participation annulée");
+        } catch (\Exception $e) {
+            // Utilisez HTTP 500 pour les erreurs serveur
+            return new Response(json_encode(['error' => $e->getMessage()]), 500, ['Content-Type' => 'application/json']);
+        }
+        
+    }
 
     #[Route('/annuler/{id}',name: 'app_annulation')]
-    public function annulerSortie(int $id, SortieRepository $sortieRepository,EtatRepository $etatRepository,EntityManagerInterface $entityManager, Request $request): \Symfony\Component\HttpFoundation\JsonResponse|Response
+    public function annulerSortie(int $id, SortieRepository $sortieRepository,EtatRepository $etatRepository,EntityManagerInterface $entityManager, Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
         $motif = $data['motif'];

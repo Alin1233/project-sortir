@@ -2,9 +2,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea, Flex } from "@chakra-ui/react"
+import { Center, Box, FormControl, FormLabel, Input, Button, Grid, VStack, Textarea, Flex, Select } from "@chakra-ui/react"
 import serviceSortie from "../services/serviceSortie"
+import serviceVille from "../services/serviceVille"
 import MapComponent from "../components/MapComponent"
+import Loading from "../components/Loading"
+import Notification from "../components/Notification";
 const CreerSortie = (props) => {
 
     const[nom, setNom] = useState('')
@@ -19,6 +22,14 @@ const CreerSortie = (props) => {
     const [codePostal, setCodePostal] = useState('')
     const [latitude, setLatitude] = useState( 47.227479546104746)
     const [longitude, setLongitude] = useState(-1.5507239538023578)
+
+    const[lieuxVille, setLieuxVille] = useState('')
+    const [villes, setVilles] = useState(null)
+
+    //notification
+    const [notification, setNotification] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
     //si l'utilisateur est nul, redirection à la connexion
     const navigate = useNavigate();
     useEffect(() => {
@@ -33,6 +44,21 @@ const CreerSortie = (props) => {
         }, [title]);
     }
     useDocumentTitle('Golaf! | Créer une sortie')
+
+    useEffect(()=>{
+        const fetchVilles = async() => {
+            const responseVilles = await serviceVille.getAllVilles()
+            setLieuxVille(responseVilles[0].lieux)
+            setVilles(responseVilles)
+            setRue(responseVilles[0].lieux[0].rue)
+            setCodePostal(responseVilles[0].codePostal)
+            setLatitude(responseVilles[0].lieux[0].latitude)
+            setLatitude(responseVilles[0].lieux[0].longitude)
+            setVille(responseVilles[0].nom)
+            setLieu(responseVilles[0].lieux[0].nom)
+        }
+        fetchVilles()
+    },[])
 
     const handleSubmit = async(e) =>{
         e.preventDefault();
@@ -60,9 +86,48 @@ const CreerSortie = (props) => {
             ville: ville
         }
         const response = await serviceSortie.creerSortie(sortie);
-        console.log(response);
+        if (response.status === 200) {
+            setNotification({ status: 'success', description: 'Sortie créée avec succès' });
+            setIsVisible(true);
+            setTimeout(() => setIsVisible(false), 5000);
+          }else{
+            setNotification({ status: 'error', description: 'Une erreur est survenue, essayez à nouveau' });
+            setIsVisible(true);
+            setTimeout(() => setIsVisible(false), 5000);
+          }
+    }
+    useEffect(() => {
+        if (villes) {
+            const selectedVille = villes.find(v => v.nom === ville);
+            if (selectedVille && selectedVille.lieux[0]) {
+                setCodePostal(selectedVille.codePostal);
+                setLieuxVille(selectedVille.lieux);
+                setLieu(selectedVille.lieux[0].nom); 
+            }
+        }
+    }, [ville, villes]);
+    
+    useEffect(() => {
+        if (lieuxVille) {
+            const selectedLieu = lieuxVille.find(l => l.nom === lieu)
+            if(selectedLieu){
+                setRue(selectedLieu.rue)
+                setLatitude(selectedLieu.latitude)
+                setLongitude(selectedLieu.longitude)
+            }
+        }
+    }, [lieu, lieuxVille]);
+
+    if(villes === null){
+        return <Loading/>
     }
     return (
+        <Box >
+            {notification && (
+            <Box >
+                <Notification status={notification.status} description={notification.description} isVisible={isVisible} />
+            </Box>
+            )}
         <Center  h="100vh" mt="-100px">
             <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
                 <Grid templateColumns="repeat(2, 1fr)" gap={6}>
@@ -99,27 +164,39 @@ const CreerSortie = (props) => {
                     <VStack align="stretch">
                         <FormControl id="ville">
                             <FormLabel>Ville:</FormLabel>
-                            <Input type='text' name='ville' value={ville} onChange={(e) => setVille(e.target.value)} size="md" />
+                            <Select name='ville' onChange={(e) => setVille(e.target.value)} defaultValue={ville}>
+                                {villes.map((ville) => (
+                                    <option key={ville.id} value={ville.nom}>
+                                    {ville.nom}
+                                    </option>
+                                ))}
+                            </Select>
                         </FormControl>
                             <FormControl id="lieu">
                             <FormLabel>Lieu:</FormLabel>
-                            <Input type='text' name='lieu' value={lieu} onChange={(e) => setLieu(e.target.value)} size="md" />
+                            <Select name='lieu' onChange={(e) => setLieu(e.target.value)} defaultValue={lieu}>
+                                {lieuxVille.map((lieu) => (
+                                    <option key={lieu.id} value={lieu.nom}>
+                                    {lieu.nom}
+                                    </option>
+                                ))}
+                            </Select>
                         </FormControl>
                             <FormControl id="rue">
                             <FormLabel>Rue:</FormLabel>
-                            <Input type='text' name='rue' value={rue} onChange={(e) => setRue(e.target.value)} size="md" />
+                            <Input disabled type='text' name='rue' value={rue} size="md" />
                         </FormControl>
                             <FormControl id="codePostal">
                             <FormLabel>Code Postal:</FormLabel>
-                            <Input type='text' name='codePostal' value={codePostal} onChange={(e) => setCodePostal(e.target.value)} size="md" />
+                            <Input disabled type='text' name='codePostal' value={codePostal}  size="md" />
                         </FormControl>
                             <FormControl id="latitude">
                             <FormLabel>Latitude:</FormLabel>
-                            <Input type='number' name='latitude' value={latitude} onChange={(e) => setLatitude(e.target.value)} size="md" />
+                            <Input disabled type='number' name='latitude' value={latitude} size="md" />
                         </FormControl>
                             <FormControl id="longitude">
                             <FormLabel>Longitude:</FormLabel>
-                            <Input type='number' name='longitude' value={longitude} onChange={(e) => setLongitude(e.target.value)} size="md" />
+                            <Input disabled type='number' name='longitude' value={longitude} size="md" />
                         </FormControl>
                     </VStack>
                 </Grid>
@@ -133,6 +210,7 @@ const CreerSortie = (props) => {
             </Box>
 
         </Center>
+    </Box>
 )
 
 }
