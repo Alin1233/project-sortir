@@ -9,10 +9,6 @@ import { useState } from 'react';
 
 const ActionsComponent = (props) => {
 
-    
-
-
-
     const handleSeDesister = async (sortieId, userId)=> {
         const response = await serviceSortie.seDesister(sortieId,userId)
         if (response.status === 200) {
@@ -35,7 +31,12 @@ const ActionsComponent = (props) => {
             <MenuList>
                 <MenuItem>Modifier</MenuItem>
                 <MenuItem>Supprimer</MenuItem>
-                <MenuItem>Publier</MenuItem>
+                {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
+                ?
+                    <MenuItem as={Button}>Publier</MenuItem>
+                :   null
+                }
+                
                 {props.sortie.participants.includes(props.user.id)
                 ?
                     <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>

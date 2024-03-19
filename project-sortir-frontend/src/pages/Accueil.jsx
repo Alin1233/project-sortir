@@ -55,7 +55,6 @@ const Accueil = (props) => {
       idParticipant: idUser
     }
     const response = await serviceSortie.addParticipant(data)
-    console.log(response);
     if (response === 200) {
       setNotification({ status: 'success', description: 'La participation a été ajoutée avec succès !' });
       setIsVisible(true);
