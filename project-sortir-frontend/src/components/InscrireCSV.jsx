@@ -20,7 +20,7 @@ const InscrireCSV = () => {
     }
     return (
         <Box w="200px" py={3} px={4} borderWidth={1} borderRadius="md">
-          <Text>{fileName || "No file chosen"}</Text>
+          <Text>{fileName || "Aucun fichier choisi"}</Text>
           <Input
             type="file"
             name="file"
@@ -31,7 +31,7 @@ const InscrireCSV = () => {
           />
           <label htmlFor="file-upload">
             <Button as="span" colorScheme="teal" size="sm" mt={2}>
-              Choose File
+              Choisir un fichier csv
             </Button>
           </label>
         </Box>
