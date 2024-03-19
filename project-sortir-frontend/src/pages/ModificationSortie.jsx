@@ -25,6 +25,7 @@ const ModificationSortie = (props) => {
 
     const sortieId  = useParams().sortieId;
 
+
     const[nom, setNom] = useState('')
     const[dateDebut, setDateDebut] = useState('')
     const[dateLimit, setDateLimit] = useState('')
@@ -37,6 +38,8 @@ const ModificationSortie = (props) => {
     const [codePostal, setCodePostal] = useState('')
     const [latitude, setLatitude] = useState( 47.227479546104746)
     const [longitude, setLongitude] = useState(-1.5507239538023578)
+    const [campus, setCampus] = useState('')
+    const [organisateur, setOrganisateur] =useState('')
 
     const[lieuxVille, setLieuxVille] = useState('')
     const [villes, setVilles] = useState(null)
@@ -53,6 +56,16 @@ const ModificationSortie = (props) => {
         }
     }, [navigate, props.user]);
 
+    function transformationSailorMoon (a){
+        const date = new Date(a);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        return  `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
     function useDocumentTitle(title) {
         useEffect(() => {
             document.title = title;
@@ -62,9 +75,16 @@ const ModificationSortie = (props) => {
 
     useEffect(()=>{
 
-        const fetchSortie = async (sortieId)=>{
+        const fetchSortie = async ()=>{
             const responseSortie = await serviceSortie.getSortie(sortieId)
-
+            setNom(responseSortie.nom)
+            setNbPlaces(responseSortie.nbInscriptionMax)
+            setDuree(responseSortie.duree)
+            setDescription(responseSortie.description)
+            setDateDebut(transformationSailorMoon(responseSortie.dateHeureDebut))
+            setDateLimit(transformationSailorMoon(responseSortie.dateLimiteInscription))
+            setCampus(responseSortie.campus)
+            setOrganisateur(responseSortie.organisateur)
         }
         const fetchVilles = async() => {
             const responseVilles = await serviceVille.getAllVilles()
@@ -77,6 +97,7 @@ const ModificationSortie = (props) => {
             setVille(responseVilles[0].nom)
             setLieu(responseVilles[0].lieux[0].nom)
         }
+        fetchSortie()
         fetchVilles()
     },[])
 
@@ -87,9 +108,9 @@ const ModificationSortie = (props) => {
             etat = 'Creee'
         } else if (e.nativeEvent.submitter.name === 'publish') {
             etat = 'Ouverte'
-        } else if (e.nativeEvent.submitter.name === 'erase'){
+        } else if (e.nativeEvent.submitter.name === 'delete'){
             const response = await serviceSortie.supprimerSortie(sortieId);
-            console.log(response)
+            window.location.assign('/')
         }
         const  sortie = {
             id: sortieId,
@@ -103,8 +124,8 @@ const ModificationSortie = (props) => {
             codePostal: codePostal,
             latitude: latitude,
             longitude: longitude,
-            organisateur: props.user,
-            campus: props.user.campus.nom,
+            organisateur: organisateur,
+            campus: campus,
             dateHeureDebut: dateDebut,
             dateLimiteInscription:dateLimit,
             ville: ville
@@ -120,6 +141,11 @@ const ModificationSortie = (props) => {
             setTimeout(() => setIsVisible(false), 5000);
         }
     }
+
+    const handleClick=()=>{
+        window.location.assign('/');
+    }
+
     useEffect(() => {
         if (villes) {
             const selectedVille = villes.find(v => v.nom === ville);
@@ -185,7 +211,7 @@ const ModificationSortie = (props) => {
                             </FormControl>
                             <FormControl id="campus">
                                 <FormLabel>Campus:</FormLabel>
-                                <Input type='text' disabled name='campus' defaultValue={props.user && props.user.campus ? props.user.campus.nom : ''} size="md" />
+                                <Input type='text' disabled name='campus' defaultValue={campus} size="md" />
                             </FormControl>
                         </VStack>
                         <VStack align="stretch">
@@ -231,7 +257,7 @@ const ModificationSortie = (props) => {
                         <Button type="submit" name="register">Enregistrer</Button>
                         <Button type="submit" name="publish">Publier la sortie</Button>
                         <Button type="submit" name="delete">Supprimer la sortie</Button>
-                        <Button type="reset" name="cancel">Annuler</Button>
+                        <Button type="reset" name="cancel" onClick={handleClick}>Annuler</Button>
                     </Flex>
                 </Box>
                 <MapComponent longitude={longitude} latitude={latitude}/>
