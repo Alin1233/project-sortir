@@ -87,7 +87,7 @@ const Accueil = (props) => {
   return (
     <div>
         {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
-        !
+        <InscrireCSV/>
         <Box>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">
