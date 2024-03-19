@@ -8,6 +8,7 @@ import serviceSortie from "../services/serviceSortie";
 import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon, SimpleGrid, HStack, Avatar, useBreakpointValue  } from "@chakra-ui/react";
 import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
+
 import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
@@ -23,6 +24,8 @@ const Accueil = (props) => {
   //notification
   const [notification, setNotification] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+
+  
 
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
