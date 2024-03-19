@@ -136,7 +136,7 @@ class SortieController extends AbstractController
                     'organisateur' =>  $sortie->getOrganisateur()->getNom(),
                     'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
                     'participants'=> $participantsData,
-                    'campus'=> $sortie->getCampus()->getNom()
+                    'campus'=> $sortie->getCampus()->getNom(),
                 ];
 
                 $sortiesData[] = $sortieData;
@@ -182,19 +182,40 @@ class SortieController extends AbstractController
 
 
     #[Route('/details/{id}', name: 'details_sortie')]
-    public function getSortie(int $id, SerializerInterface $serializer, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
+    public function getSortie(int $id, SerializerInterface $serializer, EntityManagerInterface $entityManager, SortieRepository $sortieRepository, LieuRepository $lieuRepository): Response
     {
         try {
             $sortie = $sortieRepository->find($id);
-
 
             if (!$sortie) {
                 return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
             }
 
-            $data = $serializer->serialize($sortie, 'json');
 
-            return new Response($data, 200, ['Content-Type' => 'application/json']);
+            $data = [
+                'id' => $sortie->getId(),
+                'nom'=> $sortie->getNom(),
+                'dateHeureDebut'=> $sortie->getDateHeureDebut(),
+                'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
+                'duree' => $sortie->getDuree(),
+                'etat' => $sortie->getEtat()->getLibelle(),
+                'description' => $sortie->getInfosSortie(),
+                'organisateur' =>[
+                    'nom' => $sortie->getOrganisateur()->getNom(),
+                    'id' =>$sortie->getOrganisateur()->getId(),
+                ],
+                'nbInscriptionMax'=> $sortie->getNbInscriptionMax(),
+                'participants'=> $sortie->getParticipants(),
+                'campus'=> $sortie->getCampus()->getNom(),
+                'ville' => $sortie->getLieu()->getVille()->getNom(),
+                'codePostal' => $sortie->getLieu()->getVille()->getCodePostal(),
+                'lieu' => $sortie->getLieu()->getNom(),
+                'rue' => $sortie->getLieu()->getRue(),
+                'longitude' => $sortie->getLieu()->getLongitude(),
+                'latitude' => $sortie->getLieu()->getLatitude(),
+            ];
+
+            return $this->json(['sorties' =>  $data]);
         } catch (\Exception $e) {
             // Utilisez HTTP 500 pour les erreurs serveur
             return new Response(json_encode(['error' => $e->getMessage()]), 500, ['Content-Type' => 'application/json']);
