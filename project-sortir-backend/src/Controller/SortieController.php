@@ -260,7 +260,7 @@ class SortieController extends AbstractController
             return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
         }
 
-        $etat = $etatRepository->findOneBy(['id'=>6]);
+        $etat = $etatRepository->findOneBy(['libelle'=>'annulée']);
 
         if (!$etat){
             return $this->json(['message' => 'Etat non trouvé.'], Response::HTTP_NOT_FOUND);
