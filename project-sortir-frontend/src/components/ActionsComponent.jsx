@@ -23,6 +23,19 @@ const ActionsComponent = (props) => {
         props.setUpdateData(true)
         
     }
+    const handlePublier = async(sortieId)=>{
+        const response = await serviceSortie.publierSortie(sortieId)
+        if (response.status === 200) {
+            props.setNotification({ status: 'success', description: 'Vous avez publié la sortie avec succès!' });
+            props.setIsVisible(true);
+            setTimeout(() => props.setIsVisible(false), 5000);
+          }else{
+            props.setNotification({ status: 'error', description: 'Une erreur est survenue, essayez à nouveau' });
+            props.setIsVisible(true);
+            setTimeout(() => props.setIsVisible(false), 5000);
+          }
+        props.setUpdateData(true)
+    }
     return (
         <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -33,10 +46,9 @@ const ActionsComponent = (props) => {
                 <MenuItem>Supprimer</MenuItem>
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
                 ?
-                    <MenuItem as={Button}>Publier</MenuItem>
+                    <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
                 :   null
                 }
-                
                 {props.sortie.participants.includes(props.user.id)
                 ?
                     <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>

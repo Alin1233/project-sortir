@@ -135,7 +135,7 @@ const addParticipant = async (data) => {
     }
 }
 const seDesister = async (sortieId,userId) =>{
-    const url =baseUrl+"/sedesister"
+    const url = baseUrl+"/sedesister"
     try {
         const response = await axios.delete(url+`/${sortieId}/${userId}`)
         return response
@@ -143,8 +143,16 @@ const seDesister = async (sortieId,userId) =>{
         console.error(error);
         return error.status
     }
-   
-    
 }
-export default {creerSortie, getAllSortiesByFilter, addParticipant, getSortie, seDesister}
+const publierSortie = async (sortieId) => {
+    const url = baseUrl+"/publier"
+    try {
+        const response = await axios.update(url+`/${sortieId}`)
+        return response
+    } catch (error) {
+        console.error(error);
+        return error.status
+    }
+}
+export default {creerSortie, getAllSortiesByFilter, addParticipant, getSortie, seDesister, publierSortie}
 
