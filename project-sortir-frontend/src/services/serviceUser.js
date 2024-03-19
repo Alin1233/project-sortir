@@ -10,4 +10,14 @@ const connecterUser = async (mail, motdepasse) => {
         console.error(error);
     }
 }
-export default {connecterUser}
+
+const cookieConnection =async (id)=>{
+    const url = baseUrl+'/connecter/cookie'
+    try {
+        const response = await axios.post(url, {id})
+        return response.data.participant
+    } catch (error) {
+        console.error(error);
+    }
+}
+export default {connecterUser, cookieConnection}

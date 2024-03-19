@@ -205,7 +205,10 @@ const CreerSortie = (props) => {
                     <Button type="submit" name="publish">Publier la sortie</Button>
                  </Flex>
             </Box>
-            <MapComponent longitude={longitude} latitude={latitude}/>
+            <Box w="400px" h="400px">
+                    <MapComponent longitude={longitude} latitude={latitude}/>
+            </Box>
+
         </Center>
     </Box>
 )

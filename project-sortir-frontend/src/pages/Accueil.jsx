@@ -98,9 +98,9 @@ const Accueil = (props) => {
             </Text>
           </Flex>
         </Box>
-        <Popover isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
+        <Popover ml={2} isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
             <PopoverTrigger>
-                <Button>Filtrer les sorties <ChevronDownIcon /></Button>
+                <Button ml={2}>Filtrer les sorties <ChevronDownIcon /></Button>
             </PopoverTrigger>
             <PopoverContent>
             <Filtre sorties={sorties} setSorties={setSorties} user={props.user} setUpdateData={setUpdateData}/>

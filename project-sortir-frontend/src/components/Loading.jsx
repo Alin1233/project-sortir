@@ -1,6 +1,6 @@
 import {Flex, Spinner, Text} from "@chakra-ui/react";
 
-const Loading = () => {
+const  Loading = () => {
 
     return (
         <div>
