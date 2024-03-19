@@ -38,7 +38,6 @@ const DetailsSortie = () => {
                 if (sortie) {
                     setSortie(sortie);
                     setNomSortie(sortie.nom);
-                    console.log(sortie)
                 }
             } catch (error) {
                 console.error("Erreur lors de la récupération des détails de la sortie :", error);
@@ -67,20 +66,20 @@ const DetailsSortie = () => {
 
         <div>
             <Center mb="6">
-                <Heading as='h1' size='3xl' color="teal.500">Détails</Heading>
+                <Heading fontWeight='extrabold' as='h1' size='3xl' color="teal.500">Détails</Heading>
             </Center>
 
             <Center>
                 <Box mb={5} minW="1000px" minH="auto" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} bg="gray.50"
                      boxShadow="dark-lg">
                     <Box p={6}>
-                        <Heading size="xl" my={4} color="teal.500">
+                        <Heading fontWeight='extrabold' size="xl" my={4} color="teal.500">
                             {sortie.nom}
                         </Heading>
 
                         <Grid templateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={10} alignItems="start">
                             <Flex direction="column" align="center" justify="center" height="100%">
-                            <Box>
+                            <Box maxWidth={750}>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Date & Heure de la sortie : <Box as="span"
                                                                                                               fontWeight="bold">{format(sortie.dateHeureDebut, "d MMMM yyyy à HH:mm", {locale: fr})}</Box></Text>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Date limite d'inscription : <Box as="span"
@@ -96,7 +95,7 @@ const DetailsSortie = () => {
                             </Box>
                             </Flex>
                             <Flex direction="column" align="center" justify="center" height="100%">
-                            <Box>
+                            <Box maxWidth={750}>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Campus : <Box as="span" fontWeight="bold">{sortie.campus}</Box></Text>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Lieu : <Box as="span" fontWeight="bold">{sortie.lieu}</Box></Text>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Rue : <Box as="span" fontWeight="bold">{sortie.rue}</Box></Text>
@@ -105,12 +104,12 @@ const DetailsSortie = () => {
                                 <Text fontSize='2xl' mb="3" color="gray.700">Longitude : <Box as="span" fontWeight="bold">{sortie.longitude}</Box></Text>
 
                                 <GridItem colStart={3}>
-                                    <Button onClick={onOpen} colorScheme="teal">Afficher sur la carte</Button>
+                                    <Button fontWeight='extrabold'  fontSize='2xl' onClick={onOpen} colorScheme="teal">Afficher sur la carte</Button>
 
                                     <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
                                         <ModalOverlay bg='none'
                                                       backdropFilter='auto'
-                                                      backdropBlur='2px'/>
+                                                      backdropBlur='5px'/>
                                         <ModalContent>
                                             <ModalCloseButton/>
                                             <Center>
@@ -153,10 +152,11 @@ const DetailsSortie = () => {
                     >
                         <Heading
                             as="h2"
-                            size="xl"
+                            size="2xl"
                             mb={4}
                             textAlign="center"
                             color="teal.500"
+                            fontWeight='extrabold'
                         >
                             Participants de la sortie : {sortie.nom}
                         </Heading>
@@ -165,17 +165,22 @@ const DetailsSortie = () => {
                             spacing={3}
                             bg={"teal"}
                             borderRadius={50}
+                            mt={50}
                         >
                             {sortie.participants.map((participant, index) => (
+                                <Center>
                                 <ListItem
                                     key={index}
                                     p={2}
+                                    ml={5}
+                                    mr={5}
                                     mb={2}
-                                    fontWeight="extraBold"
+                                    fontWeight="extrabold"
                                     fontSize="4xl"
                                 >
                                     {participant.nom}
                                 </ListItem>
+                                </Center>
                             ))}
                         </List>
                         </Center>

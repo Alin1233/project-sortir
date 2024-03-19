@@ -1,33 +1,32 @@
-import React, {useEffect} from "react";
-import { useNavigate } from "react-router-dom"
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import serviceIsAdmin from "../services/serviceIsAdmin.js";
 import {
     Box,
     Button,
-    Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent,
-    DrawerFooter, DrawerHeader, DrawerOverlay,
-    FormLabel,
-    Heading, Input, InputGroup,
-    InputLeftAddon,
-    InputRightAddon,
-    Select, Stack, Textarea, useDisclosure
+    Center, Divider,
+    Heading, SimpleGrid,
+    useDisclosure
 } from "@chakra-ui/react";
-import {AddIcon} from "@chakra-ui/icons";
+import {AddIcon, DeleteIcon, TimeIcon} from "@chakra-ui/icons";
+import DrawerTypesPanelAdmin from "../components/DrawerTypesPanelAdmin.jsx";
+import CustomDrawer from "../components/DrawerTypesPanelAdmin.jsx";
+import Loading from "../components/Loading.jsx";
+
 const PanelAdministration = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // eslint-disable-next-line react/prop-types
         if (props.user === null) {
-            navigate('/connecter');
-            return;
+            window.location.assign('/')
+            return <div><Loading/></div>;
         }
-        const checkAdmin = async () => {
+
+        const checkAdminStatus = async () => {
             try {
-                // eslint-disable-next-line react/prop-types
                 const userId = props.user.id;
-                const checkAdmin = await serviceIsAdmin.checkAdmin(userId);
-               if (checkAdmin.isAdmin === false) {
+                const isAdminResponse = await serviceIsAdmin.checkAdmin(userId);
+                if (isAdminResponse.isAdmin === false) {
                     navigate('/');
                 }
             } catch (error) {
@@ -35,87 +34,62 @@ const PanelAdministration = (props) => {
             }
         };
 
-       checkAdmin();
-        // eslint-disable-next-line react/prop-types
+        checkAdminStatus();
     }, [navigate, props.user]);
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const firstField = React.useRef()
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [drawerType, setDrawerType] = React.useState('');
+
+    const handleOpenDrawer = (type) => {
+        setDrawerType(type);
+        onOpen();
+    };
 
     return (
         <div>
             <Center mb="6">
-                <Heading as='h1' size='3xl' color="teal.500">PANNEAU D'ADMINISTRATION</Heading>
+                <Heading mt={50} fontWeight='extrabold' as='h1' size='3xl' color="teal.500">PANNEAU D'ADMINISTRATION</Heading>
             </Center>
-
-            <Button leftIcon={<AddIcon />} colorScheme='teal' size='xl' onClick={onOpen}>
-                Create user
+<Center>
+            <SimpleGrid mt={100} columns={2} spacing={1}>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Ajouter une ville
+            </Button>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Supprimer une ville
             </Button>
 
 
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Ajouter un lieu
+                </Button>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Supprimer un lieu
+            </Button>
 
-            <Drawer
-                isOpen={isOpen}
-                placement='right'
-                initialFocusRef={firstField}
-                onClose={onClose}
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader borderBottomWidth='1px'>
-                        Create a new account
-                    </DrawerHeader>
 
-                    <DrawerBody>
-                        <Stack spacing='24px'>
-                            <Box>
-                                <FormLabel htmlFor='username'>Name</FormLabel>
-                                <Input
-                                    ref={firstField}
-                                    id='username'
-                                    placeholder='Please enter user name'
-                                />
-                            </Box>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Créer un groupe privé
+            </Button>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Supprimer un groupe privé
+            </Button>
 
-                            <Box>
-                                <FormLabel htmlFor='url'>Url</FormLabel>
-                                <InputGroup>
-                                    <InputLeftAddon>http://</InputLeftAddon>
-                                    <Input
-                                        type='url'
-                                        id='url'
-                                        placeholder='Please enter domain'
-                                    />
-                                    <InputRightAddon>.com</InputRightAddon>
-                                </InputGroup>
-                            </Box>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Créer un utilisateur
+                </Button>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Désactiver un utilisateur
+            </Button>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+                Supprimer un utilisateur
+            </Button>
+            </SimpleGrid>
+</Center>
 
-                            <Box>
-                                <FormLabel htmlFor='owner'>Select Owner</FormLabel>
-                                <Select id='owner' defaultValue='segun'>
-                                    <option value='segun'>Segun Adebayo</option>
-                                    <option value='kola'>Kola Tioluwani</option>
-                                </Select>
-                            </Box>
-
-                            <Box>
-                                <FormLabel htmlFor='desc'>Description</FormLabel>
-                                <Textarea id='desc' />
-                            </Box>
-                        </Stack>
-                    </DrawerBody>
-
-                    <DrawerFooter borderTopWidth='1px'>
-                        <Button variant='outline' mr={3} onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button colorScheme='blue'>Submit</Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-
+            <CustomDrawer isOpen={isOpen} onClose={onClose} drawerType={drawerType} />
         </div>
-     );
+    );
 };
+
 export default PanelAdministration

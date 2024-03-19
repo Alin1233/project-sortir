@@ -48,7 +48,7 @@ const getSortie = async (id) => {
     const url = `http://localhost:8000/details/${id}`;
     try{
         const response = await axios.get(url);
-        const sortie = response.data.sorties; 
+        const sortie = response.data.sorties;
 
         return sortie;
 
