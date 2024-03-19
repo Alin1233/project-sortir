@@ -373,7 +373,21 @@ class SortieController extends AbstractController
         $entityManager->flush();
 
         return $this->json(['message'=> 'Vous avez bien modifier votre sortie']);
-
-
+    }
+    #[Route('/publier/{sortieId}', name: 'publier_sortie')]
+    public function publierSortie(EntityManagerInterface $entityManager, SortieRepository $sortieRepository, $sortieId): Response
+    {
+        try {
+            $sortie = $sortieRepository->find($sortieId);
+            
+            $sortie->getEtat()->setLibelle("Ouverte");
+            $entityManager->flush();
+    
+            return new Response("Sortie Ouverte");
+        } catch (\Exception $e) {
+            // Utilisez HTTP 500 pour les erreurs serveur
+            return new Response(json_encode(['error' => $e->getMessage()]), 500, ['Content-Type' => 'application/json']);
+        }
+        
     }
 }

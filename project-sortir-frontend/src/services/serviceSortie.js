@@ -106,7 +106,7 @@ const seDesister = async (sortieId,userId) =>{
 const publierSortie = async (sortieId) => {
     const url = baseUrl+"/publier"
     try {
-        const response = await axios.update(url+`/${sortieId}`)
+        const response = await axios.put(url+`/${sortieId}`)
         return response
     } catch (error) {
         console.error(error);
