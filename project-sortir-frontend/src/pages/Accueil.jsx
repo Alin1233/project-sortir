@@ -15,6 +15,7 @@ import ActionsComponent from "../components/ActionsComponent";
 import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
 import Notification from "../components/Notification";
 import InscrireCSV from "../components/InscrireCSV";
+import sortie from "./Sortie.jsx";
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -24,8 +25,6 @@ const Accueil = (props) => {
   //notification
   const [notification, setNotification] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
-
-  
 
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -115,7 +114,7 @@ const Accueil = (props) => {
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
                     </Text>
                     <Icon as={ViewIcon} />
-                    <ActionsComponent sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
+                    <ActionsComponent nomSortie={sortie.nom} sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
                 </HStack>
                 <Text><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
                 <Text><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>

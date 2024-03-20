@@ -45,7 +45,7 @@ const ActionsComponent = (props) => {
                 Actions
             </MenuButton>
             <MenuList>
-            <MenuItem> <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4">Modifier</Link></MenuItem>
+            <MenuItem> <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} campus={props.sortie.organisateur.campus} mr="4">Modifier</Link></MenuItem>
             <MenuItem>
                 <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )

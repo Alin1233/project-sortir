@@ -260,7 +260,7 @@ class SortieController extends AbstractController
             return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
         }
 
-        $etat = $etatRepository->findOneBy(['id'=>6]);
+        $etat = $etatRepository->findOneBy(['libelle'=>'annulée']);
 
         if (!$etat){
             return $this->json(['message' => 'Etat non trouvé.'], Response::HTTP_NOT_FOUND);
@@ -326,26 +326,45 @@ class SortieController extends AbstractController
         return $this->json(['details'=>$responseDetails]);
     }
 
-    #[Route('/supprimer/${id}', name: 'app_supprimer_sortie')]
-    public function supprimerSortie(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\JsonResponse
+    #[Route('/supprimersortie/{id}', name: 'app_supprimer_sortie')]
+    public function supprimerSortie(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, ParticipantRepository $participantRepository, EtatRepository $etatRepository): \Symfony\Component\HttpFoundation\JsonResponse
     {
-        $sortieASupprimer = $sortieRepository->findOneBy(['id'=>$id]);
 
-        if (!$sortieASupprimer){
-            return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
-        }
 
-        $entityManager->remove($sortieASupprimer);
+            $sortieASupprimer = $sortieRepository->find($id);
 
-        $entityManager->flush();
+            if (!$sortieASupprimer){
+                return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
+            }
 
-        return $this->json(['message'=> 'Vous avez bien supprimer votre sortie']);
+            $sortieASupprimer->getEtat()->removeSorty($sortieASupprimer);
+            $entityManager->flush();
+            $sortieASupprimer->getCampus()->removeSorty($sortieASupprimer);
+            $entityManager->flush();
+            $sortieASupprimer->getOrganisateur()->removeSortie($sortieASupprimer);
+            $entityManager->flush();
+            $sortieASupprimer->getLieu()->removeSorty($sortieASupprimer);
+            $entityManager->flush();
+
+
+            $participantASupprimer = $sortieASupprimer->getParticipants();
+            foreach ($participantASupprimer as $participant){
+                $sortieASupprimer->removeParticipant($participant);
+                $entityManager->flush();
+            }
+
+            $entityManager->remove($sortieASupprimer);
+
+            $entityManager->flush();
+
+
+        return $this->json(['message'=> 'Sortie supprimer']);
 
 
     }
 
-    #[Route('/modifier/{id}', name: 'app_supprimer_sortie')]
-    public function modifierSortie(Request $request, int $id, SortieRepository $sortieRepository,EntityManagerInterface $entityManager, LieuRepository $lieuRepository){
+    #[Route('/modifier/{id}', name: 'app_modifier_sortie')]
+    public function modifierSortie(Request $request, int $id, SortieRepository $sortieRepository,EntityManagerInterface $entityManager, LieuRepository $lieuRepository, EtatRepository $etatRepository){
 
         $sortie = json_decode($request->getContent(), true);
 
@@ -355,20 +374,25 @@ class SortieController extends AbstractController
             return $this->json(['message' => 'Sortie non trouvée.'], Response::HTTP_NOT_FOUND);
         }
 
+        $dateHeureDebut = \DateTime::createFromFormat('Y-m-d\TH:i', $sortie['dateHeureDebut']);
+        $dateLimiteInscription = \DateTime::createFromFormat('Y-m-d\TH:i', $sortie['dateLimiteInscription']);
+
+        $etat = $etatRepository->findOneBy(['libelle'=>$sortie['etat']]);
+
         $sortieAModifier->setNom($sortie['nom']);
-        $sortieAModifier->setDateHeureDebut($sortie['dateHeureDebut']);
-        $sortieAModifier->setDateLimiteInscription($sortie['dateLimiteInscription']);
+        $sortieAModifier->setDateHeureDebut($dateHeureDebut);
+        $sortieAModifier->setDateLimiteInscription($dateLimiteInscription);
         $sortieAModifier->setNbInscriptionMax($sortie['nbInscriptionMax']);
         $sortieAModifier->setDuree($sortie['duree']);
         $sortieAModifier->setInfosSortie($sortie['infosSortie']);
-        $sortieAModifier->setEtat($sortie['etat']);
+        $sortieAModifier->setEtat($etat);
 
         $lieu = $lieuRepository->findOneBy(['nom'=>$sortie['nomLieu']]);
         if (!$lieu){
             return $this->json(['message' => 'Lieu non trouvée.'], Response::HTTP_NOT_FOUND);
         }
-        $lieuAModifier = $lieu -> getId();
-        $sortieAModifier->setLieu($lieuAModifier);
+        //$lieuAModifier = $lieu -> getId();
+        $sortieAModifier->setLieu($lieu);
 
         $entityManager->flush();
 
