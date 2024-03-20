@@ -87,8 +87,8 @@ const Accueil = (props) => {
   }
   //effet popover et design
   const [isOpen, setIsOpen] = useState(false);
-  const handleOpen = () => {
-  setIsOpen(!isOpen);
+  const handleClickPoopover = () => {
+    setIsOpen(!isOpen);
   };
   //design pour smartphone
   const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
@@ -127,9 +127,9 @@ if(sorties===null){
             </Text>
           </Flex>
         </Box>
-        <Popover ml={2} isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
+        <Popover ml={2} isOpen={isOpen}>
             <PopoverTrigger>
-                <Button ml={2}>Filtrer les sorties <ChevronDownIcon /></Button>
+                <Button  onClick={handleClickPoopover} ml={2}>Filtrer les sorties <ChevronDownIcon /></Button>
             </PopoverTrigger>
             <PopoverContent>
             <Filtre sorties={sorties} setSorties={setSorties} user={props.user} setUpdateData={setUpdateData}/>
