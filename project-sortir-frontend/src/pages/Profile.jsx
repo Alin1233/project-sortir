@@ -144,7 +144,7 @@ const Profile = (props) => {
       <Box boxSize='sm' p="5" borderRadius="md">
         <VStack align="stretch" spacing={5} >
           <Image src={`http://localhost:8000/getimage/${image}`} alt='Hummm' borderRadius="full"/>
-          <UploadImg user={props.user}/>
+          <UploadImg user={props.user} setUser={props.setUser}/>
         </VStack>
       </Box>
       <Box as="form" onSubmit={handleSubmit} w={"auto"} p="5" bg="gray.100" boxShadow="lg" borderRadius="md" borderColor='teal.500' borderWidth="5px">
