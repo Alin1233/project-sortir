@@ -1,17 +1,22 @@
+
 /* eslint-disable react/no-unescaped-entities */
 import { useParams } from "react-router-dom"
+
+import {Link as RouterLink, useParams} from "react-router-dom"
+
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import fr from 'date-fns/locale/fr';
 import serviceSortie from "../services/serviceSortie.js";
 import { Link as RouterLink } from "react-router-dom";
 import {
+    Avatar,
     Badge,
     Box, Button,
     Center,
     Flex,
     Grid, GridItem,
-    Heading,
+    Heading, Link,
     List,
     ListIcon,
     ListItem, Modal,
@@ -29,7 +34,7 @@ import MapComponent2 from "../components/MapComponent2.jsx";
 
 const DetailsSortie = () => {
 
-    const id = useParams().id; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
+    const id = useParams().id;
     const [sortie, setSortie] = useState(null);
     const [nomSortie, setNomSortie] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -118,7 +123,7 @@ const DetailsSortie = () => {
                                             <Center>
                                                 <ModalBody >
                                                     <Flex direction="column" align="center" justify="center" height="100%">
-                                                        <MapComponent2 longitude={sortie.latitude} latitude={sortie.longitude}/>
+                                                        <MapComponent2 longitude={sortie.longitude} latitude={sortie.latitude}/>
                                                     </Flex>
                                                 </ModalBody>
                                             </Center>
@@ -139,9 +144,11 @@ const DetailsSortie = () => {
             <Grid
                 templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
                 gap={6}
+
                 p="5"
                 ml="39em"
                 >
+
                 <GridItem colSpan={[3, 2]}>
                     <Box
                     boxShadow="xl"
@@ -166,6 +173,7 @@ const DetailsSortie = () => {
                             mt="3em"
                         >
                             {sortie.participants.map((participant, index) => (
+
                             <ListItem
                                 key={index}
                                 p="2"
@@ -180,8 +188,16 @@ const DetailsSortie = () => {
                                 boxShadow="base"
                                 bg="white"
                             >
-                                <Center>
-                                <Link as={RouterLink} to={`/profile/${participant.id}`}>{participant.nom}</Link>
+                               
+                               
+
+                                <Center key={index}>
+                                    <Flex align="center">
+                                        <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
+                                        <Text ml={5}><Link as={RouterLink} to={`/profile/${participant.id}`}>{participant.nom}</Link></Text>
+                                    </Flex>
+                                </ListItem>
+
                                 </Center>
                             </ListItem>
                             ))}

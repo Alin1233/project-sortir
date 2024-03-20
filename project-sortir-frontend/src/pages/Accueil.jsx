@@ -53,7 +53,6 @@ const Accueil = (props) => {
       const filter = ['inscrit']
       if (props.user) {
       const response = await serviceSortie.getAllSortiesByFilter(filter, props.user.id)
-      console.log(props.user);
       setSorties(response)
       setUpdateData(false);}
     };
@@ -143,8 +142,10 @@ if(sorties===null){
                     <Text fontSize="xl" fontWeight="bold">
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
                     </Text>
+
                     <Icon as={ViewIcon} />
                     <ActionsComponent sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
+
                 </HStack>
                 <Text fontWeight="bold"><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
                 <Text fontWeight="bold"><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>

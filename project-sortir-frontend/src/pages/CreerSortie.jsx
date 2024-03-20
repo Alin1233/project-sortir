@@ -22,6 +22,10 @@ const CreerSortie = (props) => {
     const [codePostal, setCodePostal] = useState('')
     const [latitude, setLatitude] = useState( 47.227479546104746)
     const [longitude, setLongitude] = useState(-1.5507239538023578)
+    const [date, setDate]=useState('')
+    const [messagePlace, setMessagePlace] =useState('')
+    const [messageDuree , setMessageDuree]=useState('')
+    const [chargement, setChargement] = useState(true);
 
     const[lieuxVille, setLieuxVille] = useState('')
     const [villes, setVilles] = useState(null)
@@ -31,12 +35,13 @@ const CreerSortie = (props) => {
     const [isVisible, setIsVisible] = useState(false);
 
     //si l'utilisateur est nul, redirection à la connexion
-    const navigate = useNavigate();
+
+    /*const navigate = useNavigate();
     useEffect(() => {
         if (props.user === null) {
             navigate('/connecter');
         }
-    }, [navigate, props.user]);
+    }, [navigate, props.user]);*/
 
     function useDocumentTitle(title) {
         useEffect(() => {
@@ -45,7 +50,20 @@ const CreerSortie = (props) => {
     }
     useDocumentTitle('Golaf! | Créer une sortie')
 
+    function verifChiffrePositif(param){
+        if(param<=0){
+            return false
+        }
+        return true
+    }
+
+    function dateDuJour(){
+        const dateActuelle = new Date();
+        return  dateActuelle.toISOString().slice(0, 16);
+    }
+
     useEffect(()=>{
+        setDate(dateDuJour);
         const fetchVilles = async() => {
             const responseVilles = await serviceVille.getAllVilles()
             setLieuxVille(responseVilles[0].lieux)
@@ -60,6 +78,16 @@ const CreerSortie = (props) => {
         fetchVilles()
     },[])
 
+    useEffect(() => {
+        // Vérifier si les props sont prêts
+        if (props.user !== null) {
+            setChargement(false);
+        }//On vérifie que le user ait bien une session ouverte sinon sa le retourne a l'accueil
+        else if(localStorage.getItem('loggedUser')===null){
+                window.location.assign(('/'))
+            }
+        }, [props.user]);
+
     const handleSubmit = async(e) =>{
         e.preventDefault();
         let etat = null;
@@ -68,33 +96,39 @@ const CreerSortie = (props) => {
         } else if (e.nativeEvent.submitter.name === 'publish') {
             etat = 'Ouverte'
         }
-        const  sortie = {
-            nom: nom,
-            duree:duree,
-            nbInscriptionMax:nbPlaces,
-            infosSortie:description,
-            etat:etat,
-            nomLieu:lieu,
-            rue:rue,
-            codePostal: codePostal,
-            latitude: latitude,
-            longitude: longitude,
-            organisateur: props.user,
-            campus: props.user.campus.nom,
-            dateHeureDebut: dateDebut,
-            dateLimiteInscription:dateLimit,
-            ville: ville
+        if (!verifChiffrePositif(duree) || !verifChiffrePositif(nbPlaces)){
+            setNotification({ status: 'error', description: 'Tu ne sais pas lire Bruh!' });
+            setIsVisible(true);
+            setTimeout(() => setIsVisible(false), 5000);
+        }else {
+            const sortie = {
+                nom: nom,
+                duree: duree,
+                nbInscriptionMax: nbPlaces,
+                infosSortie: description,
+                etat: etat,
+                nomLieu: lieu,
+                rue: rue,
+                codePostal: codePostal,
+                latitude: latitude,
+                longitude: longitude,
+                organisateur: props.user,
+                campus: props.user.campus.nom,
+                dateHeureDebut: dateDebut,
+                dateLimiteInscription: dateLimit,
+                ville: ville
+            }
+            const response = await serviceSortie.creerSortie(sortie);
+            if (response.status === 200) {
+                setNotification({status: 'success', description: 'Sortie créée avec succès'});
+                setIsVisible(true);
+                setTimeout(() => setIsVisible(false), 5000);
+            } else {
+                setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
+                setIsVisible(true);
+                setTimeout(() => setIsVisible(false), 5000);
+            }
         }
-        const response = await serviceSortie.creerSortie(sortie);
-        if (response.status === 200) {
-            setNotification({ status: 'success', description: 'Sortie créée avec succès' });
-            setIsVisible(true);
-            setTimeout(() => setIsVisible(false), 5000);
-          }else{
-            setNotification({ status: 'error', description: 'Une erreur est survenue, essayez à nouveau' });
-            setIsVisible(true);
-            setTimeout(() => setIsVisible(false), 5000);
-          }
     }
     useEffect(() => {
         if (villes) {
@@ -121,6 +155,10 @@ const CreerSortie = (props) => {
     if(villes === null){
         return <Loading/>
     }
+    if(chargement){
+        return <div><Loading/></div>;
+    }
+
     return (
         <Box >
             {notification && (
@@ -138,19 +176,19 @@ const CreerSortie = (props) => {
                         </FormControl>
                         <FormControl id="dateDebut">
                             <FormLabel>Date et heure de la sortie:</FormLabel>
-                            <Input type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" />
+                            <Input type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" min={date}/>
                         </FormControl>
                         <FormControl id="dateLimit">
                             <FormLabel>Date limite d'inscription:</FormLabel>
-                            <Input type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" />
+                            <Input type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date} />
                         </FormControl>
                             <FormControl id="nbPlaces">
-                            <FormLabel>Nombre de Places:</FormLabel>
-                            <Input type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => setNbPlaces(e.target.value)} size="md" />
+                            <FormLabel>Nombre de Places: {messagePlace}</FormLabel>
+                            <Input type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => verifChiffrePositif(e.target.value)?(setNbPlaces(e.target.value) + setMessagePlace('')):(setNbPlaces(e.target.value)+ setMessagePlace('Veuillez choisir un nombre de places positif!'))} size="md" />
                         </FormControl>
                         <FormControl id="duree">
-                            <FormLabel>Durée:</FormLabel>
-                            <Input type='text' name='duree' value={duree} onChange={(e) => setDuree(e.target.value)} size="md" />
+                            <FormLabel>Durée: {messageDuree}</FormLabel>
+                            <Input type='number' name='duree' value={duree} onChange={(e) => verifChiffrePositif(e.target.value)?(setDuree(e.target.value) + setMessageDuree('')):(setDuree(e.target.value)+ setMessageDuree('Veuillez choisir une durée positive!'))} size="md" />
                         </FormControl>
                         <FormControl id="description">
                             <FormLabel>Description et infos:</FormLabel>

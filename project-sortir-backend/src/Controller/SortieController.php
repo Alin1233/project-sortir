@@ -339,11 +339,8 @@ class SortieController extends AbstractController
             }
 
             $sortieASupprimer->getEtat()->removeSorty($sortieASupprimer);
-            $entityManager->flush();
             $sortieASupprimer->getCampus()->removeSorty($sortieASupprimer);
-            $entityManager->flush();
             $sortieASupprimer->getOrganisateur()->removeSortie($sortieASupprimer);
-            $entityManager->flush();
             $sortieASupprimer->getLieu()->removeSorty($sortieASupprimer);
             $entityManager->flush();
 

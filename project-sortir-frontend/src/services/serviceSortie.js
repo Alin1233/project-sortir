@@ -62,7 +62,6 @@ const getSortie = async (id) => {
     try{
         const response = await axios.get(url);
         const sortie = response.data.sorties;
-        console.log(sortie)
         return sortie;
     } catch(error){
         console.error(error);

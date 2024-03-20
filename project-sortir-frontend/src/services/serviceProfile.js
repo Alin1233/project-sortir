@@ -57,7 +57,8 @@ const modifierProfile = async (data) => {
 const uploadImage = async (data) => {
     const url = baseUrl+'/profile/upload'
     try {
-        return await axios.post(url, data)
+        const response = await axios.post(url, data)
+        return response.data.participant
     } catch (error) {
         console.error(error);
         if (error.response) {

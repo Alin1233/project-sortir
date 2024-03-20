@@ -144,11 +144,13 @@ class ProfileController extends AbstractController
         $uploadedFile->move($destination, $fileName);
 
         $participant->setImage($fileName);
+
+        $image=$participant->getImage();
         
         $entityManager->flush();
         
         
-        return new Response('Image téléchargée avec succès.', 200);
+        return $this->json(['participant'=>$participant]);
         }
 
         return new Response('Aucune image envoyée.', 400);
