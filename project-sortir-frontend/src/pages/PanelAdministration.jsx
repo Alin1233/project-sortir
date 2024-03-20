@@ -8,7 +8,7 @@ import {
     Heading, SimpleGrid,
     useDisclosure
 } from "@chakra-ui/react";
-import {AddIcon, DeleteIcon, TimeIcon} from "@chakra-ui/icons";
+import {AddIcon, CalendarIcon, DeleteIcon, SearchIcon, TimeIcon} from "@chakra-ui/icons";
 import DrawerTypesPanelAdmin from "../components/DrawerTypesPanelAdmin.jsx";
 import CustomDrawer from "../components/DrawerTypesPanelAdmin.jsx";
 import Loading from "../components/Loading.jsx";
@@ -48,44 +48,52 @@ const PanelAdministration = (props) => {
     return (
         <div>
             <Center mb="6">
-                <Heading mt={50} fontWeight='extrabold' as='h1' size='3xl' color="teal.500">PANNEAU D'ADMINISTRATION</Heading>
+                <Heading mt={50} fontWeight='extrabold' as='h1' fontSize='5em' color="teal.500">PANNEAU D'ADMINISTRATION</Heading>
             </Center>
 <Center>
             <SimpleGrid mt={100} columns={2} spacing={1}>
             <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
                 Ajouter une ville
             </Button>
-            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerVille')}>
                 Supprimer une ville
             </Button>
 
 
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterLieu')}>
                 Ajouter un lieu
                 </Button>
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerLieu')}>
                 Supprimer un lieu
             </Button>
 
 
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('CreerGroupe')}>
                 Créer un groupe privé
             </Button>
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerGroupe')}>
                 Supprimer un groupe privé
             </Button>
 
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='green' onClick={() => handleOpenDrawer('CreerUtilisateur')}>
                 Créer un utilisateur
                 </Button>
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('DesactiverUtilisateur')}>
                 Désactiver un utilisateur
             </Button>
-            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('AjouterVille')}>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerUtilisateur')}>
                 Supprimer un utilisateur
             </Button>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<SearchIcon />} colorScheme='blue' onClick={() => handleOpenDrawer('RechercherUtilisateur')}>
+                Rechercher un ID utilisateur
+            </Button>
+
+            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
+                Annuler une sortie
+            </Button>
+
             </SimpleGrid>
-</Center>
+    </Center>
 
             <CustomDrawer isOpen={isOpen} onClose={onClose} drawerType={drawerType} />
         </div>

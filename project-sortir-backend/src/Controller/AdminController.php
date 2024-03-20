@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Repository\ParticipantRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use http\Env\Request;
 use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,12 +18,27 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractController
 {
-    #[Route('/admin', name: 'app_admin')]
-    public function index(): Response
+    #[Route('/admin/addUser', name: 'add_user_admin')]
+    public function addUser(Request $request, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
+        try {
+
+            $data = json_decode($request->getContent(), true);
+
+
+                if($data['mail'] && $data['password']){
+                    $mail = $data['mail'];
+                    $password = $data['password'];
+
+                    $participant = new Participant();
+                    $participant -> setMail($mail);
+                    $participant -> setMotPasse($password);
+                    $entityManager -> persist($participant);
+            }
+            }catch (\Exception $e){
+                return new Response(json_encode(['error' => $e->getMessage()]), 400, ['Content-Type' => 'application/json']);
+            }
+        return $this->json('Utilisateur crée avec succès');
     }
     #[Route('/admin/create/participant', name: 'create_participant', methods: ['POST', 'GET'])]
     public function createParticipant(Request $request,CampusRepository $campusRepository, EntityManagerInterface $objectManager): Response

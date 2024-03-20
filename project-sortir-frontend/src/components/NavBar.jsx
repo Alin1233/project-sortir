@@ -24,13 +24,17 @@ const NavBar = (props) => {
                 )}
             </Flex>
             </Box>
+
             <Box>
                 <Flex>
-                    <Text fontSize='2xl' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/administration" mr="4">Administration</Link></Text>
-                    <Text fontSize='2xl' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/" mr="4">Accueil</Link></Text>
-                    <Text fontSize='2xl' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/profile" mr="4">Mon profil</Link></Text>
-                    <Text fontSize='2xl' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/creer" mr="4">Créer une sortie</Link></Text>
-                    <Text fontSize='2xl' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to={`/details/${props.user && props.user.id ? props.user.id : ''}`} mr="4">Détails sortie</Link></Text>
+                    {props.user?.isAdmin ? (
+                        <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/administration" mr="4">Administration</Link></Text>
+                    ) : (
+                        <div></div>
+                    )}
+                    <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/" mr="4">Accueil</Link></Text>
+                    <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/profile" mr="4">Mon profil</Link></Text>
+                    <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/creer" mr="4">Créer une sortie</Link></Text>
                     {props.user ? (
                         <Button onClick={handleLogout} variant="link" colorScheme="black" mr="4">
                             <Tooltip label='Se déconnecter!'>
@@ -38,7 +42,7 @@ const NavBar = (props) => {
                             </Tooltip>
                         </Button>
                     ) : (
-                        <Text fontSize='2xl' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/connecter">Se Connecter</Link></Text>
+                        <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/connecter">Se Connecter</Link></Text>
                     )}
                </Flex>
             </Box>

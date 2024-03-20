@@ -41,7 +41,7 @@ const ActionsComponent = (props) => {
     }
     return (
         <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton color='white' backgroundColor='teal.500' _hover={{ bg: 'teal' }} as={Button} rightIcon={<ChevronDownIcon />}>
                 Actions
             </MenuButton>
             <MenuList>
