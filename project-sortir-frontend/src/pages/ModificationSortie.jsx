@@ -40,6 +40,9 @@ const ModificationSortie = (props) => {
     const [longitude, setLongitude] = useState(-1.5507239538023578)
     const [campus, setCampus] = useState('')
     const [organisateur, setOrganisateur] =useState('')
+    const [date, setDate]=useState('')
+    const [messagePlace, setMessagePlace] =useState('')
+    const [messageDuree , setMessageDuree]=useState('')
 
     const[lieuxVille, setLieuxVille] = useState('')
     const [villes, setVilles] = useState(null)
@@ -73,9 +76,22 @@ const ModificationSortie = (props) => {
     }
     useDocumentTitle('Golaf! | Modifier une sortie')
 
+    function verifChiffrePositif(param){
+        if(param<=0){
+            return false
+        }
+        return true
+    }
+    function dateDuJour(){
+        const dateActuelle = new Date();
+        return  dateActuelle.toISOString().slice(0, 16);
+    }
+
     useEffect(()=>{
 
+
         const fetchSortie = async ()=>{
+            setDate(dateDuJour);
             const responseSortie = await serviceSortie.getSortie(sortieId)
             setNom(responseSortie.nom)
             setNbPlaces(responseSortie.nbInscriptionMax)
@@ -101,44 +117,59 @@ const ModificationSortie = (props) => {
         fetchVilles()
     },[])
 
-    const handleSubmit = async(e) =>{
+    const handleSubmit = async(e) => {
         e.preventDefault();
         let etat = null;
-        if (e.nativeEvent.submitter.name === 'register') {
-            etat = 'Creee'
-        } else if (e.nativeEvent.submitter.name === 'publish') {
-            etat = 'Ouverte'
-        } else if (e.nativeEvent.submitter.name === 'delete'){
-            const response = await serviceSortie.supprimerSortie(sortieId);
-            window.location.assign('/')
-        }
-        const  sortie = {
-            id: sortieId,
-            nom: nom,
-            duree:duree,
-            nbInscriptionMax:nbPlaces,
-            infosSortie:description,
-            etat:etat,
-            nomLieu:lieu,
-            rue:rue,
-            codePostal: codePostal,
-            latitude: latitude,
-            longitude: longitude,
-            organisateur: organisateur,
-            campus: campus,
-            dateHeureDebut: dateDebut,
-            dateLimiteInscription:dateLimit,
-            ville: ville
-        }
-        const response = await serviceSortie.modifierSortie(sortie);
-        if (response.status === 200) {
-            setNotification({ status: 'success', description: 'Sortie créée avec succès' });
+        if (!verifChiffrePositif(duree) || !verifChiffrePositif(nbPlaces)) {
+            setNotification({status: 'error', description: 'Tu ne sais pas lire Bruh!'});
             setIsVisible(true);
             setTimeout(() => setIsVisible(false), 5000);
-        }else{
-            setNotification({ status: 'error', description: 'Une erreur est survenue, essayez à nouveau' });
-            setIsVisible(true);
-            setTimeout(() => setIsVisible(false), 5000);
+        } else {
+            if (e.nativeEvent.submitter.name === 'register') {
+                etat = 'Creee'
+            } else if (e.nativeEvent.submitter.name === 'publish') {
+                etat = 'Ouverte'
+            } else if (e.nativeEvent.submitter.name === 'delete') {
+                const response = await serviceSortie.supprimerSortie(sortieId);
+                window.location.assign('/')
+                if (response.status === 200) {
+                    setNotification({status: 'success', description: 'Sortie supprimé avec succès'});
+                    setIsVisible(true);
+                    setTimeout(() => setIsVisible(false), 5000);
+                } else {
+                    setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
+                    setIsVisible(true);
+                    setTimeout(() => setIsVisible(false), 5000);
+                }
+            }
+            const sortie = {
+                id: sortieId,
+                nom: nom,
+                duree: duree,
+                nbInscriptionMax: nbPlaces,
+                infosSortie: description,
+                etat: etat,
+                nomLieu: lieu,
+                rue: rue,
+                codePostal: codePostal,
+                latitude: latitude,
+                longitude: longitude,
+                organisateur: organisateur,
+                campus: campus,
+                dateHeureDebut: dateDebut,
+                dateLimiteInscription: dateLimit,
+                ville: ville
+            }
+            const response = await serviceSortie.modifierSortie(sortie);
+            if (response.status === 200) {
+                setNotification({status: 'success', description: 'Sortie modifiée avec succès'});
+                setIsVisible(true);
+                setTimeout(() => setIsVisible(false), 5000);
+            } else {
+                setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
+                setIsVisible(true);
+                setTimeout(() => setIsVisible(false), 5000);
+            }
         }
     }
 
@@ -191,19 +222,19 @@ const ModificationSortie = (props) => {
                             </FormControl>
                             <FormControl id="dateDebut">
                                 <FormLabel>Date et heure de la sortie:</FormLabel>
-                                <Input type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" />
+                                <Input type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" min={date}/>
                             </FormControl>
                             <FormControl id="dateLimit">
                                 <FormLabel>Date limite d'inscription:</FormLabel>
-                                <Input type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" />
+                                <Input type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date}/>
                             </FormControl>
                             <FormControl id="nbPlaces">
-                                <FormLabel>Nombre de Places:</FormLabel>
-                                <Input type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => setNbPlaces(e.target.value)} size="md" />
+                                <FormLabel>Nombre de Places: {messagePlace}</FormLabel>
+                                <Input type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => verifChiffrePositif(e.target.value)?(setNbPlaces(e.target.value) + setMessagePlace('')):(setNbPlaces(e.target.value)+ setMessagePlace('Veuillez choisir un nombre de places positif!'))} size="md" />
                             </FormControl>
                             <FormControl id="duree">
-                                <FormLabel>Durée:</FormLabel>
-                                <Input type='text' name='duree' value={duree} onChange={(e) => setDuree(e.target.value)} size="md" />
+                                <FormLabel>Durée: {messageDuree}</FormLabel>
+                                <Input type='number' name='duree' value={duree} onChange={(e) => verifChiffrePositif(e.target.value)?(setDuree(e.target.value) + setMessageDuree('')):(setDuree(e.target.value)+ setMessageDuree('Veuillez choisir une durée positive!'))} size="md" />
                             </FormControl>
                             <FormControl id="description">
                                 <FormLabel>Description et infos:</FormLabel>
