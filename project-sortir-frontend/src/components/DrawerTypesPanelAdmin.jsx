@@ -7,14 +7,299 @@ import {
     DrawerHeader,
     DrawerOverlay,
     Button,
-    Text, Center, FormControl, FormLabel, Input, VStack, Select, Textarea
+    Text, Center, FormControl, FormLabel, Input, VStack, Select, Textarea, useToast, Box, Icon, Flex
 } from "@chakra-ui/react";
-import {AddIcon, CalendarIcon, DeleteIcon, SearchIcon, TimeIcon} from "@chakra-ui/icons";
+import {AddIcon, CalendarIcon, CheckCircleIcon, DeleteIcon, SearchIcon, TimeIcon, WarningIcon} from "@chakra-ui/icons";
 // eslint-disable-next-line no-unused-vars
-import React from "react";
+import React, {useEffect, useState} from "react";
+import servicePanelAdmin from "../services/servicePanelAdmin.js";
+import serviceProfile from "../services/serviceProfile.js";
+
 
 // eslint-disable-next-line react/prop-types
 const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
+
+    const [nomVille, setNomVille] = useState('');
+    const [villeListe, setVilleListe] = useState('');
+    const [codePostal, setCodePostal] = useState('');
+    const [selectedVilleId, setSelectedVilleId] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [campusListe, setCampusList] = useState ( null)
+    const [selectedCampusId, setSelectedCampusId] = useState('');
+    const toast = useToast();
+    const chargerVilles = async () => {
+        try {
+            const villes = await servicePanelAdmin.getAllVilles();
+            if (villes) {
+                setVilleListe(villes);
+
+
+            }
+        } catch (error) {
+            console.error("Erreur lors de la récupération des détails de la sortie :", error);
+        }
+
+    };
+
+    const chargerCampus = async () =>{
+        try {
+            const campus = await serviceProfile.getCampus();
+
+            if(campus){
+                setCampusList(campus)
+                console.log(campus)
+                console.log(campusListe)
+            }
+        }catch (error) {
+            console.error("Erreur lors de la récupération des détails de la sortie :", error);
+        }
+    }
+
+
+    useEffect(() => {
+        chargerVilles();
+        chargerCampus();
+    }, []);
+
+
+    const handleSubmitAjoutVille = async (event) => {
+
+        event.preventDefault();
+
+
+        const ville = {
+            nomVille: nomVille,
+            codePostal: codePostal
+        }
+
+        const response = await servicePanelAdmin.addCity(ville)
+
+        await chargerVilles();
+
+
+        if(response.data.message === "Ville créée avec succès"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Ville créée avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === "Le nom de la ville et son code postal sont requis"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    Veuillez saisir tous les champs du formulaire
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    };
+
+    const handleVilleChange = (event) => {
+        setSelectedVilleId(event.target.value);
+    };
+
+    const handleCampusChange = (event) => {
+        setSelectedCampusId(event.target.value);
+    };
+
+    const handleSubmitSuppressionVille = async (event) => {
+
+        event.preventDefault();
+
+        const ville = {
+            idVille: selectedVilleId,
+        }
+
+        const response = await servicePanelAdmin.deleteCity(ville);
+
+        await chargerVilles();
+
+        if(response.data.message === "Ville supprimée avec succès"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Ville supprimée avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === "Veuillez sélectionner une ville"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    Veuillez sélectionner une ville à supprimer.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
+
+    const handleSubmitAjoutUtilisateur = async (event) => {
+
+        event.preventDefault()
+
+        const user ={
+            email : email,
+            password : password,
+            idCampus : parseInt(selectedCampusId)
+        }
+        console.log(user)
+
+        const response = await servicePanelAdmin.addUser(user);
+
+        if(response.data.message === "Utilisateur crée avec succès"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Utilisateur crée avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === "Mail, mot de passe et campus requis"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    Veuillez renseigner tous les champs.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+        }
+
+
+
+
     const getTitleByType = (type) => {
         switch (type) {
             case 'AjouterVille':return  (<DrawerHeader bgColor='green.500'>
@@ -104,45 +389,53 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
             case 'AjouterVille':
                 return (
                     <>
-                    <DrawerBody>
-                        <VStack align="stretch">
-                            <FormControl id="nomVille">
-                                <FormLabel fontSize='2xl' fontWeight='bold'>Nom de la ville :</FormLabel>
-                                <Input outlineColor='teal' type='text' name='nom' size="md" />
-                            </FormControl>
-                            <FormControl id="codePostal">
-                                <FormLabel fontSize='2xl' fontWeight='bold'>Code postal :</FormLabel>
-                                <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
-                            </FormControl>
-                        </VStack>
-                        <Center>
-                            <DrawerFooter mt={5}>
-                                <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                <Button colorScheme="teal">Envoyer</Button>
-                            </DrawerFooter>
-                        </Center>
-                    </DrawerBody>
+                        <form onSubmit={handleSubmitAjoutVille}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="nomVille">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Nom de la ville :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size="md" name='nom' value={nomVille} onChange={e => setNomVille(e.target.value)}/>
+                                    </FormControl>
+                                    <FormControl id="codePostal">
+                                        <FormLabel fontSize='2xl' fontWeight='bold' >Code postal :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size="md" name='codePostal' value={codePostal} onChange={e => setCodePostal(e.target.value)}/>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal"  onClick={onClose}>Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
             </>
                 );
             case 'SupprimerVille':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
-                                <FormControl id="nomVille">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner la ville à supprimer :</FormLabel>
-                                    <Select outlineColor='teal' name='ville'>
-
-                                    </Select>
-                                </FormControl>
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                        <form onSubmit={handleSubmitSuppressionVille}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="idVille">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner la ville à supprimer :</FormLabel>
+                                        <Select outlineColor='teal' name='idVille' onChange={handleVilleChange}
+                                                value={selectedVilleId}>
+                                            <option value="">Sélectionnez une ville</option>
+                                            {villeListe.map((ville, index) => ( // Étape 4
+                                                <option key={index} value={ville.id}>{ville.nom}</option>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose} >Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
                     </>
                 );
             case 'AjouterLieu':
@@ -263,24 +556,35 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
             case 'CreerUtilisateur':
                 return (
                     <>
+                        <form onSubmit={handleSubmitAjoutUtilisateur}>
                         <DrawerBody>
                             <VStack align="stretch">
                                 <FormControl id="mail">
                                     <FormLabel fontSize='2xl' fontWeight='bold'>Adresse e-mail :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='nom' size="md" />
+                                    <Input outlineColor='teal' type='email' size="md" name='email' value={email} onChange={e => setEmail(e.target.value)} />
                                 </FormControl>
                                 <FormControl id="password">
                                     <FormLabel fontSize='2xl' fontWeight='bold'>Mot de passe :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
+                                    <Input outlineColor='teal' type='text' size='md' name='password' value={password} onChange={e => setPassword(e.target.value)}/>
+                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                    <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner le campus de l'utilisateur :</FormLabel>
+                                    <Select outlineColor='teal' name='idCampus' onChange={handleCampusChange}
+                                            value={selectedCampusId}>
+                                        <option value="">Sélectionnez un campus</option>
+                                        {campusListe.map((campus, index) => ( // Étape 4
+                                            <option key={index} value={campus.id}>{campus.nom}</option>
+                                        ))}
+                                    </Select>
                                 </FormControl>
                             </VStack>
                             <Center>
                                 <DrawerFooter mt={5}>
                                     <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
+                                    <Button  type='submit' colorScheme="teal" onClick={onClose} >Envoyer</Button>
                                 </DrawerFooter>
                             </Center>
                         </DrawerBody>
+                    </form>
                     </>
                 );
             case 'DesactiverUtilisateur':

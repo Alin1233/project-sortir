@@ -1,8 +1,9 @@
 import {Box, Button, Center, Heading, Image, Text, VStack} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import serviceAutreProfil from "../services/serviceAutreProfil.js";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Loading from "../components/Loading.jsx";
+import BackButton from "../components/BackButton.jsx";
 
 const AutreProfilUtilisateur =()=>{
 
@@ -29,10 +30,6 @@ const AutreProfilUtilisateur =()=>{
         }
         responseId();
         []});
-
-    const handleClick=()=>{
-        window.location.assign('/')
-    }
 
     function useDocumentTitle(title) {
         useEffect(() => {
@@ -75,7 +72,7 @@ const AutreProfilUtilisateur =()=>{
                 </Box>
             </Center>
             <Center>
-               <Button onClick={handleClick}>Retour</Button>
+               <BackButton />
             </Center>
 
         </Box>
