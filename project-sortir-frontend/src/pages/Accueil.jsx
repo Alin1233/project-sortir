@@ -132,16 +132,15 @@ const Accueil = (props) => {
             <Filtre sorties={sorties} setSorties={setSorties} user={props.user} setUpdateData={setUpdateData}/>
             </PopoverContent>
         </Popover>
-        <SimpleGrid columns={columns} gap="20px" ml="0" mt="0">
+        
+        <Flex direction={{ base: "column", sm: "row" }} wrap="wrap" justify="center">
     {sorties.map(sortie => (
-        <Box boxShadow='dark-lg' ml="5em" mt="5" key={sortie.id} width='30em' borderWidth="5px" borderRadius="25px" overflow="hidden" p="6" borderColor='teal.500'>
+       <Box boxShadow='dark-lg' mt="2" key={sortie.id} width={{ base: "100%", sm: "45%", md: "30%", lg: "22%" }} borderWidth="5px" borderRadius="25px" overflow="hidden" p="6" borderColor='teal.500' mb={4} mr={4}>
             <VStack align="center" spacing="2">
                 <HStack spacing="4">
                     <Text color='teal.500' fontSize="xl" fontWeight="bold">
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom} <Icon as={ViewIcon}  ml={2}/></Link>
                     </Text>
-                    
-                    <Icon as={ViewIcon} />
                     <ActionsComponent nomSortie={sortie.nom} sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
                     
                 </HStack>
@@ -151,10 +150,9 @@ const Accueil = (props) => {
                   <Text fontWeight='bold'>Inscrits / Places :</Text>
                   <Text fontWeight='bold'>{sortie.participants.length} / {sortie.nbInscriptionMax}</Text>
                 </VStack>
-
                 <Text fontWeight='bold'>État : {sortie.etat}</Text>
-
-                    <Text fontWeight='bold'>Organisateur :
+                    <Text fontWeight='bold'>
+                      Organisateur :
                     </Text>
                         <Flex>
                           <Link color='teal.500' as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
@@ -166,8 +164,6 @@ const Accueil = (props) => {
                 <Link as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
                      <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
                 </Link>
-                
-
                 <HStack>
                     <Text fontWeight='bold'>Inscrit :</Text>
                     {sortie.participants.includes(props.user.id) 
@@ -180,7 +176,8 @@ const Accueil = (props) => {
             </VStack>
         </Box>
     ))}
-        </SimpleGrid>
+        </Flex>
+        
     </div>
 );
 }
