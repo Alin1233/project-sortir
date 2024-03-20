@@ -17,6 +17,7 @@ use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 #[Route('/profile', name: 'app_profile')]
 class ProfileController extends AbstractController
@@ -101,13 +102,14 @@ class ProfileController extends AbstractController
         }
     }
 
-    #[Route('/{id}', name: 'app_autreUtilisateur')]
-    public function getAutreProfil(int $id ,ParticipantRepository $participantRepository,CampusRepository$campusRepository, Request $request): Response
+    #[Route('/id/{id}', name: 'app_autreUtilisateur')]
+    public function getAutreProfil(int $id ,ParticipantRepository $participantRepository,CampusRepository $campusRepository, Request $request): Response
     {
 
         $participant = $participantRepository->findOneBy(['id'=>$id]);
-        $participantId=$participant->getId();
-        $campus=$campusRepository->findOneBy(['id'=>$participantId]);
+        $participantId = $participant->getId();
+        
+        $campus= $participant->getCampus();
         $participantAvecCampus= [
             'id'=>$participant->getId(),
             'pseudo'=>$participant->getPseudo(),
@@ -116,24 +118,40 @@ class ProfileController extends AbstractController
             'telephone'=>$participant->getTelephone(),
             'email'=>$participant->getMail(),
             'campusId'=>$campus->getId(),
-            'campusNom'=>$campus->getNom()
+            'campusNom'=>$campus->getNom(),
+            'image'=>$participant->getImage()
         ];
 
         return $this->json(['participant'=>$participantAvecCampus]);
     }
 
 
-   /* #[Route('/upload', name: 'app_upload')]
-    public function uploadImage(Request $request,FileUploader $fileUploader): Response
+    #[Route('/upload', name: 'app_upload')]
+    public function uploadImage(Request $request,FileUploader $fileUploader, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager): Response
     {
-        $data= $request->files->get('image');
-        /**@var UploadedFile $image *
-        $image=$data;
+        $uploadedFile = $request->files->get('file');
 
-        if ($image){
-            $imageFilename = $fileUploader->upload($image);
-            return new Response('Image téléchargée avec succès.', 200);
+        $participantId = $request->request->get('id'); 
+        
+        $participant = $participantRepository->find($participantId);
+
+        if ($uploadedFile) {
+            
+        $fileName = $participant->getId().$participant->getNom()."profile";
+
+        $destination = $this->getParameter('uploads_directory');
+
+        $uploadedFile->move($destination, $fileName);
+
+        $participant->setImage($fileName);
+        
+        $entityManager->flush();
+        
+        
+        return new Response('Image téléchargée avec succès.', 200);
         }
+
         return new Response('Aucune image envoyée.', 400);
-    }*/
+    }
+   
 }

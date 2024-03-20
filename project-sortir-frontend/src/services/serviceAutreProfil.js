@@ -4,7 +4,7 @@ const getAutreProfil = async (id) => {
 
     //const baseUrl = 'http://localhost:8000'
 
-    const url = `http://localhost:8000/profile/${id}`;
+    const url = `http://localhost:8000/profile/id/${id}`;
     try{
         const response = await axios.get(url);
         console.log(response)

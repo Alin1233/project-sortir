@@ -21,4 +21,5 @@ class UserController extends AbstractController
         $isAdmin = $user->isIsAdmin();
         return new Response(json_encode(['isAdmin' => $isAdmin]), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
+    
 }

@@ -53,6 +53,7 @@ function App() {
             <Route path="/details/:id" element={<DetailsSortie/>} />
             <Route path="/annuler/:sortieId" element={<AnnulerSortie/>}/>
             <Route path="/modifier/:sortieId" element={<ModificationSortie/>}/>
+            <Route path="/supprimersortie" element={<ModificationSortie/>}/>
             <Route path="/administration" element={<PanelAdministration user={user}/>} />
           </Routes>
         </Router>

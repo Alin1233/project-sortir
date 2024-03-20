@@ -17,16 +17,17 @@ import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import serviceSortie from "../services/serviceSortie";
 import { Table, Thead, Tbody, Tr, Th, Td, Spinner, Flex, Text, Icon, SimpleGrid, HStack, Avatar, useBreakpointValue  } from "@chakra-ui/react";
-import SearchBar from "../components/SearchBar";
 import Filtre from "../components/Filtre";
-
-import axios from "axios";
 import dateFunctions from "../helpers/dateFunctions";
 import ActionsComponent from "../components/ActionsComponent";
 import { ChevronDownIcon, CheckIcon, TimeIcon, LockIcon, CalendarIcon, ViewIcon  } from '@chakra-ui/icons';
 import Notification from "../components/Notification";
 import InscrireCSV from "../components/InscrireCSV";
 import Loading from "../components/Loading.jsx";
+import UploadImg from "../components/UploadImg";
+import sortie from "./Sortie.jsx";
+
+
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -36,8 +37,6 @@ const Accueil = (props) => {
   //notification
   const [notification, setNotification] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
-
-  
 
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -50,6 +49,7 @@ const Accueil = (props) => {
       const filter = ['inscrit']
       if (props.user) {
       const response = await serviceSortie.getAllSortiesByFilter(filter, props.user.id)
+      console.log(props.user);
       setSorties(response)
       setUpdateData(false);}
     };
@@ -114,7 +114,6 @@ const Accueil = (props) => {
   return (
     <div>
         {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
-        <InscrireCSV/>
         <Box>
           <Flex justifyContent="space-between" alignItems="center" p={5}>
             <Heading as="h1" size="lg"  textAlign="center">
@@ -141,7 +140,10 @@ const Accueil = (props) => {
                     <Text color='teal.500' fontSize="xl" fontWeight="bold">
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom} <Icon as={ViewIcon}  ml={2}/></Link>
                     </Text>
-                    <ActionsComponent  sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
+                    
+                    <Icon as={ViewIcon} />
+                    <ActionsComponent nomSortie={sortie.nom} sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
+                    
                 </HStack>
                 <Text fontWeight='bold'><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
                 <Text fontWeight='bold'><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>
@@ -149,20 +151,22 @@ const Accueil = (props) => {
                   <Text fontWeight='bold'>Inscrits / Places :</Text>
                   <Text fontWeight='bold'>{sortie.participants.length} / {sortie.nbInscriptionMax}</Text>
                 </VStack>
+
                 <Text fontWeight='bold'>État : {sortie.etat}</Text>
 
                     <Text fontWeight='bold'>Organisateur :
                     </Text>
                         <Flex>
-                        <Link color='teal.500' as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
+                          <Link color='teal.500' as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
                             <Text fontWeight='bold' color='teal.500'>{sortie.organisateur.nom}
                                 <Icon as={ViewIcon}  ml={2}/>
                             </Text>
-                        </Link>
-                </Flex>
+                          </Link>
+                        </Flex>
                 <Link as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
-                    <Avatar ml name={props.user.nom}/>
+                     <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
                 </Link>
+                
 
                 <HStack>
                     <Text fontWeight='bold'>Inscrit :</Text>
