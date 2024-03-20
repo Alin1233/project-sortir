@@ -86,7 +86,7 @@ const DetailsSortie = () => {
                                 <Text fontSize='2xl' mb="3" color="gray.700">Date limite d'inscription : <Box as="span"
                                                                                                               fontWeight="bold">{format(sortie.dateLimiteInscription, "d MMMM yyyy à HH:mm", {locale: fr})}</Box></Text>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Nombre de places : <Box as="span"
-                                                                                                     fontWeight="bold">{sortie.nbInscriptionMax}</Box></Text>
+                                                                                                     fontWeight="bold">{sortie.nbInscriptionMax} ({sortie.nbInscriptionMax-sortie.participants.length} restante(s))</Box></Text>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Durée : <Box as="span"
                                                                                           fontWeight="bold">{sortie.duree} minutes</Box></Text>
                                 <Text fontSize='2xl' mb="3" color="gray.700">Informations supplémentaires : <Box as="span"

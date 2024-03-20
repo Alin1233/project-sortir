@@ -1,16 +1,13 @@
-import axios from 'axios'
+import axios from "axios";
+const baseUrl = 'http://localhost:8000/admin'
 
-const baseUrl = 'http://localhost:8000'
 
-const getLieuById = async (ville) => {
-    const url = baseUrl+'/lieu/'+ville
+const addUser = async (data) => {
+    const url = baseUrl+'/addUser'
     try{
-        let urlEncode = encodeURI(url);
-        const response = await axios.get(urlEncode)
-        let lieu = response.data;
-        return lieu;
-
-    } catch(error){
+        const response = await axios.post(url, data)
+        return response
+    }catch(error){
         console.error(error);
         if (error.response) {
             // The request was made and the server responded with a status code
@@ -18,6 +15,7 @@ const getLieuById = async (ville) => {
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
+            return error.response
         } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -30,4 +28,3 @@ const getLieuById = async (ville) => {
         console.log(error.config);
     }
 }
-export default {getLieuById}
