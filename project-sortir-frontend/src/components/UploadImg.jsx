@@ -8,6 +8,7 @@ const UploadImg = (props) => {
   const fileInput = useRef();
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState('Choisissez une photo de profil');
+  //const [fileImage, setFileImage]=useState('http://localhost:8000/getimage/${props.user.image}')
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -23,8 +24,10 @@ const UploadImg = (props) => {
     formData.append('id', props.user.id);
 
     const response = await serviceProfile.uploadImage(formData);
-    
+    window.localStorage.setItem('loggedUser', JSON.stringify(response))
+    props.setUser(response)
     console.log(response);
+    window.location.reload(true);
   };
 
   return (
