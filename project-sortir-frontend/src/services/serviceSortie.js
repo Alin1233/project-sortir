@@ -62,6 +62,7 @@ const getSortie = async (id) => {
     try{
         const response = await axios.get(url);
         const sortie = response.data.sorties;
+        console.log(sortie)
         return sortie;
     } catch(error){
         console.error(error);
@@ -152,9 +153,10 @@ const getDetailsSortie = async (id) =>{
 }
 
 const supprimerSortie = async(id) =>{
-    const url = `http://localhost:8000/supprimer/${id}`;
+    const url = `http://localhost:8000/supprimersortie/`+ id;
     try {
-        const response = await axios.post(url, id)
+        const response = await axios.post(url,id)
+        console.log(response)
         return response
     }  catch(error) {
         console.error(error);
