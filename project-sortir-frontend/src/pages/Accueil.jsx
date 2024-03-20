@@ -49,7 +49,6 @@ const Accueil = (props) => {
       const filter = ['inscrit']
       if (props.user) {
       const response = await serviceSortie.getAllSortiesByFilter(filter, props.user.id)
-      console.log(props.user);
       setSorties(response)
       setUpdateData(false);}
     };
@@ -140,8 +139,6 @@ const Accueil = (props) => {
                     <Text color='teal.500' fontSize="xl" fontWeight="bold">
                         <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom} <Icon as={ViewIcon}  ml={2}/></Link>
                     </Text>
-                    
-                    <Icon as={ViewIcon} />
                     <ActionsComponent nomSortie={sortie.nom} sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
                     
                 </HStack>

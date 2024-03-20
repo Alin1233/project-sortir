@@ -1,15 +1,16 @@
-import { useParams } from "react-router-dom"
+import {Link as RouterLink, useParams} from "react-router-dom"
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import fr from 'date-fns/locale/fr';
 import serviceSortie from "../services/serviceSortie.js";
 import {
+    Avatar,
     Badge,
     Box, Button,
     Center,
     Flex,
     Grid, GridItem,
-    Heading,
+    Heading, Link,
     List,
     ListIcon,
     ListItem, Modal,
@@ -27,7 +28,7 @@ import MapComponent2 from "../components/MapComponent2.jsx";
 
 const DetailsSortie = () => {
 
-    const id = useParams().id; // ID fixe, considérez d'utiliser useParams() pour un ID dynamique si nécessaire
+    const id = useParams().id;
     const [sortie, setSortie] = useState(null);
     const [nomSortie, setNomSortie] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -116,7 +117,7 @@ const DetailsSortie = () => {
                                             <Center>
                                                 <ModalBody >
                                                     <Flex direction="column" align="center" justify="center" height="100%">
-                                                        <MapComponent2 longitude={sortie.latitude} latitude={sortie.longitude}/>
+                                                        <MapComponent2 longitude={sortie.longitude} latitude={sortie.latitude}/>
                                                     </Flex>
                                                 </ModalBody>
                                             </Center>
@@ -143,6 +144,7 @@ const DetailsSortie = () => {
                 gap={6}
                 p={5}
                 ml={625}
+                mt={20}
             >
                 <GridItem colSpan={[3, 2]}>
                     <Box
@@ -178,7 +180,10 @@ const DetailsSortie = () => {
                                     fontWeight="extrabold"
                                     fontSize="4xl"
                                 >
-                                    {participant.nom}
+                                    <Flex align="center">
+                                        <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
+                                        <Text ml={5}><Link as={RouterLink} to={`/profile/${participant.id}`}>{participant.nom}</Link></Text>
+                                    </Flex>
                                 </ListItem>
                                 </Center>
                             ))}
