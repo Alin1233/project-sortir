@@ -124,6 +124,7 @@ const Profile = (props) => {
               {/* eslint-disable-next-line react/jsx-no-undef */}
               <Image src="../img/IWantYou.png" alt='Hummm' borderRadius="full" />
             </VStack>
+            <UploadImg user={props.user}/>
           </Box>
           <Box as="form" onSubmit={handleSubmit} w={"auto"} p="5" bg="white" boxShadow="md" backgroundColor="#FFFAFA">
             <Grid templateColumns="auto" gap={6}>
@@ -166,12 +167,6 @@ const Profile = (props) => {
                     ))}
                   </Select>
                 </FormControl>
-                <Box>
-                  <FormControl id="image">
-                    <FormLabel>Choisir une photo de Profil:</FormLabel>
-                    <Input type='file' name='image' size="md" onChange={(e)=>handleChange(e.target.files[0])}/>
-                  </FormControl>
-                </Box>
               </VStack>
             </Grid>
             <Flex justify="space-between" mt="20px">
