@@ -1,14 +1,11 @@
 
 /* eslint-disable react/no-unescaped-entities */
-import { useParams } from "react-router-dom"
-
-import {Link as RouterLink, useParams} from "react-router-dom"
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import fr from 'date-fns/locale/fr';
 import serviceSortie from "../services/serviceSortie.js";
-import { Link as RouterLink } from "react-router-dom";
+
 import {
     Avatar,
     Badge,
@@ -27,8 +24,10 @@ import {
     ModalHeader,
     ModalOverlay,
     Spinner,
-    Text, useDisclosure, Link
+    Text, useDisclosure,
 } from "@chakra-ui/react";
+
+import {Link as RouterLink, useParams} from "react-router-dom"
 import Loading from "../components/Loading.jsx";
 import MapComponent2 from "../components/MapComponent2.jsx";
 
@@ -188,16 +187,11 @@ const DetailsSortie = () => {
                                 boxShadow="base"
                                 bg="white"
                             >
-                               
-                               
-
                                 <Center key={index}>
                                     <Flex align="center">
                                         <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
                                         <Text ml={5}><Link as={RouterLink} to={`/profile/${participant.id}`}>{participant.nom}</Link></Text>
                                     </Flex>
-                                </ListItem>
-
                                 </Center>
                             </ListItem>
                             ))}
