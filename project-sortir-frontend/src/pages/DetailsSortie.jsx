@@ -1,8 +1,14 @@
+
+/* eslint-disable react/no-unescaped-entities */
+import { useParams } from "react-router-dom"
+
 import {Link as RouterLink, useParams} from "react-router-dom"
+
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import fr from 'date-fns/locale/fr';
 import serviceSortie from "../services/serviceSortie.js";
+import { Link as RouterLink } from "react-router-dom";
 import {
     Avatar,
     Badge,
@@ -21,7 +27,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Spinner,
-    Text, useDisclosure
+    Text, useDisclosure, Link
 } from "@chakra-ui/react";
 import Loading from "../components/Loading.jsx";
 import MapComponent2 from "../components/MapComponent2.jsx";
@@ -71,9 +77,9 @@ const DetailsSortie = () => {
                 <Heading fontWeight='extrabold' as='h1' size='3xl' color="teal.500">Détails</Heading>
             </Center>
 
-            <Center>
-                <Box mb={5} minW="1000px" minH="auto" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} bg="gray.50"
-                     boxShadow="dark-lg">
+            <Center >
+                <Box mb={5} minW="1000px" minH="auto"  borderRadius="lg" overflow="hidden" p={4} bg="gray.50"
+                     boxShadow="dark-lg" borderColor='teal.500' borderWidth="5px">
                     <Box p={6}>
                         <Heading fontWeight='extrabold' size="xl" my={4} color="teal.500">
                             {sortie.nom}
@@ -135,63 +141,71 @@ const DetailsSortie = () => {
                     </Box>
                 </Box>
             </Center>
-
-
-
-
             <Grid
                 templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
                 gap={6}
-                p={5}
-                ml={625}
-                mt={20}
-            >
+
+                p="5"
+                ml="39em"
+                >
+
                 <GridItem colSpan={[3, 2]}>
                     <Box
-                        boxShadow="xl"
-                        p="6"
-                        rounded="md"
-                        bg="white"
+                    boxShadow="xl"
+                    p="6"
+                    rounded="md"
+                    bg="white"
                     >
-                        <Heading
-                            as="h2"
-                            size="2xl"
-                            mb={4}
-                            textAlign="center"
-                            color="teal.500"
-                            fontWeight='extrabold'
-                        >
-                            Participants de la sortie : {sortie.nom}
-                        </Heading>
-                        <Center>
+                    <Heading
+                        as="h2"
+                        size="2xl"
+                        mb="4"
+                        textAlign="center"
+                        color="teal.500"
+                        fontWeight='extrabold'
+                    >
+                        Participants de la sortie : {sortie.nom}
+                    </Heading>
+                    <Center>
                         <List
                             spacing={3}
-                            bg={"teal"}
-                            borderRadius={50}
-                            mt={50}
+                            borderRadius="md"
+                            mt="3em"
                         >
                             {sortie.participants.map((participant, index) => (
+
+                            <ListItem
+                                key={index}
+                                p="2"
+                                ml="5"
+                                mr="5"
+                                mb="2"
+                                fontWeight="extrabold"
+                                fontSize="2xl"
+                                border="1px"
+                                borderColor="gray.200"
+                                borderRadius="md"
+                                boxShadow="base"
+                                bg="white"
+                            >
+                               
+                               
+
                                 <Center key={index}>
-                                <ListItem
-                                    p={2}
-                                    ml={5}
-                                    mr={5}
-                                    mb={2}
-                                    fontWeight="extrabold"
-                                    fontSize="4xl"
-                                >
                                     <Flex align="center">
                                         <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
                                         <Text ml={5}><Link as={RouterLink} to={`/profile/${participant.id}`}>{participant.nom}</Link></Text>
                                     </Flex>
                                 </ListItem>
+
                                 </Center>
+                            </ListItem>
                             ))}
                         </List>
                         </Center>
                     </Box>
                 </GridItem>
-            </Grid>
+                </Grid>
         </div>
     )
 };

@@ -1,17 +1,20 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import {
-    Button,
-    Link,
-    Heading,
-    VStack,
-    Box,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    Alert,
-    AlertTitle, AlertDescription, AlertIcon, Center
+  Button,
+  Link,
+  Heading,
+  VStack,
+  Box,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Alert,
+  AlertTitle, AlertDescription, AlertIcon, Center
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -27,7 +30,6 @@ import Loading from "../components/Loading.jsx";
 import UploadImg from "../components/UploadImg";
 import sortie from "./Sortie.jsx";
 
-
 const Accueil = (props) => {
   
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -37,6 +39,8 @@ const Accueil = (props) => {
   //notification
   const [notification, setNotification] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+
+  
 
   const formattedDate = currentDate.toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -82,33 +86,32 @@ const Accueil = (props) => {
   }
   //effet popover et design
   const [isOpen, setIsOpen] = useState(false);
-  const handleOpen = () => {
-  setIsOpen(!isOpen);
+  const handleClickPoopover = () => {
+    setIsOpen(!isOpen);
   };
   //design pour smartphone
   const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
   //data is loading
-
-    if(props.user ===null ){
-        return  <div>
-                    <Alert status='error'
-                        flexDirection='column'
-                        alignItems='center'
-                        justifyContent='center'
-                        textAlign='center'
-                        height='200px'>
-                            <AlertIcon boxSize='80px' mb={10}/>
-                            <AlertTitle fontSize='xl'><Link as={RouterLink} to="/connecter">Veuillez vous connecter pour accéder à la liste de sorties!</Link></AlertTitle>
-                            <AlertTitle fontSize='xl'><Link as={RouterLink} to="/connecter">Cliquez ici pour vous connecter.</Link></AlertTitle>
-                    </Alert>
-                </div>
-    }
-  if(sorties===null){
-      return    <div>
-                    <Loading/>
-                </div>
-  }
+  if(props.user ===null ){
+    return  <div>
+                <Alert status='error'
+                    flexDirection='column'
+                    alignItems='center'
+                    justifyContent='center'
+                    textAlign='center'
+                    height='200px'>
+                        <AlertIcon boxSize='80px' mb={10}/>
+                        <AlertTitle fontSize='xl'><Link as={RouterLink} to="/connecter">Veuillez vous connecter pour accéder à la liste de sorties!</Link></AlertTitle>
+                        <AlertTitle fontSize='xl'><Link as={RouterLink} to="/connecter">Cliquez ici pour vous connecter.</Link></AlertTitle>
+                </Alert>
+            </div>
+}
+if(sorties===null){
+  return    <div>
+                <Loading/>
+            </div>
+}
 
   return (
     <div>
@@ -123,61 +126,51 @@ const Accueil = (props) => {
             </Text>
           </Flex>
         </Box>
-        <Popover ml={2} isOpen={isOpen} onOpen={handleOpen} onClose={handleOpen}>
+        <Popover ml={2} isOpen={isOpen}>
             <PopoverTrigger>
-                <Button ml={2}>Filtrer les sorties <ChevronDownIcon /></Button>
+                <Button  onClick={handleClickPoopover} ml={2}>Filtrer les sorties <ChevronDownIcon /></Button>
             </PopoverTrigger>
             <PopoverContent>
             <Filtre sorties={sorties} setSorties={setSorties} user={props.user} setUpdateData={setUpdateData}/>
             </PopoverContent>
         </Popover>
-        <SimpleGrid columns={columns} gap="20px" ml="0" mt="0">
+        <SimpleGrid columns={columns} spacing={10} ml={{base: "0", md: isOpen ? "350" : "0"}} mt={{base: isOpen ? "600" : "0", md: "0"}} p={{base: "4", md: "4"}}>
     {sorties.map(sortie => (
-        <Box boxShadow='dark-lg' ml="5em" mt="5" key={sortie.id} width='30em' borderWidth="5px" borderRadius="25px" overflow="hidden" p="6" borderColor='teal.500'>
-            <VStack align="center" spacing="2">
+        <Box key={sortie.id} borderWidth="5px" borderRadius="30px" overflow="hidden" p="6" boxShadow='dark-lg' borderColor='teal.500' m={{base: "4", md: "0"}}>
+            <VStack align="center" spacing="4">
                 <HStack spacing="4">
-                    <Text color='teal.500' fontSize="xl" fontWeight="bold">
-                        <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom} <Icon as={ViewIcon}  ml={2}/></Link>
+                    <Text fontSize="xl" fontWeight="bold">
+                        <Link as={RouterLink} to={`/details/${sortie.id}`}>{sortie.nom}</Link>
                     </Text>
-                    <ActionsComponent nomSortie={sortie.nom} sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
-                    
+
+                    <Icon as={ViewIcon} />
+                    <ActionsComponent sortie={sortie} user={props.user} setUpdateData={setUpdateData} setNotification={setNotification} setIsVisible={setIsVisible}/>
+
                 </HStack>
-                <Text fontWeight='bold'><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
-                <Text fontWeight='bold'><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>
+                <Text fontWeight="bold"><TimeIcon /> {dateFunctions.formatDateHour(sortie.dateHeureDebut)}</Text>
+                <Text fontWeight="bold"><LockIcon /> {dateFunctions.formatDate(sortie.dateLimiteInscription)}</Text>
                 <VStack align="center" spacing="1">
-                  <Text fontWeight='bold'>Inscrits / Places :</Text>
-                  <Text fontWeight='bold'>{sortie.participants.length} / {sortie.nbInscriptionMax}</Text>
+                  <Text fontWeight="bold">Inscrits / Places:</Text>
+                  <Text fontWeight="bold">{sortie.participants.length} / {sortie.nbInscriptionMax}</Text>
                 </VStack>
-
-                <Text fontWeight='bold'>État : {sortie.etat}</Text>
-
-                    <Text fontWeight='bold'>Organisateur :
-                    </Text>
-                        <Flex>
-                          <Link color='teal.500' as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
-                            <Text fontWeight='bold' color='teal.500'>{sortie.organisateur.nom}
-                                <Icon as={ViewIcon}  ml={2}/>
-                            </Text>
-                          </Link>
-                        </Flex>
-                <Link as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>
-                     <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
-                </Link>
-                
-
+                <Text fontWeight="bold">Etat: {sortie.etat}</Text>
+                <Flex align="center">
+                  <Text mr={2} fontWeight="bold">Organisateur: <Link as={RouterLink} to={`/profile/${sortie.organisateur.id}`}>{sortie.organisateur.nom}</Link></Text>
+                  <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
+                </Flex>
                 <HStack>
-                    <Text fontWeight='bold'>Inscrit :</Text>
+                    <Text fontWeight="bold">Inscrit:</Text>
                     {sortie.participants.includes(props.user.id) 
                     ? <CheckIcon boxSize="20px" color="green.500" />
                       : (sortie.etat === 'Ouverte')
                     ? <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
-                      : <Text>Non et il n'est pas possible de vous inscrire</Text>
+                      : <Text fontWeight="bold">Non et il n'est pas possible de vous inscrire</Text>
                     }
                 </HStack>
             </VStack>
         </Box>
     ))}
-        </SimpleGrid>
+</SimpleGrid>
     </div>
 );
 }
