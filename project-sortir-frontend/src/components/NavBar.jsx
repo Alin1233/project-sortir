@@ -2,7 +2,9 @@
 /* eslint-disable react/prop-types */
 import {Box, Button, Link, Flex, Image, Heading, Avatar, Tooltip, Text} from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
+import { useBreakpointValue } from "@chakra-ui/react";
+
 
 const NavBar = (props) => {
     //Quand quelqu'un clique sur "log out", le cookie est supprimé et l'utilisateur actuel est déclaré null
@@ -10,12 +12,13 @@ const NavBar = (props) => {
         window.localStorage.removeItem("loggedUser")
         props.setUser(null)
     }
+    const isMobile = useBreakpointValue({ base: true, md: false });
     return (
         <Flex as="nav" align="center" justify="space-between" wrap="wrap" padding="1.5rem" bg="teal.500" color="white">
-            <Box>
+        <Box>
             <Flex align="center">
                 <Link as={RouterLink} to="/" mr="4">
-                <Image src={logo} alt="Logo" boxSize="100px" borderRadius="full"/>
+                    <Image src={logo} alt="Logo" boxSize="100px" borderRadius="full"/>
                 </Link>
                 {props.user ?(
                     <Heading size="lg" ml="4">{props.user.nom}, Let's Golaf!</Heading>
@@ -23,10 +26,9 @@ const NavBar = (props) => {
                     <Heading size="lg" ml="4">Golaf!</Heading>
                 )}
             </Flex>
-            </Box>
-
-            <Box>
-                <Flex>
+        </Box>
+        <Box display={{ base: isMobile ? "block" : "block" }}>
+                <Flex align="center">
                     {props.user?.isAdmin ? (
                         <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/administration" mr="4">Administration</Link></Text>
                     ) : (
@@ -44,7 +46,7 @@ const NavBar = (props) => {
                     ) : (
                         <Text fontSize='1em' mb="3" color="white" fontWeight="extrabold"><Link as={RouterLink} to="/connecter">Se Connecter</Link></Text>
                     )}
-               </Flex>
+                </Flex>
             </Box>
         </Flex>
     );

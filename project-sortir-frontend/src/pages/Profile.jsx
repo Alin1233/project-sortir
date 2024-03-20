@@ -114,52 +114,54 @@ const Profile = (props) => {
 //Affichage
 
   return (
-      <Box>
-        <Center mt="10vh">
-          <Heading textDecoration="underline">Mon Profil</Heading>
-        </Center>
-        <Center h="80rem" mt="-200px" gap={9}>
-          <Box boxSize='sm'>
-            <VStack align="stretch" >
-              {/* eslint-disable-next-line react/jsx-no-undef */}
-              <Image src="../img/IWantYou.png" alt='Hummm' borderRadius="full" />
-            </VStack>
-            <UploadImg user={props.user}/>
-          </Box>
-          <Box as="form" onSubmit={handleSubmit} w={"auto"} p="5" bg="white" boxShadow="md" backgroundColor="#FFFAFA">
-            <Grid templateColumns="auto" gap={6}>
-              <VStack align="stretch">
+    <Box>
+    <Center mt="10vh">
+      <Heading as="h2" size="xl" color="teal.500"  mt="-100">Mon Profil</Heading>
+    </Center>
+    <Flex direction="row" justify="center" align="start"   gap={9}>
+    <Center   gap={9} >
+      <Box boxSize='sm' p="5" borderRadius="md">
+        <VStack align="stretch" spacing={5} >
+          <Image src="../img/IWantYou.png" alt='Hummm' borderRadius="full" />
+          <UploadImg user={props.user}/>
+        </VStack>
+      </Box>
+      <Box as="form" onSubmit={handleSubmit} w={"auto"} p="5" bg="gray.100" boxShadow="lg" borderRadius="md" borderColor='teal.500' borderWidth="5px">
+        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+          <VStack align="stretch" spacing={5}>
                 <FormControl id="pseudo">
                   <FormLabel>Pseudo : </FormLabel>
-                  <Input type='text' name='pseudo' value={pseudo} onChange={(e) => setPseudo(e.target.value)} size="md" required={true}/>
+                  <Input bg="white" type='text' name='pseudo' value={pseudo} onChange={(e) => setPseudo(e.target.value)} size="md" required={true}/>
                 </FormControl>
                 <FormControl id="prenom">
                   <FormLabel>Prénom:</FormLabel>
-                  <Input type='text' name='prenom' value={prenom} onChange={(e) => setPrenom(e.target.value)} size="md"/>
+                  <Input  bg="white" type='text' name='prenom' value={prenom} onChange={(e) => setPrenom(e.target.value)} size="md"/>
                 </FormControl>
                 <FormControl id="nom">
                   <FormLabel>Nom :</FormLabel>
-                  <Input type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md"/>
+                  <Input  bg="white" type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md"/>
                 </FormControl>
                 <FormControl id="telephone">
                   <FormLabel>Telephone :</FormLabel>
-                  <Input type='text' name='telephone' value={telephone} onChange={(e) => setTelephone(e.target.value)} size="md"/>
+                  <Input bg="white"type='text' name='telephone' value={telephone} onChange={(e) => setTelephone(e.target.value)} size="md"/>
                 </FormControl>
+                </VStack>
+                <VStack align="stretch" spacing={5}>
                 <FormControl id="email">
                   <FormLabel>Email :</FormLabel>
-                  <Input type='text' name='email' value={email} onChange={(e) => setEmail(e.target.value)} size="md" required={true}/>
+                  <Input bg="white" type='text' name='email' value={email} onChange={(e) => setEmail(e.target.value)} size="md" required={true}/>
                 </FormControl>
                 <FormControl id="password">
                   <FormLabel>Mot de Passe:</FormLabel>
-                  <Input type='password' name='password' value={password} onChange={(e) => setPassword(e.target.value)} size="md" required={true}/>
+                  <Input bg="white" type='password' name='password' value={password} onChange={(e) => setPassword(e.target.value)} size="md" required={true}/>
                 </FormControl>
                 <FormControl id="confirmPassword">
                   <FormLabel>Confirmation du Mot de Passe:</FormLabel>
-                  <Input type='password' name='confirmPassword' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} size="md" required={true}/>
+                  <Input bg="white" type='password' name='confirmPassword' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} size="md" required={true}/>
                 </FormControl>
                 <FormControl id="campus">
                   <FormLabel>Campus :</FormLabel>
-                  <Select value={campus} onChange={(e)=>{setCampus(e.target.value)}} placeholder="Sélectionner un campus" required={true}>
+                  <Select bg="white" value={campus} onChange={(e)=>{setCampus(e.target.value)}} placeholder="Sélectionner un campus" required={true}>
                     {campusList.map((campusList) => (
                         <option key={campusList.id} value={campusList.nom}>
                           {campusList.nom}
@@ -169,13 +171,14 @@ const Profile = (props) => {
                 </FormControl>
               </VStack>
             </Grid>
-            <Flex justify="space-between" mt="20px">
-              <Button type="submit" colorScheme='teal' name="register">Enregistrer</Button>
-              <Button type="reset" name="reset" onClick={handleClick}>Annuler</Button>
+             <Flex justify="space-between" mt="20px">
+                <Button type="submit" colorScheme='teal' name="register">Enregistrer</Button>
+                <Button type="reset" colorScheme='red' variant="outline" name="reset" onClick={handleClick}>Annuler</Button>
             </Flex>
-          </Box>
-        </Center>
-      </Box>
+    </Box>
+  </Center>
+  </Flex>
+</Box>
   )
 }
 
