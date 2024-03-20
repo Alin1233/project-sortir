@@ -11,6 +11,7 @@ use App\Entity\Participant;
 use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ConnecterController extends AbstractController
 {
@@ -45,6 +46,7 @@ class ConnecterController extends AbstractController
                     'id' => $campus->getId(),
                     'nom' => $campus->getNom(),
                 ],
+                'image'=> $participant->getImage()
             ];
             $response = $this->json([
                 'participant' => $participantData,
@@ -80,6 +82,7 @@ class ConnecterController extends AbstractController
                     'id' => $campus->getId(),
                     'nom' => $campus->getNom(),
                 ],
+                'image'=> $participant->getImage()
             ];
             $response = $this->json([
                 'participant' => $participantData,
@@ -92,5 +95,23 @@ class ConnecterController extends AbstractController
 
         return $response;
 
+    }
+
+    #[Route('/getimage/{imageName}', name: 'get_image', requirements: ['imageName' => '.+'])]
+    public function getProfileImage(string $imageName): Response
+    {   
+        
+        $projectDir = $this->getParameter('kernel.project_dir');
+        try {
+            $imagePath = $projectDir . '/public/uploads/photo_profile/'.$imageName;
+            $response = new BinaryFileResponse($imagePath);
+        } catch (\Throwable $e) {
+            $imagePath = $projectDir.'/public/uploads/photo_profile/default';
+            $response = new BinaryFileResponse($imagePath);
+        }
+        $response = new BinaryFileResponse($imagePath);
+        $response->headers->set('Content-Type', 'image/png');
+        return $response;
+        
     }
 }

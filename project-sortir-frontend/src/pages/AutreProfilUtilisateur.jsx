@@ -13,6 +13,7 @@ const AutreProfilUtilisateur =()=>{
     const[email,setEmail]=useState('');
     const[campus,setCampus]=useState('');
     const[pseudo, setPseudo]=useState('');
+    const[image, setImage] = useState('');
 
     useEffect(()=> {
         const responseId = async ()=>{
@@ -24,6 +25,7 @@ const AutreProfilUtilisateur =()=>{
             setPrenom(response.prenom);
             setEmail(response.email);
             setCampus(response.campusNom);
+            setImage(response.image)
         }
         responseId();
         []});
@@ -56,7 +58,7 @@ const AutreProfilUtilisateur =()=>{
                 <Box boxSize='sm'>
                     <VStack align="stretch" >
                         {/* eslint-disable-next-line react/jsx-no-undef */}
-                        <Image src="../img/WhoAreYou.png" alt='Hummm' borderRadius="full" />
+                        <Image src={`http://localhost:8000/getimage/${image}`} alt='Hummm' borderRadius="full" />
                     </VStack>
                 </Box>
                 <Box  w="30%" p="5" bg="white" boxShadow="md" borderRadius="full" backgroundColor="#FFFAFA">

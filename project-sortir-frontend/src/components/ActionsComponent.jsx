@@ -45,15 +45,16 @@ const ActionsComponent = (props) => {
                 Actions
             </MenuButton>
             <MenuList>
-            <MenuItem> <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} campus={props.sortie.organisateur.campus} mr="4">Modifier</Link></MenuItem>
-            <MenuItem>
-                <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
+
+            <MenuItem as={Button}>  <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4">Modifier</Link></MenuItem>
+            <MenuItem as={Button}>  <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
+
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
                 ?
                     <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
                 :   null
                 }
-                {props.sortie.participants.includes(props.user.id)
+                {props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" )
                 ?
                     <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
                 :   null
