@@ -103,12 +103,13 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/id/{id}', name: 'app_autreUtilisateur')]
-    public function getAutreProfil(int $id ,ParticipantRepository $participantRepository,CampusRepository$campusRepository, Request $request): Response
+    public function getAutreProfil(int $id ,ParticipantRepository $participantRepository,CampusRepository $campusRepository, Request $request): Response
     {
 
         $participant = $participantRepository->findOneBy(['id'=>$id]);
-        $participantId=$participant->getId();
-        $campus=$campusRepository->findOneBy(['id'=>$participantId]);
+        $participantId = $participant->getId();
+        
+        $campus= $participant->getCampus();
         $participantAvecCampus= [
             'id'=>$participant->getId(),
             'pseudo'=>$participant->getPseudo(),
