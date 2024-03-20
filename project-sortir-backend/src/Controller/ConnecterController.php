@@ -102,7 +102,13 @@ class ConnecterController extends AbstractController
     {   
         
         $projectDir = $this->getParameter('kernel.project_dir');
-        $imagePath = $projectDir . '/public/uploads/photo_profile/'.$imageName;
+        try {
+            $imagePath = $projectDir . '/public/uploads/photo_profile/'.$imageName;
+            $response = new BinaryFileResponse($imagePath);
+        } catch (\Throwable $e) {
+            $imagePath = $projectDir.'/public/uploads/photo_profile/default';
+            $response = new BinaryFileResponse($imagePath);
+        }
         $response = new BinaryFileResponse($imagePath);
         $response->headers->set('Content-Type', 'image/png');
         return $response;

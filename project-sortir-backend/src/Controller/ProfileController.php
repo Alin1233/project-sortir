@@ -118,7 +118,8 @@ class ProfileController extends AbstractController
             'telephone'=>$participant->getTelephone(),
             'email'=>$participant->getMail(),
             'campusId'=>$campus->getId(),
-            'campusNom'=>$campus->getNom()
+            'campusNom'=>$campus->getNom(),
+            'image'=>$participant->getImage()
         ];
 
         return $this->json(['participant'=>$participantAvecCampus]);

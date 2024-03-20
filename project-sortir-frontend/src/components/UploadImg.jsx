@@ -23,6 +23,7 @@ const UploadImg = (props) => {
     formData.append('id', props.user.id);
 
     const response = await serviceProfile.uploadImage(formData);
+    
     console.log(response);
   };
 
