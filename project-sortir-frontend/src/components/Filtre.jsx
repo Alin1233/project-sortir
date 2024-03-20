@@ -16,9 +16,11 @@ const Filtre = (props) => {
     const [searchDate2, setSearchDate2] = useState("")
     const [originalSorties, setOriginalSorties] = useState([...props.sorties]);
     const [checkboxValues, setCheckboxValues] = useState(['inscrit']);
+    
+    const [apiSorties, setApiSorties] = useState([...props.sorties]);
 
     useEffect(() => {
-        let filteredSorties = [...originalSorties];
+      let filteredSorties = [...apiSorties];
        
         if (searchNom) {
           filteredSorties = filteredSorties.filter(sortie => sortie.nom.toLowerCase().includes(searchNom.toLowerCase()));
@@ -32,13 +34,16 @@ const Filtre = (props) => {
           )
         }
         
-        props.setSorties(searchNom || searchCampus || searchDate1 || searchDate2 ? filteredSorties : originalSorties);
-      }, [searchNom, searchCampus, searchDate1, searchDate2]);
+        props.setSorties(searchNom || searchCampus || searchDate1 || searchDate2 ? filteredSorties : apiSorties);
+      }, [searchNom, searchCampus, searchDate1, searchDate2, apiSorties]);
 
       const handleCheckbox = async(value) => {
           setCheckboxValues(value);
           const response = await serviceSortie.getAllSortiesByFilter(value, props.user.id);
+          setApiSorties(response); 
           props.setSorties(response);
+          
+          
       };
       const handleResetClick = () => {
         setSearchCampus("")
