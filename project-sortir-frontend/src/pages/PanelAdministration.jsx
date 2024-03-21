@@ -2,14 +2,12 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import serviceIsAdmin from "../services/serviceIsAdmin.js";
 import {
-    Box,
     Button,
-    Center, Divider,
+    Center,
     Heading, SimpleGrid,
     useDisclosure
 } from "@chakra-ui/react";
-import {AddIcon, CalendarIcon, DeleteIcon, SearchIcon, TimeIcon} from "@chakra-ui/icons";
-import DrawerTypesPanelAdmin from "../components/DrawerTypesPanelAdmin.jsx";
+import {AddIcon, CalendarIcon, DeleteIcon, TimeIcon} from "@chakra-ui/icons";
 import CustomDrawer from "../components/DrawerTypesPanelAdmin.jsx";
 import Loading from "../components/Loading.jsx";
 
@@ -36,6 +34,14 @@ const PanelAdministration = (props) => {
 
         checkAdminStatus();
     }, [navigate, props.user]);
+
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+
+    useDocumentTitle('Golaf! | Panneau d\'administration')
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [drawerType, setDrawerType] = React.useState('');
@@ -81,14 +87,20 @@ const PanelAdministration = (props) => {
             <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('DesactiverUtilisateur')}>
                 Désactiver un utilisateur
             </Button>
-            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerUtilisateur')}>
-                Supprimer un utilisateur
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='blue' onClick={() => handleOpenDrawer('InscriptionUtilisateurCSV')}>
+                Créer des utilisateurs
             </Button>
-            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<SearchIcon />} colorScheme='blue' onClick={() => handleOpenDrawer('RechercherUtilisateur')}>
-                Rechercher un ID utilisateur
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='blue' onClick={() => handleOpenDrawer('ActiverUtilisateur')}>
+                Activer un utilisateur
+            </Button>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerUtilisateur')}>
+                 Supprimer un utilisateur
             </Button>
 
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
+            <Button opacity='0' mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
+                Annuler une sortie
+            </Button>
+            <Button  mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
                 Annuler une sortie
             </Button>
 

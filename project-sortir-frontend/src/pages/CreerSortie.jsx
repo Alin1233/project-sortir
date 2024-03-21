@@ -79,6 +79,7 @@ const CreerSortie = (props) => {
         fetchVilles()
     },[])
 
+
     useEffect(() => {
         // Vérifier si les props sont prêts
         if (props.user !== null) {

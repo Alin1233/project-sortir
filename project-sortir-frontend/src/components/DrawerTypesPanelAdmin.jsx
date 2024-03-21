@@ -9,38 +9,48 @@ import {
     Button,
     Text, Center, FormControl, FormLabel, Input, VStack, Select, Textarea, useToast, Box, Icon, Flex
 } from "@chakra-ui/react";
-import {AddIcon, CalendarIcon, CheckCircleIcon, DeleteIcon, SearchIcon, TimeIcon, WarningIcon} from "@chakra-ui/icons";
+import {AddIcon, CalendarIcon, CheckCircleIcon, DeleteIcon, TimeIcon, WarningIcon} from "@chakra-ui/icons";
 // eslint-disable-next-line no-unused-vars
 import React, {useEffect, useState} from "react";
 import servicePanelAdmin from "../services/servicePanelAdmin.js";
 import serviceProfile from "../services/serviceProfile.js";
+import InscrireCSV from "./InscrireCSV.jsx";
 
 
 // eslint-disable-next-line react/prop-types
 const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
 
     const [nomVille, setNomVille] = useState('');
-    const [villeListe, setVilleListe] = useState('');
     const [codePostal, setCodePostal] = useState('');
     const [selectedVilleId, setSelectedVilleId] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [campusListe, setCampusList] = useState ( null)
     const [selectedCampusId, setSelectedCampusId] = useState('');
+    const [idUser, setIdUser] = useState('');
+    const [idSortie, setIdSortie] = useState('');
+    const [motifAnnulation, setMotifAnnulation] = useState('');
+    const [nomLieu, setNomLieu] = useState('');
+    const [rueLieu, setRueLieu] = useState('');
+    const [latitudeLieu, setLatitudeLieu] = useState('');
+    const [longitudeLieu, setLongitudeLieu] = useState('');
+    const[lieuxVille, setLieuxVille] = useState('');
+    const [villes, setVilles] = useState(null);
     const toast = useToast();
-    const chargerVilles = async () => {
-        try {
-            const villes = await servicePanelAdmin.getAllVilles();
-            if (villes) {
-                setVilleListe(villes);
+    const [ville, setVille] = useState('');
+    const [lieu, setLieu] = useState('');
+    const [rue, setRue] = useState('');
+    const[selectedLieu, setSelectedLieu] = useState('');
 
-
-            }
-        } catch (error) {
-            console.error("Erreur lors de la récupération des détails de la sortie :", error);
-        }
-
-    };
+    const chargerVillesAvecLieux = async() => {
+        const responseVilles = await servicePanelAdmin.getAllVilles()
+        setLieuxVille(responseVilles[0].lieux)
+        setVilles(responseVilles)
+        setRue(responseVilles[0].lieux[0].rue)
+        setCodePostal(responseVilles[0].codePostal)
+        setVille(responseVilles[0].nom)
+        setLieu(responseVilles[0].lieux[0].nom)
+    }
 
     const chargerCampus = async () =>{
         try {
@@ -48,8 +58,6 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
 
             if(campus){
                 setCampusList(campus)
-                console.log(campus)
-                console.log(campusListe)
             }
         }catch (error) {
             console.error("Erreur lors de la récupération des détails de la sortie :", error);
@@ -57,10 +65,31 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
     }
 
 
+
     useEffect(() => {
-        chargerVilles();
         chargerCampus();
+        chargerVillesAvecLieux();
     }, []);
+
+    useEffect(() => {
+        if (ville) {
+            const selectedVille = villes.find(v => v.nom === ville);
+            if (selectedVille && selectedVille.lieux[0]) {
+                setCodePostal(selectedVille.codePostal);
+                setLieuxVille(selectedVille.lieux);
+                setLieu(selectedVille.lieux[0].nom);
+            }
+        }
+    }, [ville, villes]);
+
+    useEffect(() => {
+        if (lieuxVille) {
+            const selectedLieu = lieuxVille.find(l => l.nom === lieu)
+            if(selectedLieu){
+                setRue(selectedLieu.rue)
+            }
+        }
+    }, [lieu, lieuxVille]);
 
 
     const handleSubmitAjoutVille = async (event) => {
@@ -75,7 +104,7 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
 
         const response = await servicePanelAdmin.addCity(ville)
 
-        await chargerVilles();
+        await chargerVillesAvecLieux();
 
 
         if(response.data.message === "Ville créée avec succès"){
@@ -141,9 +170,14 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
     };
 
     const handleVilleChange = (event) => {
-        setSelectedVilleId(event.target.value);
+        setSelectedVilleId(event.target.value)
+        setVille(event.target.value);
+        console.log(selectedVilleId)
     };
-
+    const handleLieuChange = (event) => {
+        setSelectedLieu(event.target.value);
+        console.log(selectedLieu)
+    };
     const handleCampusChange = (event) => {
         setSelectedCampusId(event.target.value);
     };
@@ -151,14 +185,14 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
     const handleSubmitSuppressionVille = async (event) => {
 
         event.preventDefault();
-
+        console.log(selectedVilleId)
         const ville = {
             idVille: selectedVilleId,
         }
 
         const response = await servicePanelAdmin.deleteCity(ville);
 
-        await chargerVilles();
+        await chargerVillesAvecLieux();
 
         if(response.data.message === "Ville supprimée avec succès"){
             return (
@@ -297,8 +331,446 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
         }
         }
 
+    const handleSubmitDesactiverUtilisateur = async (event) => {
+        event.preventDefault()
+
+        const userBan = {
+            idUser: idUser,
+        }
+
+        const response = await servicePanelAdmin.banUser(userBan);
+        console.log(response)
+
+        if(response.data.message === 'Utilisateur désactivé'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Utilisateur désactivé avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === 'Veuillez renseigner un ID utilisateur valide' || response.data.message ==='Utilisateur non trouvé'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    Veuillez indiquer un ID utilisateur valide.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
+
+    const handleSubmitActiverUtilisateur = async (event) => {
+        event.preventDefault()
+
+        const userUnban = {
+            idUser: idUser,
+        }
+
+        const response = await servicePanelAdmin.unbanUser(userUnban)
+
+        if(response.data.message === "Utilisateur activé"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Utilisateur activé avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === 'Veuillez renseigner un ID utilisateur valide' || response.data.message ==='Utilisateur non trouvé'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    Veuillez indiquer un ID utilisateur valide.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
+
+    const handleSubmitSuppressionUtilisateur = async (event) => {
+        event.preventDefault()
+
+        const userDelete = {
+            idUser: idUser,
+        }
+
+        const response = await servicePanelAdmin.deleteUser(userDelete)
+
+        if(response.data.message === "Utilisateur supprimé"){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Utilisateur supprimé avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === 'Veuillez renseigner un ID utilisateur valide' || response.data.message ==='Utilisateur non trouvé'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    Veuillez indiquer un ID utilisateur valide.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
+
+    const handleSubmitAnnulerSortie = async (event) => {
+        event.preventDefault()
+
+        const sortie = {
+            idSortie: idSortie,
+            motifAnnulation: motifAnnulation,
+        }
+
+        const response = await servicePanelAdmin.cancelSortie(sortie)
+
+        if(response.data.message ==="Sortie annulée."){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Sortie annulée avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.message === 'Sortie non trouvée.' || response.data.message === 'Etat non trouvé.' || response.data.error || response.data.message === 'Motif non renseigné'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                    Erreur lors de l'annulation de la sortie, veuillez vérifier que tous les champs soient bien remplis.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
 
 
+    const handleSubmitAjoutLieu = async (event) => {
+        event.preventDefault()
+
+        const lieu = {
+            idVille: selectedVilleId,
+            nomLieu: nomLieu,
+            rueLieu: rueLieu,
+            latitudeLieu: latitudeLieu,
+            longitudeLieu: longitudeLieu
+        }
+
+        const response = await servicePanelAdmin.addLieu(lieu);
+        chargerVillesAvecLieux();
+
+        if(response.data.message === 'Lieu crée avec succès'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Lieu crée avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+            }else if(response.data.error === 'Veuillez renseigner tous les champs' || response.data.error){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                    Erreur lors de la création du lieu, veuillez renseigner tous les champs.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
+
+
+
+    const handleSubmitSuppressionLieu = async (event) => {
+
+        event.preventDefault()
+
+        const lieu = {
+            idLieu: selectedLieu,
+        }
+
+        const response = await servicePanelAdmin.deleteLieu(lieu)
+        chargerVillesAvecLieux();
+
+        if(response.data.message === 'Lieu supprimé avec succès'){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="green.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={CheckCircleIcon} w={10} h={10} mr={3} mt={1} />
+                                <Text flex="1">
+                                    Lieu supprimé avec succès.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }else if(response.data.error === 'Veuillez sélectionner un lieu' || response.data.error){
+            return (
+                toast({
+                    render: () => (
+                        <Box
+                            color="white"
+                            px={5}
+                            py={3}
+                            bg="red.500"
+                            borderRadius="lg"
+                            display="flex"
+                            alignItems="start"
+                            fontSize="2em"
+                            fontWeight="bold"
+                            boxShadow="lg"
+                            maxWidth="100%"
+                        >
+                            <Flex flexDirection="column" alignItems="center" textAlign="center">
+                                <Icon as={WarningIcon} w={10} h={10} mr={3} mt={1} />
+
+                                <Text flex="1">
+                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                    Erreur lors de la suppression du lieu, veuillez renseigner tous les champs.
+                                </Text>
+                            </Flex>
+                        </Box>
+                    ),
+                    isClosable: true,
+                    position: "top",
+                })
+            )
+        }
+    }
 
     const getTitleByType = (type) => {
         switch (type) {
@@ -365,10 +837,10 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                     </Text>
                 </Center>
                                                 </DrawerHeader>);
-            case 'RechercherUtilisateur':return  (<DrawerHeader bgColor='blue.500'>
+            case 'ActiverUtilisateur':return  (<DrawerHeader bgColor='blue.500'>
                 <Center>
                     <Text fontSize='3xl' fontWeight='bold'>
-                        <SearchIcon mt={10} mb={10}/> Rechercher un ID utilisateur
+                        <TimeIcon mt={10} mb={10}/> Activer un utilisateur
                     </Text>
                 </Center>
             </DrawerHeader>);
@@ -376,6 +848,13 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                 <Center>
                     <Text fontSize='3xl' fontWeight='bold'>
                         <CalendarIcon mt={10} mb={10}/> Annuler une sortie
+                    </Text>
+                </Center>
+            </DrawerHeader>);
+            case 'InscriptionUtilisateurCSV':return  (<DrawerHeader bgColor='blue.500'>
+                <Center>
+                    <Text fontSize='3xl' fontWeight='bold'>
+                        <AddIcon mt={10} mb={10}/> Créer des utilisateurs
                     </Text>
                 </Center>
             </DrawerHeader>);
@@ -422,7 +901,7 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                                         <Select outlineColor='teal' name='idVille' onChange={handleVilleChange}
                                                 value={selectedVilleId}>
                                             <option value="">Sélectionnez une ville</option>
-                                            {villeListe.map((ville, index) => ( // Étape 4
+                                            {villes.map((ville, index) => ( // Étape 4
                                                 <option key={index} value={ville.id}>{ville.nom}</option>
                                             ))}
                                         </Select>
@@ -441,59 +920,82 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
             case 'AjouterLieu':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
-                                <FormControl id="nomVille">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez indiquer la ville où se situe le lieu :</FormLabel>
-                                    <Select outlineColor='teal' name='ville'>
-
-                                    </Select>
-                                </FormControl>
-                                <FormControl id="nomLieu">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Nom du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='nom' size="md" />
-                                </FormControl>
-                                <FormControl id="rueLieu">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Précisez la rue du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
-                                </FormControl>
-                                <FormControl id="rueLieu">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Latitude du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
-                                </FormControl>
-                                <FormControl id="rueLieu">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Longitude du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
-                                </FormControl>
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                        <form onSubmit={handleSubmitAjoutLieu}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="idVille">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner la ville où se situe le lieu :</FormLabel>
+                                        <Select outlineColor='teal' name='idVille' onChange={handleVilleChange}
+                                                value={selectedVilleId}>
+                                            <option value="">Sélectionnez une ville</option>
+                                            {villes.map((ville, index) => ( // Étape 4
+                                                <option key={index} value={ville.id}>{ville.nom}</option>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl id="nomLieu">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Nom du lieu :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size="md" name='nomLieu' value={nomLieu} onChange={e => setNomLieu(e.target.value)}/>
+                                    </FormControl>
+                                    <FormControl id="rueLieu">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Précisez la rue du lieu :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size="md" name='rueLieu' value={rueLieu} onChange={e => setRueLieu(e.target.value)}/>                </FormControl>
+                                    <FormControl id="rueLieu">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Latitude du lieu :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size="md" name='latitudeLieu' value={latitudeLieu} onChange={e => setLatitudeLieu(e.target.value)}/>                </FormControl>
+                                    <FormControl id="rueLieu">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Longitude du lieu :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size="md" name='longitudeLieu' value={longitudeLieu} onChange={e => setLongitudeLieu(e.target.value)}/>                </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose}>Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
                     </>
                 );
             case 'SupprimerLieu':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
-                                <FormControl id="nomLieu">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner le lieu à supprimer :</FormLabel>
-                                    <Select outlineColor='teal' name='ville'>
-                                    ICI FAIRE REMONTER LISTE DE LIEUX
-                                    </Select>
-                                </FormControl>
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                        <form onSubmit={handleSubmitSuppressionLieu}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="ville">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner la ville du
+                                            lieu à supprimer :</FormLabel>
+                                        <Select name='ville' onChange={handleVilleChange} value={selectedVilleId}>
+                                            <option value="">Sélectionnez une ville</option>
+                                            {villes.map((ville) => (
+                                                <option key={ville.id} value={ville.nom}>
+                                                    {ville.nom}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl id="lieu">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez sélectionner le lieu à
+                                            supprimer :</FormLabel>
+                                        <Select name='idLieu' onChange={handleLieuChange} isDisabled={!selectedVilleId}
+                                                value={selectedLieu}>
+                                            {lieuxVille.map((lieu, index) => (
+                                                <option key={index} value={lieu.id}>
+                                                    {lieu.nom} ({lieu.id})
+                                                </option>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose}>Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
                     </>
                 );
             case 'CreerGroupe':
@@ -502,25 +1004,26 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                         <DrawerBody>
                             <VStack align="stretch">
                                 <FormControl id="nomVille">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez indiquer la ville où se situe le lieu :</FormLabel>
+                                    <FormLabel fontSize='2xl' fontWeight='bold'>Veuillez indiquer la ville où se situe
+                                        le lieu :</FormLabel>
                                     <Select outlineColor='teal' name='ville'>
 
                                     </Select>
                                 </FormControl>
                                 <FormControl id="nomLieu">
                                     <FormLabel fontSize='2xl' fontWeight='bold'>Nom du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='nom' size="md" />
+                                    <Input outlineColor='teal' type='text' name='nom' size="md"/>
                                 </FormControl>
                                 <FormControl id="rueLieu">
                                     <FormLabel fontSize='2xl' fontWeight='bold'>Précisez la rue du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
+                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md"/>
                                 </FormControl>
                                 <FormControl id="rueLieu">
                                     <FormLabel fontSize='2xl' fontWeight='bold'>Latitude du lieu :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
+                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md"/>
                                 </FormControl>
                                 <FormControl id="rueLieu">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Longitude du lieu :</FormLabel>
+                                <FormLabel fontSize='2xl' fontWeight='bold'>Longitude du lieu :</FormLabel>
                                     <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
                                 </FormControl>
                             </VStack>
@@ -590,91 +1093,100 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
             case 'DesactiverUtilisateur':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
-                                <FormControl id="idUser">
-                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>ID de l'utilisateur :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='nom' size="md" />
-                                </FormControl>
-                                <FormControl id="password">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Durée de la désactivation (en jours, 0 pour réactiver) :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='dateDebut' size="md" />
-                                </FormControl>
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                        <form onSubmit={handleSubmitDesactiverUtilisateur}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="idUser">
+                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>ID de l'utilisateur à désactiver :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size='md' name='idUser' value={idUser} onChange={e => setIdUser(e.target.value)}/>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose}>Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
                     </>
                 );
             case 'SupprimerUtilisateur':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
-                                <FormControl id="idUser">
-                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>ID de l'utilisateur à supprimer :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='nom' size="md" />
-                                </FormControl>
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                        <form onSubmit={handleSubmitSuppressionUtilisateur}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="idUser">
+                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>ID de l'utilisateur à supprimer :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size='md' name='idUser' value={idUser} onChange={e => setIdUser(e.target.value)}/>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose}>Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
                     </>
                 );
-            case 'RechercherUtilisateur':
+            case 'ActiverUtilisateur':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
-                                <FormControl id="idUser">
-                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Adresse e-mail de l'utilisateur :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='nom' size="md" />
-                                </FormControl>
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                        <form onSubmit={handleSubmitActiverUtilisateur}>
+                            <DrawerBody>
+                                <VStack align="stretch">
+                                    <FormControl id="idUser">
+                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>ID de l'utilisateur à activer :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size='md' name='idUser' value={idUser} onChange={e => setIdUser(e.target.value)}/>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose} >Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
                     </>
                 );
             case 'AnnulerSortie':
                 return (
                     <>
-                        <DrawerBody>
-                            <VStack align="stretch">
+                        <form onSubmit={handleSubmitAnnulerSortie}>
+                            <DrawerBody>
+                                <VStack align="stretch">
 
-                                <FormControl id="idSortie">
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>ID de la sortie :</FormLabel>
-                                    <Input outlineColor='teal' type='text' name='idSortie' size="md" />
-                                </FormControl>
-                                <FormControl>
-                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                    <FormLabel fontSize='2xl' fontWeight='bold'>Motif d'annulation (sera envoyé par mail aux participants) :</FormLabel>
-                                    <Textarea outlineColor='teal' type='text' name='motif' size="md"/>
-                                </FormControl>
-
-                            </VStack>
-                            <Center>
-                                <DrawerFooter mt={5}>
-                                    <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
-                                    <Button colorScheme="teal">Envoyer</Button>
-                                </DrawerFooter>
-                            </Center>
-                        </DrawerBody>
+                                    <FormControl id="idSortie">
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>ID de la sortie :</FormLabel>
+                                        <Input outlineColor='teal' type='text' size='md' name='idUser' value={idSortie} onChange={e => setIdSortie(e.target.value)}/>
+                                    </FormControl>
+                                    <FormControl>
+                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                        <FormLabel fontSize='2xl' fontWeight='bold'>Motif d'annulation (sera envoyé par mail aux participants) :</FormLabel>
+                                        <Textarea outlineColor='teal' type='text' size='md' name='idUser' value={motifAnnulation} onChange={e => setMotifAnnulation(e.target.value)}/>
+                                    </FormControl>
+                                </VStack>
+                                <Center>
+                                    <DrawerFooter mt={5}>
+                                        <Button colorScheme='red' mr={10} onClick={onClose}>Annuler</Button>
+                                        <Button type='submit' colorScheme="teal" onClick={onClose}>Envoyer</Button>
+                                    </DrawerFooter>
+                                </Center>
+                            </DrawerBody>
+                        </form>
+                    </>
+                );
+            case 'InscriptionUtilisateurCSV':
+                return (
+                    <>
+                    <InscrireCSV/>
                     </>
                 );
             // Ajoutez d'autres cas pour les différents types
