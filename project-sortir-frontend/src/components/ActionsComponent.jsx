@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 
@@ -64,6 +65,11 @@ const ActionsComponent = (props) => {
                 {props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" )
                 ?
                     <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
+                :   null
+                }
+                {!((props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)) && !(props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )) && !(props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" ))
+                ?
+                    <MenuItem as={Button}>Aucune action n'est disponible</MenuItem>
                 :   null
                 }
             </MenuList>
