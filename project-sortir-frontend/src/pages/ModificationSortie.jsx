@@ -229,7 +229,7 @@ const ModificationSortie = (props) => {
                             </FormControl>
                             <FormControl id="dateLimit">
                                 <FormLabel>Date limite d'inscription:</FormLabel>
-                                <Input bg="white" type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date}/>
+                                <Input bg="white" type='datetime-local' max={dateDebut} name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date}/>
                             </FormControl>
                             <FormControl id="nbPlaces">
                                 <FormLabel>Nombre de Places: {messagePlace}</FormLabel>
