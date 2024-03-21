@@ -122,7 +122,10 @@ const CreerSortie = (props) => {
             if (response.status === 200) {
                 setNotification({status: 'success', description: 'Sortie créée avec succès'});
                 setIsVisible(true);
-                setTimeout(() => setIsVisible(false), 5000);
+                setTimeout(() => {
+                    setIsVisible(false);
+                    window.location.assign('/');
+                  }, 2000);
             } else {
                 setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
                 setIsVisible(true);
