@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
         $lieu4=new Lieu();
         $lieu4->setNom('EscapeGaming');
         $lieu4->setRue('Place du Je');
-        $lieu4->setLatitude(45.750001);
+        $lieu4->setLatitude(45.75050);
         $lieu4->setLongitude(4.850000);
         $lieu4->setVille($ville2);
         //Lieu a Chambery

@@ -15,7 +15,6 @@ import {
   VStack
 } from "@chakra-ui/react";
 import {useEffect,  useState} from "react";
-import { useNavigate} from "react-router-dom";
 import serviceProfile from "../services/serviceProfile.js";
 import Loading from "../components/Loading.jsx";
 import UploadImg from "../components/UploadImg.jsx";
@@ -87,7 +86,7 @@ const Profile = (props) => {
         nom: nom,
         prenom: prenom,
         telephone: telephone,
-        email: email,
+        mail: email,
         password: password,
         confirmPassword: confirmPassword,
         campus: campus,
@@ -95,19 +94,21 @@ const Profile = (props) => {
       }
       console.log(user)
       const response = await serviceProfile.modifierProfile(user);
-      /*const responseImage = await serviceProfile.uploadImage(image);
-      console.log(responseImage)*/
-      window.localStorage.setItem('loggedUser', JSON.stringify(response))
-      props.setUser(response)
       console.log(response)
       if (response.status===500){
         alert('Erreur venant du serveur, profil non modifié')
       }else if(response.status===200){
         alert('Vous avez bien modifié votre profil avec succès')
+        delete response.status
+        window.localStorage.setItem('loggedUser', JSON.stringify(response))
+        props.setUser(response)
         console.log(response)
+        console.log(response)
+      }else if (response.status===400){
+        alert('Pseudo déja pris veuillez en choisir un autre svp')
       }
     }else{
-      alert('Attention votre mot de passe ne correspond pas à votre confirmation')
+        alert('Attention votre mot de passe ne correspond pas à votre confirmation')
     }
   }
 

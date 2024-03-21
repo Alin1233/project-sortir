@@ -51,7 +51,7 @@ class Participant
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur')]
     private Collection $sortiesOrganisees;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 55, unique: true, nullable: true)]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
