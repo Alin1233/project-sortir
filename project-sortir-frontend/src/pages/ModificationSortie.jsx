@@ -109,7 +109,7 @@ const ModificationSortie = (props) => {
             setRue(responseVilles[0].lieux[0].rue)
             setCodePostal(responseVilles[0].codePostal)
             setLatitude(responseVilles[0].lieux[0].latitude)
-            setLatitude(responseVilles[0].lieux[0].longitude)
+            setLongitude(responseVilles[0].lieux[0].longitude)
             setVille(responseVilles[0].nom)
             setLieu(responseVilles[0].lieux[0].nom)
         }
