@@ -45,10 +45,17 @@ const ActionsComponent = (props) => {
                 Actions
             </MenuButton>
             <MenuList>
+                {(props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)
+                ?
+                    <MenuItem as={Button}>  <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4">Modifier</Link></MenuItem>
+                :   null
 
-            <MenuItem as={Button}>  <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4">Modifier</Link></MenuItem>
-            <MenuItem as={Button}>  <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
-
+                }
+                {(props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)
+                ?
+                    <MenuItem as={Button}>  <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
+                :   null
+                }
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
                 ?
                     <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
