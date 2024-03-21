@@ -73,8 +73,8 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
     }, []);
 
     useEffect(() => {
-        if (nomVille) {
-            const selectedVille = villes.find(v => v.nom === nomVille);
+        if (ville) {
+            const selectedVille = villes.find(v => v.nom === ville);
             if (selectedVille && selectedVille.lieux[0]) {
                 setCodePostal(selectedVille.codePostal);
                 setLieuxVille(selectedVille.lieux);
@@ -171,7 +171,8 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
     };
 
     const handleVilleChange = (event) => {
-        setSelectedVilleId(event.target.value);
+        setSelectedVilleId(event.target.value)
+        setVille(event.target.value);
         console.log(selectedVilleId)
     };
     const handleLieuChange = (event) => {
