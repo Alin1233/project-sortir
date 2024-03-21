@@ -43,38 +43,35 @@ class ProfileController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            //$image=$request->files->get('image');
-
-
 
             $pseudo = $data['pseudo'];
             $prenom = $data['prenom'];
             $nom = $data['nom'];
             $telephone = $data['telephone'];
-            $email = $data['email'];
+            $email = $data['mail'];
             $campus = $data['campus'];
+            $id = $data['id'];
 
 
 
             if ($data['password'] === $data['confirmPassword']) {
                 $password = $data['password'];
 
-                $participant = $participantRepository->findOneBy(['mail' => $email]);
+                $participant = $participantRepository->findOneBy(['id' => $id]);
 
-                $participant -> setPseudo($pseudo);
+                try {
+                    $participant -> setPseudo($pseudo);
+                }catch(\Exception $e){
+                    return new Response(json_encode(['error' => $e->getMessage(), 'code'=>$e->getCode()]), 501, ['Content-Type' => 'erreur pseudo']);
+                }
                 $participant->setPrenom($prenom);
                 $participant->setNom($nom);
                 $participant->setTelephone($telephone);
                 $participant->setMail($email);
                 $participant->setMotPasse($password);
 
-
                 $campusBDD = $campusRepository->findOneBy(['nom'=>$campus]);
                 $participant->setCampus($campusBDD);
-                /*if ($image) {
-                    $imageFilename = $fileUploader->upload($image);
-                    $participant->setImage($imageFilename);
-                }*/
 
                 $campus2 = $participant->getCampus();
                 $participantSansMDP = [
@@ -90,7 +87,8 @@ class ProfileController extends AbstractController
                     'campus' => [
                         'id' => $campus2->getId(),
                         'nom' => $campus2->getNom(),
-                    ]
+                    ],
+                    'status'=>200
                 ];
 
                 $entityManager->flush();
