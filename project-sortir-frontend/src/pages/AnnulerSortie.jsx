@@ -3,7 +3,7 @@ import {Box, Button, Center, FormControl, FormLabel, Heading, Text, Textarea, VS
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import serviceSortie from "../services/serviceSortie.js";
-
+import Notification from "../components/Notification";
 
 const AnnulerSortie = () => {
 
@@ -20,6 +20,11 @@ const AnnulerSortie = () => {
     const [codePostal, setCodePostal]=useState('')
     const [ville, setVille]=useState('')
     const [dateNonFormate, setDateNonFormate]=useState('')
+
+    //notification
+    const [notification, setNotification] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
 
 
     useEffect(()=> {
@@ -59,11 +64,20 @@ const AnnulerSortie = () => {
             motif: motif
         }
         const response = await serviceSortie.annulerSortie(envoieDonnee)
-        window.location.assign('/')
+        if (response.status === 200) {
+            setNotification({status: 'success', description: 'La sortie a été annulée avec succès'});
+            setIsVisible(true);
+            setTimeout(() => {
+                setIsVisible(false);
+                window.location.assign('/');
+              }, 2000);
+        } 
+        
     }
 
     return(
         <Box >
+            {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
             <Center mt="10vh">
                 <Heading as="h2" size="xl" color="teal.500"  mt="-100">Annuler une Sortie</Heading>                                                        
             </Center>

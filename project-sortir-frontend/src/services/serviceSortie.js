@@ -119,7 +119,8 @@ const annulerSortie = async(data) =>{
     const id = data.sortieId
     const url = baseUrl+'/annuler/'+ id;
     try {
-        return await axios.post(url, data)
+        const response = await axios.post(url, data)
+        return response
     } catch (error) {
         console.error(error);
     }
