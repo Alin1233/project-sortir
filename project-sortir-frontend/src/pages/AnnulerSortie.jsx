@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {Box, Button, Center, FormControl, FormLabel, Heading, Text, Textarea, VStack} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
@@ -21,14 +22,12 @@ const AnnulerSortie = () => {
     const [dateNonFormate, setDateNonFormate]=useState('')
 
 
-
     useEffect(()=> {
         const responseId = async ()=>{
             //récupération de toutes les infos via adresse api de l'utilisateur via l'id que l'on récupere dans l'url
             const response = await serviceSortie.getDetailsSortie(sortieId);
             setNom(response.sortieNom)
             setDateNonFormate(response.sortieDate)
-
             setCampus(response.campusNom)
             setVille(response.villeNom)
             setCodePostal(response.villeCodePostal)
@@ -40,7 +39,6 @@ const AnnulerSortie = () => {
             const minute = date.getMinutes();
             const mois = date.getMonth() + 1;
             const annee = date.getFullYear();
-            console.log(date.getMinutes());
             if(minute < 10){
                 setDateDebut( `${jour}/${mois}/${annee} à ${heure}h0${minute}`);
             }else{
@@ -60,9 +58,8 @@ const AnnulerSortie = () => {
             sortieId: sortieId,
             motif: motif
         }
-        console.log(envoieDonnee)
         const response = await serviceSortie.annulerSortie(envoieDonnee)
-        console.log(response)
+        window.location.assign('/')
     }
 
     return(
