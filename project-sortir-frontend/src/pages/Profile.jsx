@@ -106,31 +106,29 @@ const Profile = (props) => {
         setIsVisible(true);
         setTimeout(() => {
           setIsVisible(false);
-        }, 1000);
+        }, 2000);
       }else if(response.status===200){
         setNotification({status: 'success', description: 'Vous avez bien modifié votre profil avec succès'});
         setIsVisible(true);
-        setTimeout(() => {
-          setIsVisible(false);
-        }, 1000);
         delete response.status
         window.localStorage.setItem('loggedUser', JSON.stringify(response))
         props.setUser(response)
-        console.log(response)
-        console.log(response)
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 1000);
       }else if (response.status===400){
         setNotification({status: 'error', description: 'Pseudo déja pris veuillez en choisir un autre svp'});
         setIsVisible(true);
         setTimeout(() => {
           setIsVisible(false);
-        }, 1000);
+        }, 2000);
       }
     }else{
         setNotification({status: 'error', description: 'Attention votre mot de passe ne correspond pas à votre confirmation'});
         setIsVisible(true);
         setTimeout(() => {
           setIsVisible(false);
-        }, 1000);
+        }, 2000);
     }
   }
 
