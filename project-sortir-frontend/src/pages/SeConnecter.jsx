@@ -27,8 +27,10 @@ const SeConnecter = (props) => {
       props.setUser(response)
       setNotification({ status: 'success', description: 'Connexion réussie!' });
       setIsVisible(true);
-      setTimeout(() => setIsVisible(false), 5000);
-      window.location.assign('/')
+      setTimeout(() => {
+        setIsVisible(false);
+        window.location.assign('/');
+      }, 2000);
     }else{
       setNotification({ status: 'error', description: 'Mauvais mot de passe ou email, essayez encore !' });
       setIsVisible(true);

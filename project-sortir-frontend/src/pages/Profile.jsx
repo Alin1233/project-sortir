@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-unescaped-entities */
 import {
@@ -116,8 +117,8 @@ const Profile = (props) => {
     window.location.assign('/')
   }
   function validerNumeroTelephone(e) {
-    // Expression régulière pour valider un numéro de téléphone
-    const regex = /^\d{10}$/; // Vous pouvez ajuster cette expression régulière en fonction du format de numéro de téléphone que vous attendez
+    
+    const regex = /^\d{10}$/; 
     return regex.test(e);
   }
 

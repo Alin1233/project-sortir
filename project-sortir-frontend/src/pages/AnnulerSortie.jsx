@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import {Box, Button, Center, FormControl, FormLabel, Heading, Text, Textarea, VStack} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import serviceSortie from "../services/serviceSortie.js";
-
+import Notification from "../components/Notification";
 
 const AnnulerSortie = () => {
 
@@ -20,6 +21,10 @@ const AnnulerSortie = () => {
     const [ville, setVille]=useState('')
     const [dateNonFormate, setDateNonFormate]=useState('')
 
+    //notification
+    const [notification, setNotification] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
 
 
     useEffect(()=> {
@@ -28,7 +33,6 @@ const AnnulerSortie = () => {
             const response = await serviceSortie.getDetailsSortie(sortieId);
             setNom(response.sortieNom)
             setDateNonFormate(response.sortieDate)
-
             setCampus(response.campusNom)
             setVille(response.villeNom)
             setCodePostal(response.villeCodePostal)
@@ -40,7 +44,11 @@ const AnnulerSortie = () => {
             const minute = date.getMinutes();
             const mois = date.getMonth() + 1;
             const annee = date.getFullYear();
-            setDateDebut( `${jour}/${mois}/${annee} à ${heure}h${minute}`);
+            if(minute < 10){
+                setDateDebut( `${jour}/${mois}/${annee} à ${heure}h0${minute}`);
+            }else{
+                setDateDebut( `${jour}/${mois}/${annee} à ${heure}h${minute}`);
+            }
         }
         responseId();
         []});
@@ -55,31 +63,39 @@ const AnnulerSortie = () => {
             sortieId: sortieId,
             motif: motif
         }
-        console.log(envoieDonnee)
         const response = await serviceSortie.annulerSortie(envoieDonnee)
-        console.log(response)
+        if (response.status === 200) {
+            setNotification({status: 'success', description: 'La sortie a été annulée avec succès'});
+            setIsVisible(true);
+            setTimeout(() => {
+                setIsVisible(false);
+                window.location.assign('/');
+              }, 2000);
+        } 
+        
     }
 
     return(
-        <Box>
-            <Center mt="100px" p={5}>
-                <Heading textDecoration="underline">Annuler une Sortie</Heading>
+        <Box >
+            {notification && <Notification status={notification.status} description={notification.description} isVisible={isVisible} />}
+            <Center mt="10vh">
+                <Heading as="h2" size="xl" color="teal.500"  mt="-100">Annuler une Sortie</Heading>                                                        
             </Center>
             <Center>
-                <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md"  backgroundColor="#FFFAFA">
+                <Box as="form" onSubmit={handleSubmit} w="50%" p="5"  boxShadow="md"   borderColor='teal.500' borderWidth="5px"  borderRadius="20px" bg="gray.100">
                     <Center>
                         <VStack align="stretch">
 
-                            <Text>Nom de la sortie : {nom}</Text>
-                            <Text>Date de la sortie :  {dateDebut}</Text>
-                            <Text>Campus : {campus}</Text>
-                            <Text>Lieu : {nomLieu},  {rue} {codePostal} {ville}</Text>
+                            <Text  fontWeight="bold">Nom de la sortie : {nom}</Text>
+                            <Text  fontWeight="bold">Date de la sortie :  {dateDebut}</Text>
+                            <Text  fontWeight="bold">Campus : {campus}</Text>
+                            <Text  fontWeight="bold">Lieu : {nomLieu},  {rue} {codePostal} {ville}</Text>
                             <FormControl id="description">
                                 <FormLabel>Motif :</FormLabel>
-                                <Textarea name='description' value={motif} onChange={(e) => setMotif(e.target.value)} size="md" />
+                                <Textarea bg="white" name='description' value={motif} onChange={(e) => setMotif(e.target.value)} size="md" />
                             </FormControl>
                             <Button type="submit" colorScheme='teal' name="register" >Enregistrer</Button>
-                            <Button onClick={handleClickRetour}>Annuler</Button>
+                            <Button onClick={handleClickRetour}  colorScheme='red' variant="outline">Annuler</Button>
                         </VStack>
                     </Center>
                 </Box>

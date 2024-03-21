@@ -162,7 +162,7 @@ if(sorties===null){
                     <Text fontWeight="bold">Inscrit:</Text>
                     {sortie.participants.includes(props.user.id) 
                     ? <CheckIcon boxSize="20px" color="green.500" />
-                      : (sortie.etat === 'Ouverte')
+                      : (sortie.etat === 'Ouverte') && new Date (sortie.dateLimiteInscription).getTime() >= currentDate.getTime()
                     ? <Button onClick={()=>handleParticiperClick(sortie.id)}>Participer</Button>
                       : <Text fontWeight="bold">Non et il n'est pas possible de vous inscrire</Text>
                     }

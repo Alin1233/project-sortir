@@ -85,12 +85,20 @@ class SortieRepository extends ServiceEntityRepository
 
     // Si aucun filtre n'est fourni, toutes les entités de la sortie sont renvoyées.
     if (empty($filters)) {
-        return $entityManager->getRepository('App\Entity\Sortie')->findAll();
+        return $entityManager->getRepository('App\Entity\Sortie')->createQueryBuilder('s')
+        ->join('s.etat', 'e')
+        ->where('e.libelle != :excludedEtat')
+        ->setParameter('excludedEtat', 'Historisée')
+        ->getQuery()
+        ->getResult();
     }
 
     $queryBuilder = $entityManager->createQueryBuilder()
-                                  ->select('s')
-                                  ->from('App\Entity\Sortie', 's');
+                                ->select('s')
+                                ->from('App\Entity\Sortie', 's')
+                                ->join('s.etat', 'e')
+                                ->where('e.libelle != :excludedEtat')
+                                ->setParameter('excludedEtat', 'Historisée');
 
     $orX = $queryBuilder->expr()->orX();
 

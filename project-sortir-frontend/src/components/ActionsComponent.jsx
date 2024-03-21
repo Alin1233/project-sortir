@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 
@@ -45,10 +46,17 @@ const ActionsComponent = (props) => {
                 Actions
             </MenuButton>
             <MenuList>
+                {(props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)
+                ?
+                    <MenuItem as={Button}>  <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4">Modifier</Link></MenuItem>
+                :   null
 
-            <MenuItem as={Button}>  <Link as={RouterLink} to={`/modifier/${props.sortie.id}`} id={props.sortie.id} mr="4">Modifier</Link></MenuItem>
-            <MenuItem as={Button}>  <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
-
+                }
+                {(props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)
+                ?
+                    <MenuItem as={Button}>  <Link as={RouterLink} to={`/annuler/${props.sortie.id}`} id={props.sortie.id} mr="4">Annuler</Link></MenuItem>
+                :   null
+                }
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
                 ?
                     <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
@@ -57,6 +65,11 @@ const ActionsComponent = (props) => {
                 {props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" )
                 ?
                     <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
+                :   null
+                }
+                {!((props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)) && !(props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )) && !(props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" ))
+                ?
+                    <MenuItem as={Button}>Aucune action n'est disponible</MenuItem>
                 :   null
                 }
             </MenuList>
