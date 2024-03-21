@@ -209,36 +209,36 @@ const ModificationSortie = (props) => {
                     <Notification status={notification.status} description={notification.description} isVisible={isVisible} />
                 </Box>
             )}
-            <Center mt="100px" p={5}>
-                <Heading textDecoration="underline">Modifier une sortie</Heading>
+            <Center mt="10vh">
+                <Heading as="h2" size="xl" color="teal.500"  mt="-100">Modifier une sortie</Heading>                                                        
             </Center>
             <Center  h="100vh" mt="-100px">
-                <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md">
-                    <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+                <Box as="form" onSubmit={handleSubmit} w="50%" p="5" boxShadow="md" bg="gray.100"  borderColor='teal.500' borderWidth="5px"  borderRadius="20px">
+                    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                         <VStack align="stretch">
                             <FormControl id="nom">
                                 <FormLabel>Nom de la sortie:</FormLabel>
-                                <Input type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md" />
+                                <Input bg="white" type='text' name='nom' value={nom} onChange={(e) => setNom(e.target.value)} size="md" />
                             </FormControl>
                             <FormControl id="dateDebut">
                                 <FormLabel>Date et heure de la sortie:</FormLabel>
-                                <Input type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" min={date}/>
+                                <Input bg="white" type='datetime-local' name='dateDebut' value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} size="md" min={date}/>
                             </FormControl>
                             <FormControl id="dateLimit">
                                 <FormLabel>Date limite d'inscription:</FormLabel>
-                                <Input type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date}/>
+                                <Input bg="white" type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date}/>
                             </FormControl>
                             <FormControl id="nbPlaces">
                                 <FormLabel>Nombre de Places: {messagePlace}</FormLabel>
-                                <Input type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => verifChiffrePositif(e.target.value)?(setNbPlaces(e.target.value) + setMessagePlace('')):(setNbPlaces(e.target.value)+ setMessagePlace('Veuillez choisir un nombre de places positif!'))} size="md" />
+                                <Input bg="white" type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => verifChiffrePositif(e.target.value)?(setNbPlaces(e.target.value) + setMessagePlace('')):(setNbPlaces(e.target.value)+ setMessagePlace('Veuillez choisir un nombre de places positif!'))} size="md" />
                             </FormControl>
                             <FormControl id="duree">
                                 <FormLabel>Durée: {messageDuree}</FormLabel>
-                                <Input type='number' name='duree' value={duree} onChange={(e) => verifChiffrePositif(e.target.value)?(setDuree(e.target.value) + setMessageDuree('')):(setDuree(e.target.value)+ setMessageDuree('Veuillez choisir une durée positive!'))} size="md" />
+                                <Input bg="white" type='number' name='duree' value={duree} onChange={(e) => verifChiffrePositif(e.target.value)?(setDuree(e.target.value) + setMessageDuree('')):(setDuree(e.target.value)+ setMessageDuree('Veuillez choisir une durée positive!'))} size="md" />
                             </FormControl>
                             <FormControl id="description">
                                 <FormLabel>Description et infos:</FormLabel>
-                                <Textarea name='description' value={description} onChange={(e) => setDescription(e.target.value)} size="md" />
+                                <Textarea  bg="white" name='description' value={description} onChange={(e) => setDescription(e.target.value)} size="md" />
                             </FormControl>
                             <FormControl id="campus">
                                 <FormLabel>Campus:</FormLabel>
@@ -248,7 +248,7 @@ const ModificationSortie = (props) => {
                         <VStack align="stretch">
                             <FormControl id="ville">
                                 <FormLabel>Ville:</FormLabel>
-                                <Select name='ville' onChange={(e) => setVille(e.target.value)} defaultValue={ville}>
+                                <Select bg="white" name='ville' onChange={(e) => setVille(e.target.value)} defaultValue={ville}>
                                     {villes.map((ville) => (
                                         <option key={ville.id} value={ville.nom}>
                                             {ville.nom}
@@ -258,7 +258,7 @@ const ModificationSortie = (props) => {
                             </FormControl>
                             <FormControl id="lieu">
                                 <FormLabel>Lieu:</FormLabel>
-                                <Select name='lieu' onChange={(e) => setLieu(e.target.value)} defaultValue={lieu}>
+                                <Select bg="white" name='lieu' onChange={(e) => setLieu(e.target.value)} defaultValue={lieu}>
                                     {lieuxVille.map((lieu) => (
                                         <option key={lieu.id} value={lieu.nom}>
                                             {lieu.nom}
@@ -283,15 +283,17 @@ const ModificationSortie = (props) => {
                                 <Input disabled type='number' name='longitude' value={longitude} size="md" />
                             </FormControl>
                         </VStack>
+                        <Box ml="10px" w="400px" h="400px" mt="120px">
+                             <MapComponent longitude={longitude} latitude={latitude}/>
+                        </Box>
                     </Grid>
                     <Flex justify="space-between">
-                        <Button type="submit" name="register">Enregistrer</Button>
-                        <Button type="submit" name="publish">Publier la sortie</Button>
-                        <Button type="submit" name="delete">Supprimer la sortie</Button>
-                        <Button type="reset" name="cancel" onClick={handleClick}>Annuler</Button>
+                        <Button type="submit" name="register" colorScheme='teal'>Enregistrer</Button>
+                        <Button type="submit" name="publish" colorScheme='teal'>Publier la sortie</Button>
+                        <Button type="submit" name="delete"colorScheme='red' variant="outline">Supprimer la sortie</Button>
+                        <Button type="reset" name="cancel" colorScheme='red' variant="outline" onClick={handleClick}>Annuler</Button>
                     </Flex>
                 </Box>
-                <MapComponent longitude={longitude} latitude={latitude}/>
             </Center>
         </Box>
     )

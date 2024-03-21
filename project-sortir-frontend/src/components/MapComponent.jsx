@@ -28,8 +28,8 @@ const MapComponent = (props) => {
   }, [viewport]);
 
   return (
-    <div>
-      <Map height={300} width={500}  center={[viewport.latitude, viewport.longitude]} defaultZoom={13}>
+    <div style={{borderRadius: '15px', overflow: 'hidden'}}>
+      <Map height={300} width={400}  center={[viewport.latitude, viewport.longitude]} defaultZoom={13}>
         <Marker color='red' size='xl' anchor={[viewport.latitude, viewport.longitude]} payload={1} />
       </Map>
       <p>{address}</p>

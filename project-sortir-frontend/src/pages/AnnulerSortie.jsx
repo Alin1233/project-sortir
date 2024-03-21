@@ -40,7 +40,12 @@ const AnnulerSortie = () => {
             const minute = date.getMinutes();
             const mois = date.getMonth() + 1;
             const annee = date.getFullYear();
-            setDateDebut( `${jour}/${mois}/${annee} à ${heure}h${minute}`);
+            console.log(date.getMinutes());
+            if(minute < 10){
+                setDateDebut( `${jour}/${mois}/${annee} à ${heure}h0${minute}`);
+            }else{
+                setDateDebut( `${jour}/${mois}/${annee} à ${heure}h${minute}`);
+            }
         }
         responseId();
         []});
@@ -61,25 +66,25 @@ const AnnulerSortie = () => {
     }
 
     return(
-        <Box>
-            <Center mt="100px" p={5}>
-                <Heading textDecoration="underline">Annuler une Sortie</Heading>
+        <Box >
+            <Center mt="10vh">
+                <Heading as="h2" size="xl" color="teal.500"  mt="-100">Annuler une Sortie</Heading>                                                        
             </Center>
             <Center>
-                <Box as="form" onSubmit={handleSubmit} w="50%" p="5" bg="white" boxShadow="md"  backgroundColor="#FFFAFA">
+                <Box as="form" onSubmit={handleSubmit} w="50%" p="5"  boxShadow="md"   borderColor='teal.500' borderWidth="5px"  borderRadius="20px" bg="gray.100">
                     <Center>
                         <VStack align="stretch">
 
-                            <Text>Nom de la sortie : {nom}</Text>
-                            <Text>Date de la sortie :  {dateDebut}</Text>
-                            <Text>Campus : {campus}</Text>
-                            <Text>Lieu : {nomLieu},  {rue} {codePostal} {ville}</Text>
+                            <Text  fontWeight="bold">Nom de la sortie : {nom}</Text>
+                            <Text  fontWeight="bold">Date de la sortie :  {dateDebut}</Text>
+                            <Text  fontWeight="bold">Campus : {campus}</Text>
+                            <Text  fontWeight="bold">Lieu : {nomLieu},  {rue} {codePostal} {ville}</Text>
                             <FormControl id="description">
                                 <FormLabel>Motif :</FormLabel>
-                                <Textarea name='description' value={motif} onChange={(e) => setMotif(e.target.value)} size="md" />
+                                <Textarea bg="white" name='description' value={motif} onChange={(e) => setMotif(e.target.value)} size="md" />
                             </FormControl>
                             <Button type="submit" colorScheme='teal' name="register" >Enregistrer</Button>
-                            <Button onClick={handleClickRetour}>Annuler</Button>
+                            <Button onClick={handleClickRetour}  colorScheme='red' variant="outline">Annuler</Button>
                         </VStack>
                     </Center>
                 </Box>
