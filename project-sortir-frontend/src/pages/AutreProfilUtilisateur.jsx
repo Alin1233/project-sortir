@@ -100,7 +100,7 @@ const AutreProfilUtilisateur =()=>{
           <Stack direction="row" spacing={4} justify="center" mt={4}>
             <BackButton />
             <Button onClick={toggleVisibility} colorScheme='teal'>
-              {isVisible ? 'Cacher les sorties où cet utilisateur est inscrit' : 'Afficher les sorties où cet utilisateur est inscrit'}
+              {isVisible ? 'Cacher les sorties où ' +pseudo+  ' est inscrit' : 'Afficher les sorties où ' +pseudo+  ' est inscrit'}
             </Button>
           </Stack>
           {isVisible && (

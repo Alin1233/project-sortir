@@ -135,7 +135,7 @@ const ModificationSortie = (props) => {
                 if (response.status === 200) {
                     setNotification({status: 'success', description: 'Sortie supprimé avec succès'});
                     setIsVisible(true);
-                    setTimeout(() => setIsVisible(false), 5000);
+                    setTimeout(() => setIsVisible(false), 1000);
                 } else {
                     setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
                     setIsVisible(true);
@@ -167,7 +167,7 @@ const ModificationSortie = (props) => {
                 setTimeout(() => {
                     setIsVisible(false);
                     window.location.assign('/');
-                  }, 2000);
+                  }, 1000);
             } else {
                 setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
                 setIsVisible(true);
@@ -232,11 +232,11 @@ const ModificationSortie = (props) => {
                                 <Input bg="white" type='datetime-local' max={dateDebut} name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date}/>
                             </FormControl>
                             <FormControl id="nbPlaces">
-                                <FormLabel>Nombre de Places: {messagePlace}</FormLabel>
+                                <FormLabel>Nombre de Place(s): {messagePlace}</FormLabel>
                                 <Input bg="white" type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => verifChiffrePositif(e.target.value)?(setNbPlaces(e.target.value) + setMessagePlace('')):(setNbPlaces(e.target.value)+ setMessagePlace('Veuillez choisir un nombre de places positif!'))} size="md" />
                             </FormControl>
                             <FormControl id="duree">
-                                <FormLabel>Durée: {messageDuree}</FormLabel>
+                                <FormLabel>Durée en minute(s): {messageDuree}</FormLabel>
                                 <Input bg="white" type='number' name='duree' value={duree} onChange={(e) => verifChiffrePositif(e.target.value)?(setDuree(e.target.value) + setMessageDuree('')):(setDuree(e.target.value)+ setMessageDuree('Veuillez choisir une durée positive!'))} size="md" />
                             </FormControl>
                             <FormControl id="description">
