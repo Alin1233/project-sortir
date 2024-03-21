@@ -50,8 +50,8 @@ class AppFixtures extends Fixture
         $lieu2=new Lieu();
         $lieu2->setNom('Bowling La Quille');
         $lieu2->setRue('Faubourg Bouboulle');
-        $lieu2->setLatitude(47.217);
-        $lieu2->setLongitude(-1.553);
+        $lieu2->setLatitude(47.219322);
+        $lieu2->setLongitude(-1.555024);
         $lieu2->setVille($ville);
         //Lieu a Lyon
         $lieu3=new Lieu();
@@ -63,8 +63,8 @@ class AppFixtures extends Fixture
         $lieu4=new Lieu();
         $lieu4->setNom('EscapeGaming');
         $lieu4->setRue('Place du Je');
-        $lieu4->setLatitude(45.75050);
-        $lieu4->setLongitude(4.850000);
+        $lieu4->setLatitude(45.763420);
+        $lieu4->setLongitude(4.834277);
         $lieu4->setVille($ville2);
         //Lieu a Chambery
         $lieu5=new Lieu();
@@ -76,8 +76,8 @@ class AppFixtures extends Fixture
         $lieu6=new Lieu();
         $lieu6->setNom('ReactScion');
         $lieu6->setRue('Allée des Jumeaux');
-        $lieu6->setLatitude(	45.564601);
-        $lieu6->setLongitude(5.917781);
+        $lieu6->setLatitude(	45.571);
+        $lieu6->setLongitude(5.919);
         $lieu6->setVille($ville3);
         //Lieu a Rennes
         $lieu7=new Lieu();
@@ -89,8 +89,8 @@ class AppFixtures extends Fixture
         $lieu8=new Lieu();
         $lieu8->setNom('ReactScion');
         $lieu8->setRue('Allée des Jumeaux');
-        $lieu8->setLatitude(	48.0833);
-        $lieu8->setLongitude(-1.6832);
+        $lieu8->setLatitude(	48.117266);
+        $lieu8->setLongitude(-1.6777926);
         $lieu8->setVille($ville4);
 
         //Create a User
