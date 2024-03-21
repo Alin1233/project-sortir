@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[ApiResource]
-#[UniqueEntity(fields: ['pseudo','mail'], ignoreNull: 'pseudo')]
+#[UniqueEntity(fields: ['pseudo'], ignoreNull: 'pseudo')]
 class Participant
 {
     #[ORM\Id]

@@ -13,6 +13,8 @@ import { Link as RouterLink } from "react-router-dom";
 
 const ActionsComponent = (props) => {
 
+    const [isHovered, setIsHovered] = useState(false);
+
     const handleSeDesister = async (sortieId, userId)=> {
         const response = await serviceSortie.seDesister(sortieId,userId)
         if (response.status === 200) {
@@ -59,12 +61,12 @@ const ActionsComponent = (props) => {
                 }
                 {props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )
                 ?
-                    <MenuItem as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier</MenuItem>
+                    <MenuItem _hover={{ textDecoration: "underline" }} as={Button} onClick={()=>handlePublier(props.sortie.id)}>Publier la sortie</MenuItem>
                 :   null
                 }
                 {props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" )
                 ?
-                    <MenuItem as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
+                    <MenuItem _hover={{ textDecoration: "underline" }} as={Button} onClick={()=>handleSeDesister(props.sortie.id, props.user.id)}>Se désister</MenuItem>
                 :   null
                 }
                 {!((props.sortie.etat === "Creee" || props.sortie.etat === "Ouverte") && (props.sortie.organisateur.nom === props.user.nom || props.user.isAdmin)) && !(props.sortie.etat === "Creee" && (props.sortie.organisateur.id === props.user.id || props.user.isAdmin === true )) && !(props.sortie.participants.includes(props.user.id) && (props.sortie.etat === "Creee" ||props.sortie.etat === "Ouverte" ))

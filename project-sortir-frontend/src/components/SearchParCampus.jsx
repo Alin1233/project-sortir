@@ -21,7 +21,7 @@ const SearchParCampus = (props) => {
                 </Flex>
      }
     return (
-        <Select placeholder="Select campus" value={props.value} onChange={props.onChange} maxW="300px">
+        <Select placeholder="Selectionnez un campus" value={props.value} onChange={props.onChange} maxW="300px">
         {campuses.map((campus) => (
           <option key={campus.id} value={campus.nom}>
             {campus.nom}

@@ -18,7 +18,7 @@ const SearchParDate = (props) => {
         </Box>
         <Box w="100%">
             <Text mb={1}>Et:</Text>
-            <Input type='date' name='dateLimit' value={props.searchDate2} onChange={handleSearch2} size="md" maxW="300px" />
+            <Input type='date' name='dateLimit' value={props.searchDate2} onChange={handleSearch2} size="md" maxW="300px" min={props.searchDate1}/>
         </Box>
     </VStack>
 );

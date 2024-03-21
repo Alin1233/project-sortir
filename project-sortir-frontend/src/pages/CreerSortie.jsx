@@ -127,7 +127,7 @@ const CreerSortie = (props) => {
                 setTimeout(() => {
                     setIsVisible(false);
                     window.location.assign('/');
-                  }, 2000);
+                  }, 1000);
             } else {
                 setNotification({status: 'error', description: 'Une erreur est survenue, essayez à nouveau'});
                 setIsVisible(true);
@@ -191,11 +191,11 @@ const CreerSortie = (props) => {
                             <Input bg="white" max={dateDebut} type='datetime-local' name='dateLimit' value={dateLimit} onChange={(e) => setDateLimit(e.target.value)} size="md" min={date} />
                         </FormControl>
                             <FormControl id="nbPlaces">
-                            <FormLabel>Nombre de Places: {messagePlace}</FormLabel>
+                            <FormLabel>Nombre de Place(s): {messagePlace}</FormLabel>
                             <Input bg="white" type='number' name='nbPlaces' value={nbPlaces} onChange={(e) => verifChiffrePositif(e.target.value)?(setNbPlaces(e.target.value) + setMessagePlace('')):(setNbPlaces(e.target.value)+ setMessagePlace('Veuillez choisir un nombre de places positif!'))} size="md" />
                         </FormControl>
                         <FormControl id="duree">
-                            <FormLabel>Durée: {messageDuree}</FormLabel>
+                            <FormLabel>Durée en minute(s): {messageDuree}</FormLabel>
                             <Input bg="white" type='number' name='duree' value={duree} onChange={(e) => verifChiffrePositif(e.target.value)?(setDuree(e.target.value) + setMessageDuree('')):(setDuree(e.target.value)+ setMessageDuree('Veuillez choisir une durée positive!'))} size="md" />
                         </FormControl>
                         <FormControl id="description">
@@ -250,7 +250,7 @@ const CreerSortie = (props) => {
                     </Box>
                 </Grid>
                 <Flex justify="space-between">
-                    <Button type="submit" name="register" colorScheme='teal'>Register</Button>
+                    <Button type="submit" name="register" colorScheme='teal'>Enregistrer</Button>
                     <Button type="submit" name="publish" colorScheme='teal'>Publier la sortie</Button>
                  </Flex>
             </Box>

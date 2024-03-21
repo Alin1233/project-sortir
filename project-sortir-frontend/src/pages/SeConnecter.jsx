@@ -25,12 +25,12 @@ const SeConnecter = (props) => {
       //si oui, créer un cookie et définir l'utilisateur actuel comme utilisateur récupéré sur le serveur
       window.localStorage.setItem('loggedUser', JSON.stringify(response))
       props.setUser(response)
-      setNotification({ status: 'success', description: 'Connexion réussie!' });
+      setNotification({ status: 'success', description: 'Connexion réussie! Vous allez être redirigé vers l\'accueil' });
       setIsVisible(true);
       setTimeout(() => {
         setIsVisible(false);
         window.location.assign('/');
-      }, 2000);
+      }, 1000);
     }else{
       setNotification({ status: 'error', description: 'Mauvais mot de passe ou email, essayez encore !' });
       setIsVisible(true);
