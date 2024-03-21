@@ -129,10 +129,9 @@ class SortieRepository extends ServiceEntityRepository
         ));
     }
     if (in_array('passee', $filters)) {
-        $queryBuilder->join('s.etat', 'e');
         $orX->add('e.libelle = :etat');
         $queryBuilder->setParameter('etat', 'Passée');
-
+    
         // Ajout d'une condition pour les sorties de moins d'un mois
         $queryBuilder->andWhere('s.dateHeureDebut > :oneMonthAgo');
         $queryBuilder->setParameter('oneMonthAgo', new \DateTime('-1 month'));
