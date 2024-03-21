@@ -87,14 +87,20 @@ const PanelAdministration = (props) => {
             <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('DesactiverUtilisateur')}>
                 Désactiver un utilisateur
             </Button>
-            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerUtilisateur')}>
-                Supprimer un utilisateur
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<AddIcon />} colorScheme='blue' onClick={() => handleOpenDrawer('InscriptionUtilisateurCSV')}>
+                Créer des utilisateurs
             </Button>
             <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<TimeIcon />} colorScheme='blue' onClick={() => handleOpenDrawer('ActiverUtilisateur')}>
                 Activer un utilisateur
             </Button>
+            <Button padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<DeleteIcon />} colorScheme='red' onClick={() => handleOpenDrawer('SupprimerUtilisateur')}>
+                 Supprimer un utilisateur
+            </Button>
 
-            <Button mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
+            <Button opacity='0' mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
+                Annuler une sortie
+            </Button>
+            <Button  mt={50} padding={10} fontWeight='extrabold' fontSize='4xl' leftIcon={<CalendarIcon />} colorScheme='orange' onClick={() => handleOpenDrawer('AnnulerSortie')}>
                 Annuler une sortie
             </Button>
 

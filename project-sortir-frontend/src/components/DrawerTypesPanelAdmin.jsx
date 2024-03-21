@@ -14,6 +14,7 @@ import {AddIcon, CalendarIcon, CheckCircleIcon, DeleteIcon, TimeIcon, WarningIco
 import React, {useEffect, useState} from "react";
 import servicePanelAdmin from "../services/servicePanelAdmin.js";
 import serviceProfile from "../services/serviceProfile.js";
+import InscrireCSV from "./InscrireCSV.jsx";
 
 
 // eslint-disable-next-line react/prop-types
@@ -33,10 +34,8 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
     const [rueLieu, setRueLieu] = useState('');
     const [latitudeLieu, setLatitudeLieu] = useState('');
     const [longitudeLieu, setLongitudeLieu] = useState('');
-
     const[lieuxVille, setLieuxVille] = useState('');
     const [villes, setVilles] = useState(null);
-
     const toast = useToast();
     const [ville, setVille] = useState('');
     const [lieu, setLieu] = useState('');
@@ -852,6 +851,13 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                     </Text>
                 </Center>
             </DrawerHeader>);
+            case 'InscriptionUtilisateurCSV':return  (<DrawerHeader bgColor='blue.500'>
+                <Center>
+                    <Text fontSize='3xl' fontWeight='bold'>
+                        <AddIcon mt={10} mb={10}/> Créer des utilisateurs
+                    </Text>
+                </Center>
+            </DrawerHeader>);
             // Ajoutez d'autres cas selon le type
             default: return '';
         }
@@ -1166,7 +1172,6 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                                         <FormLabel fontSize='2xl' fontWeight='bold'>Motif d'annulation (sera envoyé par mail aux participants) :</FormLabel>
                                         <Textarea outlineColor='teal' type='text' size='md' name='idUser' value={motifAnnulation} onChange={e => setMotifAnnulation(e.target.value)}/>
                                     </FormControl>
-
                                 </VStack>
                                 <Center>
                                     <DrawerFooter mt={5}>
@@ -1176,6 +1181,12 @@ const CustomDrawer = ({ isOpen, onClose, drawerType }) => {
                                 </Center>
                             </DrawerBody>
                         </form>
+                    </>
+                );
+            case 'InscriptionUtilisateurCSV':
+                return (
+                    <>
+                    <InscrireCSV/>
                     </>
                 );
             // Ajoutez d'autres cas pour les différents types
