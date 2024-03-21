@@ -43,6 +43,7 @@ const DetailsSortie = () => {
         const fetchSortie = async () => {
             try {
                 const sortie = await serviceSortie.getSortie(id);
+                console.log(sortie)
                 if (sortie) {
                     setSortie(sortie);
                     setNomSortie(sortie.nom);
@@ -190,7 +191,7 @@ const DetailsSortie = () => {
                             >
                                 <Center key={index}>
                                     <Flex align="center">
-                                        <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${sortie.organisateur.image}`}/>
+                                        <Avatar name={sortie.organisateur.nom} src={`http://localhost:8000/getimage/${participant.image}`}/>
                                         <Text ml={5}><Link as={RouterLink} to={`/profile/${participant.id}`}>{participant.nom}</Link></Text>
                                     </Flex>
                                 </Center>
