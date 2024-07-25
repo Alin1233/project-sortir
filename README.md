@@ -52,7 +52,7 @@ Project Sortir is designed to facilitate social interaction by enabling users to
 
 1. Clone the backend repository:
     ```bash
-    git clone https://github.com/yourusername/project-sortir-backend.git
+    git clone https://github.com/Alin1233/project-sortir-backend.git
     ```
 2. Navigate to the backend directory:
     ```bash
@@ -77,7 +77,7 @@ Project Sortir is designed to facilitate social interaction by enabling users to
 
 1. Clone the frontend repository:
     ```bash
-    git clone https://github.com/yourusername/project-sortir-frontend.git
+    git clone https://github.com/Alin1233/project-sortir-frontend.git
     ```
 2. Navigate to the frontend directory:
     ```bash
