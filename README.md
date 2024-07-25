@@ -117,7 +117,8 @@ Project Sortir is structured with a separate frontend and backend to handle diff
 
 ### Diagrams
 
-![Flowchart](https://github.com/yourusername/project-sortir/raw/main/frontend/public/images/flowchart.png)
+![Screenshot](https://github.com/Alin1233/project-sortir/blob/main/screenshots/Class%20Diagram.png?raw=true)
+![Screenshot](https://github.com/Alin1233/project-sortir/blob/main/screenshots/Diagram%20State%20of%20Activity.png?raw=true)
 
 ## Technologies Used
 
