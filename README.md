@@ -31,9 +31,10 @@ Project Sortir is designed to facilitate social interaction by enabling users to
 
 ## Demonstration
 
-![Screenshot](https://github.com/yourusername/project-sortir/raw/main/frontend/public/images/screenshot.png)
-![GIF](https://github.com/yourusername/project-sortir/raw/main/frontend/public/images/demo.gif)
-[Video Demo](https://github.com/yourusername/project-sortir/raw/main/frontend/public/videos/demo.mp4)
+![Screenshot](https://github.com/Alin1233/project-sortir/blob/main/screenshots/Activity%20Creation.png?raw=true)
+![Screenshot](https://github.com/Alin1233/project-sortir/blob/main/screenshots/Home%20Page.png?raw=true)
+![Screenshot](https://github.com/Alin1233/project-sortir/blob/main/screenshots/My%20Profie.png?raw=true)
+
 
 ## Getting Started
 
